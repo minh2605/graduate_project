@@ -1,0 +1,44 @@
+import mongoose, { Types } from "mongoose";
+
+export interface CategoryDocument extends mongoose.Document {
+  name: string;
+  productTypeId: Types.ObjectId;
+  description: string;
+  image: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const categorySchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+      index: true,
+    },
+    productTypeId: {
+      type: mongoose.SchemaTypes.ObjectId,
+      required: true,
+      trim: true,
+      ref: "ProductType",
+    },
+    description: {
+      type: String,
+      trim: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+const CategoryModel = mongoose.model<CategoryDocument>(
+  "Category",
+  categorySchema
+);
+export default CategoryModel;
