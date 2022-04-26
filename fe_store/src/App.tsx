@@ -1,11 +1,18 @@
+import { AppRoutes } from "features/routes/AppRoutes";
+import { PublicRoutes } from "features/routes/PublicRoutes";
 import React from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 
-function App() {
+const App = (): JSX.Element => {
   return (
-    <div className="App">
-      <h1>Welcome to Minh's store</h1>
+    <div className="min-h-screen">
+      <Routes>
+        <Route path="/public/*" element={<PublicRoutes />} />
+        <Route index element={<Navigate to="home" />} />
+        <Route path="*" element={<AppRoutes />} />
+      </Routes>
     </div>
   );
-}
+};
 
 export default App;
