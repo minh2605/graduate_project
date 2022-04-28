@@ -27,7 +27,7 @@ export const AppRoutes = (): JSX.Element => {
           <Route index element={<Navigate to="home" />} />
           <Route path="/home" element={<div>HOME PAGE</div>} />
           {APP_ROUTES.map((route) => (
-            <Route path={route.path} element={route.element} />
+            <Route key={route.path} path={route.path} element={route.element} />
           ))}
         </Route>
       </Routes>

@@ -22,7 +22,10 @@ module.exports = {
       lg: "1024px",
       xl: "1440px",
     },
-    colors: {},
+    colors: {
+      current: "currentColor",
+      "light-white": "#F6F3EE",
+    },
     extend: {
       zIndex: {
         tooltip: "1300",

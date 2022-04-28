@@ -17,7 +17,7 @@ export const PublicRoutes = (): JSX.Element => {
         <Route element={<Outlet />}>
           <Route index element={<Navigate to="login" />} />
           {PUBLIC_ROUTES.map((route) => (
-            <Route path={route.path} element={route.element} />
+            <Route key={route.path} path={route.path} element={route.element} />
           ))}
         </Route>
       </Routes>
