@@ -1,31 +1,41 @@
+import { Header } from "common/components/Header";
+import { OrderCart } from "common/components/OrderCart";
+import { HomePage } from "pages/HomePage";
+import { MenuPage } from "pages/MenuPage";
+import { OrderPage } from "pages/OrderPage";
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
-
-const HomePage = <div>Home Page</div>;
-const MenuPage = <div>Menu Page</div>;
-const OrderPage = <div>Order Page</div>;
 
 const APP_ROUTES = [
   {
     path: "/home",
-    element: HomePage,
+    element: <HomePage />,
   },
   {
     path: "/menu",
-    element: MenuPage,
+    element: <MenuPage />,
   },
   {
     path: "/order",
-    element: OrderPage,
+    element: <OrderPage />,
   },
 ];
 
 export const AppRoutes = (): JSX.Element => {
   return (
     <div>
+      <Header />
+      <OrderCart />
       <Routes>
-        <Route path="/" element={<Outlet />}>
+        <Route
+          path="/"
+          element={
+            <div className="mt-24 w-4/5 py-8 px-16">
+              <Outlet />
+            </div>
+          }
+        >
           <Route index element={<Navigate to="home" />} />
-          <Route path="/home" element={<div>HOME PAGE</div>} />
+          <Route path="/home" element={<HomePage />} />
           {APP_ROUTES.map((route) => (
             <Route key={route.path} path={route.path} element={route.element} />
           ))}

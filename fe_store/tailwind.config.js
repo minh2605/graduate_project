@@ -2,6 +2,9 @@ module.exports = {
   purge: ["./src/**/*.{js,jsx,ts,tsx}"],
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
+    fontFamily: {
+      bangers: ["Bangers", "cursive"],
+    },
     fontSize: {
       h1: "1.75rem",
       h2: "1.5rem",
@@ -24,7 +27,13 @@ module.exports = {
     },
     colors: {
       current: "currentColor",
-      "light-white": "#F6F3EE",
+      white: "#FFF",
+      "light-grey": "#767676",
+      "dark-grey": "#191919",
+      "dark-red": "#B92F28",
+      "light-red": "#EF2E32",
+      "light-red-opacity": "rgba(239, 46, 50, 0.1)",
+      "border-grey": "#E7E7E7",
     },
     extend: {
       zIndex: {
@@ -41,5 +50,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")],
 };
