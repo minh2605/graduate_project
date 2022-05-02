@@ -20,10 +20,10 @@ export const CartProducts = (): JSX.Element => {
     <div className="h-full flex flex-col">
       <div>
         <div className="mb-4">
-          <p className="font-medium flex items-center">
-            <span>Your cart from</span>
+          <div className="font-medium flex items-center">
+            <span>Your orders in</span>
             <LogoText className="ml-1">Foogle</LogoText>
-          </p>
+          </div>
         </div>
         <div className="pb-4 border-b-2 border-border-grey">
           <CartCheckoutButton>

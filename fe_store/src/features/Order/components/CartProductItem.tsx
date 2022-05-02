@@ -20,7 +20,7 @@ export const CartProductItem = ({
   return (
     <ProductItemWrapper onClick={handleProductItemClicked}>
       <div className="relative w-16 h-16 shrink-0">
-        <div className="absolute rounded top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-dark-grey text-white flex items-center text-center">
+        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-dark-grey text-white flex items-center text-center">
           <span className="w-full">1 x</span>
         </div>
         <img

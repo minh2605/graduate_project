@@ -1,7 +1,7 @@
 import { Header } from "common/components/Header";
 import { OrderCart } from "common/components/OrderCart";
 import { HomePage } from "pages/HomePage";
-import { MenuPage } from "pages/MenuPage";
+import { CheckoutPage } from "pages/CheckoutPage";
 import { OrderPage } from "pages/OrderPage";
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 
@@ -11,8 +11,8 @@ const APP_ROUTES = [
     element: <HomePage />,
   },
   {
-    path: "/menu",
-    element: <MenuPage />,
+    path: "/checkout",
+    element: <CheckoutPage />,
   },
   {
     path: "/order",
