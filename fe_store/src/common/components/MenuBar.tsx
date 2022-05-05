@@ -43,7 +43,7 @@ export const MenuBar = ({
             <span>Home</span>
           </Link>
           <Link
-            to="/menu"
+            to="/checkout"
             className="py-4 px-8 flex items-center gap-4 border-t border-border-grey"
           >
             <SvgPayment />
@@ -57,7 +57,7 @@ export const MenuBar = ({
             <span>Order</span>
           </Link>
           <Link
-            to="/login"
+            to="/sign-in"
             className="py-4 px-8 flex items-center gap-4 border-t border-border-grey"
           >
             <SvgAccount />

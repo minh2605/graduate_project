@@ -58,8 +58,8 @@ export const Header = (): JSX.Element => {
           <span className="flex-1 text-center">3</span>
         </HeaderActionButton>
         <HeaderActionButton>
-          <Link to="/login" className="block w-full">
-            <span className="w-full">Login</span>
+          <Link to="/sign-in" className="block w-full">
+            <span className="w-full">Sign in</span>
           </Link>
         </HeaderActionButton>
       </div>

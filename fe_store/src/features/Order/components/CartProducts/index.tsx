@@ -1,6 +1,5 @@
 import tw, { styled } from "twin.macro";
 import { CartProductItem } from "features/Order/components/CartProductItem";
-import { LogoText } from "common/components/Header";
 
 const CartCheckoutButton = styled.div(
   tw`flex items-center justify-between bg-light-red p-3 rounded-3xl text-white hover:bg-dark-red cursor-pointer font-medium`
@@ -20,10 +19,9 @@ export const CartProducts = (): JSX.Element => {
     <div className="h-full flex flex-col">
       <div>
         <div className="mb-4">
-          <div className="font-medium flex items-center">
-            <span>Your orders in</span>
-            <LogoText className="ml-1">Foogle</LogoText>
-          </div>
+          <span className="text-h3 font-medium flex items-center">
+            Your orders
+          </span>
         </div>
         <div className="pb-4 border-b-2 border-border-grey">
           <CartCheckoutButton>
