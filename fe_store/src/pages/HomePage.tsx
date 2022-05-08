@@ -1,9 +1,8 @@
 import FoogleLogo from "assets/svg/foogle-logo.svg";
+import { Products } from "common/components/Products";
 import { StoreOptions } from "common/components/StoreOptions";
-import { StoreInfoPopup } from "features/Store/components/StoreInfoPopup";
-import { useState } from "react";
+
 export const HomePage = (): JSX.Element => {
-  const [isOpen, setOpen] = useState(false);
   return (
     <div>
       <div className="relative mb-16">
@@ -21,8 +20,8 @@ export const HomePage = (): JSX.Element => {
         </div>
       </div>
       <div>
-        <StoreOptions onOpenModal={setOpen} />
-        <StoreInfoPopup isOpen={isOpen} onClose={() => setOpen(false)} />
+        <StoreOptions />
+        <Products />
       </div>
     </div>
   );
