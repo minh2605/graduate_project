@@ -10,6 +10,8 @@ export interface OrderDocument extends mongoose.Document {
   discount_id: Types.ObjectId;
   product_ids: Types.ObjectId[];
   date: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const orderSchema = new mongoose.Schema(
@@ -63,6 +65,7 @@ const orderSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

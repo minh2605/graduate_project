@@ -2,8 +2,8 @@ import mongoose, { Types } from "mongoose";
 
 export interface ProductTypeDocument extends mongoose.Document {
   name: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 const productTypeSchema = new mongoose.Schema(
   {
@@ -16,6 +16,7 @@ const productTypeSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

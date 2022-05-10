@@ -1,7 +1,6 @@
 import React from "react";
 import { MapContainer } from "react-leaflet";
 import { MapContent } from "common/components/MapContent";
-import "leaflet/dist/leaflet.css";
 
 export const MapWrapper = (): JSX.Element => {
   return (

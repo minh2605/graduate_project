@@ -20,6 +20,7 @@ export const StoreOptions = (): JSX.Element => {
         <Button
           className="flex items-center gap-2"
           onClick={() => setOpen(true)}
+          variant="secondary"
         >
           <SvgInfo />
           <span>More Info</span>

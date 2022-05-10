@@ -9,8 +9,8 @@ export interface ProductDocument extends mongoose.Document {
   description: string;
   images: string;
   slideImages: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const productSchema = new mongoose.Schema(
@@ -57,6 +57,7 @@ const productSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

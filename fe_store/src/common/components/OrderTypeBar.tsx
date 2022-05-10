@@ -37,7 +37,7 @@ export const OrderTypeBar = (): JSX.Element => {
               <div className="flex justify-end basis-1/2">
                 <SwitchButton
                   name="enable_delivery"
-                  label="Enable Delivery"
+                  label="Delivery"
                   checked={values.enable_delivery}
                 />
               </div>

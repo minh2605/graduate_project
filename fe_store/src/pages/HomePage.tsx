@@ -22,6 +22,12 @@ export const HomePage = (): JSX.Element => {
       <div>
         <StoreOptions />
         <Products />
+        {/* <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3834.0744030517058!2d108.21154651484412!3d16.061628388885598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314219b586c9fef3%3A0x7a420f614d1d86a4!2zMTYwIMSQLiBOZ3V54buFbiBIb8OgbmcsIEjhuqNpIENow6J1IDIsIEjhuqNpIENow6J1LCDEkMOgIE7hurVuZyA1NTAwMDAsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1652173671105!5m2!1svi!2s"
+          width="600"
+          height="450"
+          loading="lazy"
+        ></iframe> */}
       </div>
     </div>
   );

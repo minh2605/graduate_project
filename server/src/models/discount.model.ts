@@ -3,6 +3,8 @@ import mongoose, { Types } from "mongoose";
 export interface DiscountDocument extends mongoose.Document {
   discount_code: string;
   discount_value: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const discountSchema = new mongoose.Schema(
@@ -21,6 +23,7 @@ const discountSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

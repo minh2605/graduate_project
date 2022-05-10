@@ -5,6 +5,8 @@ export interface AccountDocument extends mongoose.Document {
   hash_pwd: string;
   role_name: string;
   order_ids: Types.ObjectId[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const accountSchema = new mongoose.Schema(
@@ -33,6 +35,7 @@ const accountSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

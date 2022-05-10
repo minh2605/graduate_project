@@ -4,6 +4,8 @@ import mongoose, { ConnectOptions } from "mongoose";
 import { envConfig } from "./config/config";
 import mongoSanitize from "express-mongo-sanitize";
 import compression from "compression";
+import morgan from "morgan";
+
 import routes from "./routes";
 
 let server;
@@ -21,10 +23,11 @@ mongoose
     console.log("Error", error);
   });
 
+app.use(morgan("combined"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "30mb" }));
 
-app.use("/", routes);
+app.use("/api", routes);
 
 // gzip compression
 app.use(compression());

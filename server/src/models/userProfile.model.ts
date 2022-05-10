@@ -9,6 +9,8 @@ export interface UserProfileDocument extends mongoose.Document {
   birthday: Date;
   gender: boolean;
   avatar: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const userProfileSchema = new mongoose.Schema(
@@ -47,6 +49,7 @@ const userProfileSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

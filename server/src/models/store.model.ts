@@ -11,6 +11,8 @@ export interface StoreDocument extends mongoose.Document {
   favicon: string;
   sound_notification: boolean;
   open_days: string[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const storeSchema = new mongoose.Schema(
@@ -64,6 +66,7 @@ const storeSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

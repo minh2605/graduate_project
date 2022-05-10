@@ -5,6 +5,8 @@ export interface OrderTypeDocument extends mongoose.Document {
   fee: number;
   enable_big_order: boolean;
   big_order_value: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const orderTypeSchema = new mongoose.Schema(
@@ -25,6 +27,7 @@ const orderTypeSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

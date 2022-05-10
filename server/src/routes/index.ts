@@ -1,8 +1,7 @@
 import productRoute from "./product.route";
 import categoryRoute from "./category.route";
 import productTypeRoute from "./productType.route";
-
-const express = require("express");
+import express from "express";
 
 const router = express.Router();
 

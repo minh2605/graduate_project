@@ -5,8 +5,8 @@ export interface CategoryDocument extends mongoose.Document {
   productTypeId: Types.ObjectId;
   description: string;
   image: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const categorySchema = new mongoose.Schema(
@@ -34,6 +34,7 @@ const categorySchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 
