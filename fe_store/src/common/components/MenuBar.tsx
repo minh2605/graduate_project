@@ -57,7 +57,7 @@ export const MenuBar = ({
             <span>Order</span>
           </Link>
           <Link
-            to="/sign-in"
+            to="/public/sign-in"
             className="py-4 px-8 flex items-center gap-4 border-t border-border-grey"
           >
             <SvgAccount />

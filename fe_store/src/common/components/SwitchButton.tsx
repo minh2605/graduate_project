@@ -25,6 +25,7 @@ export const SwitchButton = ({
         {label}
       </span>
       <Switch
+        type="submit"
         name={name}
         checked={enabled}
         onChange={() => {

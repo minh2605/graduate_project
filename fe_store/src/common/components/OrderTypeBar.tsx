@@ -1,6 +1,6 @@
 import { SwitchButton } from "common/components/SwitchButton";
 import { Form, Formik } from "formik";
-
+import * as yup from "yup";
 export interface ToggleOrderTypeFormValue {
   enable_delivery: boolean;
 }
@@ -9,12 +9,20 @@ export const OrderTypeBar = (): JSX.Element => {
   const initialValues: ToggleOrderTypeFormValue = {
     enable_delivery: false,
   };
+  const orderTypeSchema: yup.SchemaOf<ToggleOrderTypeFormValue> = yup
+    .object()
+    .shape({
+      enable_delivery: yup.boolean().required(),
+    });
   return (
     <Formik
       initialValues={initialValues}
+      validationSchema={orderTypeSchema}
       validateOnBlur={false}
       validateOnChange={false}
-      onSubmit={() => {}}
+      onSubmit={(values) => {
+        console.log("values", values);
+      }}
     >
       {({ values }) => {
         return (
