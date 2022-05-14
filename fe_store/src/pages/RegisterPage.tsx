@@ -1,25 +1,33 @@
 import { Button } from "common/components/Button";
-import SvgGoogle from "common/components/svg/Google";
 import SvgLeftArrow from "common/components/svg/LeftArrow";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
 
 interface SigninPageProps {
+  name: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
-export const SigninPage = (): JSX.Element => {
+export const RegisterPage = (): JSX.Element => {
   const initialValues: SigninPageProps = {
+    name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   };
-  const loginSchema: yup.SchemaOf<SigninPageProps> = yup.object().shape({
+  const registerSchema: yup.SchemaOf<SigninPageProps> = yup.object().shape({
+    name: yup.string().required("This field is required!"),
     email: yup
       .string()
       .required("This field is required!")
       .email("Email format is incorrect!"),
     password: yup
+      .string()
+      .required("This field is required!")
+      .min(6, "Password must be larger than 6 characters"),
+    confirmPassword: yup
       .string()
       .required("This field is required!")
       .min(6, "Password must be larger than 6 characters"),
@@ -29,26 +37,16 @@ export const SigninPage = (): JSX.Element => {
     <div className="flex flex-col">
       <div className="px-14 flex flex-col ">
         <div className="flex items-center gap-2 text-h1 font-bold mb-8 text-dark-red">
-          <Link to="../../../home">
+          <Link to="../sign-in">
             <SvgLeftArrow width={32} height={32} />
           </Link>
-          <h1>Sign in</h1>
-        </div>
-        <div className="flex flex-col items-center">
-          <Button
-            className="flex items-center gap-4 w-1/2 justify-center mb-8"
-            variant="white"
-            type="button"
-          >
-            <SvgGoogle />
-            <span>Sign in with Google</span>
-          </Button>
+          <h1>Sign up</h1>
         </div>
         <Formik
           validateOnBlur={false}
           validateOnChange={false}
           initialValues={initialValues}
-          validationSchema={loginSchema}
+          validationSchema={registerSchema}
           onSubmit={(values) => {
             console.log("values submit", values);
           }}
@@ -58,13 +56,21 @@ export const SigninPage = (): JSX.Element => {
             noValidate
             className="flex flex-col font-medium"
           >
-            <div className="h-[1px] bg-border-grey text-light-grey w-full relative mb-8">
-              <span className="text-sm p-4 bg-white absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2">
-                or Sign in with Email
-              </span>
-            </div>
             <div className="px-20 flex flex-col">
-              <div className="flex flex-col flex-1 gap-2 mb-4 text-base">
+              <div className="flex flex-col gap-2 mb-4 text-base">
+                <label htmlFor="name">Name*</label>
+                <Field
+                  name="name"
+                  type="text"
+                  className="border py-2 px-4 rounded text-sm"
+                />
+                <ErrorMessage
+                  name="name"
+                  component="div"
+                  className={`text-light-red text-xs`}
+                />
+              </div>
+              <div className="flex flex-col gap-2 mb-4 text-base">
                 <label htmlFor="email">Email*</label>
                 <Field
                   name="email"
@@ -90,25 +96,29 @@ export const SigninPage = (): JSX.Element => {
                   className={`text-light-red text-xs`}
                 />
               </div>
-              <div className="text-sm mb-4">
-                <Link
-                  to="../forgot-password"
-                  className="m-auto hover:text-dark-red"
-                >
-                  <span>Forgot password?</span>
-                </Link>
+              <div className="flex flex-col gap-2 mb-8 text-base">
+                <label htmlFor="password">Confirm Password*</label>
+                <Field
+                  name="confirmPassword"
+                  type="password"
+                  className="border py-2 px-4 rounded text-sm"
+                />
+                <ErrorMessage
+                  name="confirmPassword"
+                  component="div"
+                  className={`text-light-red text-xs`}
+                />
               </div>
               <Button
                 className="flex items-center gap-4 w-full justify-center mt-2 mb-4"
                 type="submit"
               >
-                <span>Sign in</span>
+                <span>Sign up</span>
               </Button>
-
               <div className="flex items-center gap-2 text-sm m-auto">
-                <span>Don't have an account?</span>
-                <Link to="../sign-up" className="m-auto hover:text-dark-red">
-                  <span>Sign up</span>
+                <span>Already have an account?</span>
+                <Link to="../sign-in" className="text-base hover:text-dark-red">
+                  <span>Sign in</span>
                 </Link>
               </div>
             </div>

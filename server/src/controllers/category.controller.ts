@@ -1,21 +1,23 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 import categoryService from "../services/category.service";
+import { catchAsync } from "../utils/catchAsync";
 
-const createCategory = async (req: Request, res: Response) => {
+const createCategory = catchAsync(async (req: Request, res: Response) => {
   const newCategory = await categoryService.createCategory(req.body);
   res.status(httpStatus.CREATED).send(newCategory);
-};
+});
 
-const getCategories = async (req: Request, res: Response) => {
+const getCategories = catchAsync(async (req: Request, res: Response) => {
   const categories = await categoryService.getCategories();
   res.status(httpStatus.OK).send(categories);
-};
+});
 
-const getCategoryById = async (req: Request, res: Response) => {
-  const categoryById = await categoryService.getCategoryById(req.body);
+const getCategoryById = catchAsync(async (req: Request, res: Response) => {
+  const { id: categoryId } = req.params;
+  const categoryById = await categoryService.getCategoryById(categoryId);
   res.status(httpStatus.OK).send(categoryById);
-};
+});
 
 const categoryController = {
   createCategory,

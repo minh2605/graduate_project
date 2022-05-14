@@ -1,14 +1,14 @@
 import mongoose, { Types } from "mongoose";
 
 export interface ProductDocument extends mongoose.Document {
-  productCode: string;
+  productCode?: string;
   name: string;
   productTypeId: Types.ObjectId;
   productCategoryId: Types.ObjectId;
   price: number;
   description: string;
-  images: string;
-  slideImages: string[];
+  image: string;
+  slideImages?: string[];
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -13,7 +13,8 @@ export const SwitchButton = ({
   checked,
 }: SwitchButtonProps): JSX.Element => {
   const [enabled, setEnabled] = useState(false);
-  const { setFieldValue } = useFormikContext<ToggleOrderTypeFormValue>();
+  const { setFieldValue, submitForm } =
+    useFormikContext<ToggleOrderTypeFormValue>();
 
   return (
     <div className="flex items-center gap-2">
@@ -25,12 +26,12 @@ export const SwitchButton = ({
         {label}
       </span>
       <Switch
-        type="submit"
         name={name}
         checked={enabled}
         onChange={() => {
           setEnabled((enabled) => !enabled);
           setFieldValue(name, !checked);
+          submitForm();
         }}
         value={name}
         className={`${enabled ? "bg-dark-red" : "bg-light-grey"}
