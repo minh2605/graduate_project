@@ -5,4 +5,11 @@ import authValidation from "../validations/auth.validation";
 
 const router = express.Router();
 
-router.post("/register", validate(authValidation), accountController.register);
+router.post(
+  "/register",
+  validate(authValidation.register),
+  accountController.register
+);
+router.post("/login", validate(authValidation.login), accountController.login);
+
+export default router;

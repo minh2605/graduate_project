@@ -1,20 +1,31 @@
 import { Request, Response } from "express";
-import accountService from "../services/account.service";
+import accountService, { AccountRegister } from "../services/account.service";
 import httpStatus from "http-status";
 import { catchAsync } from "../utils/catchAsync";
+import userService, { UserCreateProps } from "../services/user.service";
 
 const register = catchAsync(async (req: Request, res: Response) => {
-  const user = await accountService.createAccount(req.body);
-  const tokens = "temp token";
-  res.status(httpStatus.CREATED).send({ user, tokens });
+  const { email, password, name } = req.body;
+  const accountRegister: AccountRegister = {
+    email,
+    password,
+  };
+  const account = await accountService.createAccount(accountRegister);
+  const userCreateBody: UserCreateProps = {
+    account_id: account._id,
+    name,
+  };
+  await userService.createUser(userCreateBody);
+  res.status(httpStatus.OK).send();
 });
 
-// const login = catchAsync(async (req, res) => {
-//   const { email, password } = req.body;
-//   const user = await accountService.loginUserWithEmailAndPassword(email, password);
-//   const tokens = await tokenService.generateAuthTokens(user);
-//   res.send({ user, tokens });
-// });
+const login = catchAsync(async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+  const user = await accountService.login({ email, password });
+  // const tokens = await tokenService.generateAuthTokens(user);
+  console.log("user", user);
+  res.send({ user });
+});
 
 // const logout = catchAsync(async (req, res) => {
 //   await authService.logout(req.body.refreshToken);
@@ -39,6 +50,7 @@ const register = catchAsync(async (req: Request, res: Response) => {
 
 const accountController = {
   register,
+  login,
 };
 
 export default accountController;

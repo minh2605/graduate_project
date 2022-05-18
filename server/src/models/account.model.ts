@@ -1,12 +1,19 @@
 import mongoose, { Types } from "mongoose";
+import bcrypt from "bcryptjs";
 
+enum AccountRole {
+  ADMIN = "admin",
+  USER = "user",
+}
 export interface AccountDocument extends mongoose.Document {
   email: string;
-  hash_pwd: string;
-  role_name: string;
-  order_ids: Types.ObjectId[];
+  password: string;
+  role_name?: string;
+  order_ids?: Types.ObjectId[];
   createdAt?: Date;
   updatedAt?: Date;
+  setPassword: (password: string) => Promise<void>;
+  checkPasswordMatch: (password: string) => Promise<boolean>;
 }
 
 const accountSchema = new mongoose.Schema(
@@ -17,19 +24,19 @@ const accountSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
-    hash_pwd: {
+    password: {
       type: String,
       required: true,
       trim: true,
     },
     role_name: {
       type: String,
-      trim: true,
+      enum: AccountRole.USER,
+      default: AccountRole.USER,
     },
     order_ids: [
       {
         type: mongoose.SchemaTypes.ObjectId,
-        required: true,
       },
     ],
   },
@@ -38,6 +45,18 @@ const accountSchema = new mongoose.Schema(
     versionKey: false,
   }
 );
+
+accountSchema.methods.setPassword = async function (password: string) {
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password, salt);
+  this.password = hash;
+  this.save();
+};
+
+accountSchema.methods.checkPasswordMatch = async function (password: string) {
+  const result = await bcrypt.compare(password, this.password);
+  return result;
+};
 
 const AccountModel = mongoose.model<AccountDocument>("Account", accountSchema);
 export default AccountModel;

@@ -2,13 +2,12 @@ import mongoose, { Types } from "mongoose";
 
 export interface UserProfileDocument extends mongoose.Document {
   account_id: Types.ObjectId;
-  first_name: string;
-  last_name: string;
-  address: string;
-  city: Date;
-  birthday: Date;
-  gender: boolean;
-  avatar: string;
+  name: string;
+  address?: string;
+  city?: Date;
+  birthday?: Date;
+  gender?: boolean;
+  avatar?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -21,11 +20,7 @@ const userProfileSchema = new mongoose.Schema(
       trim: true,
       ref: "Account",
     },
-    first_name: {
-      type: String,
-      trim: true,
-    },
-    last_name: {
+    name: {
       type: String,
       trim: true,
     },

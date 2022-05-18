@@ -34,6 +34,7 @@ module.exports = {
       "dark-red": "#B92F28",
       "light-red": "#EF2E32",
       "light-red-opacity": "rgba(239, 46, 50, 0.1)",
+      "dark-red-opacity": "rgba(185, 47, 40, 0.75)",
       "border-grey": "#E7E7E7",
     },
     extend: {
