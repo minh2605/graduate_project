@@ -1,7 +1,7 @@
 import mongoose, { Types } from "mongoose";
 import bcrypt from "bcryptjs";
 
-enum AccountRole {
+export enum AccountRole {
   ADMIN = "admin",
   USER = "user",
 }

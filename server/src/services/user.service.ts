@@ -1,11 +1,11 @@
 import UserProfileModel from "../models/userProfile.model";
-import { ObjectId } from "mongoose";
+import { Types } from "mongoose";
 
 export type UserCreateProps = {
-  account_id: ObjectId;
+  account_id: Types.ObjectId;
   name: string;
   address?: string;
-  city?: Date;
+  city?: string;
   birthday?: Date;
   gender?: boolean;
   avatar?: string;

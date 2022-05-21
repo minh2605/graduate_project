@@ -3,6 +3,7 @@ import accountService, { AccountRegister } from "../services/account.service";
 import httpStatus from "http-status";
 import { catchAsync } from "../utils/catchAsync";
 import userService, { UserCreateProps } from "../services/user.service";
+import tokenServices from "../services/token.service";
 
 const register = catchAsync(async (req: Request, res: Response) => {
   const { email, password, name } = req.body;
@@ -22,15 +23,14 @@ const register = catchAsync(async (req: Request, res: Response) => {
 const login = catchAsync(async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const user = await accountService.login({ email, password });
-  // const tokens = await tokenService.generateAuthTokens(user);
-  console.log("user", user);
-  res.send({ user });
+  const tokens = await tokenServices.generateAuthTokens(user);
+  res.send({ user, tokens });
 });
 
-// const logout = catchAsync(async (req, res) => {
-//   await authService.logout(req.body.refreshToken);
-//   res.status(httpStatus.NO_CONTENT).send();
-// });
+const logout = catchAsync(async (req: Request, res: Response) => {
+  await accountService.logout(req.body.refreshToken);
+  res.status(httpStatus.NO_CONTENT).send();
+});
 
 // const refreshTokens = catchAsync(async (req, res) => {
 //   const tokens = await authService.refreshAuth(req.body.refreshToken);
@@ -51,6 +51,7 @@ const login = catchAsync(async (req: Request, res: Response) => {
 const accountController = {
   register,
   login,
+  logout,
 };
 
 export default accountController;

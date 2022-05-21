@@ -4,7 +4,7 @@ export interface UserProfileDocument extends mongoose.Document {
   account_id: Types.ObjectId;
   name: string;
   address?: string;
-  city?: Date;
+  city?: string;
   birthday?: Date;
   gender?: boolean;
   avatar?: string;

@@ -22,7 +22,8 @@ const tokenSchema = new mongoose.Schema(
       ref: "Account",
     },
     type: {
-      type: TokenType,
+      type: String,
+      enum: TokenType,
       required: true,
     },
     expires: {

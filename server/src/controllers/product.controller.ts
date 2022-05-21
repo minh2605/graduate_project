@@ -1,7 +1,11 @@
+import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 import productService from "../services/product.service";
 import { catchAsync } from "../utils/catchAsync";
+import { envConfig } from "../config/config";
+import TokenModel from "../models/token.model";
+import { TokenType } from "../config/token";
 
 const createProduct = catchAsync(async (req: Request, res: Response) => {
   const newProduct = await productService.createProduct(req.body);

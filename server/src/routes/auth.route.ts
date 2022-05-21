@@ -11,5 +11,13 @@ router.post(
   accountController.register
 );
 router.post("/login", validate(authValidation.login), accountController.login);
+router.post(
+  "/logout",
+  validate(authValidation.logout),
+  accountController.logout
+);
+// router.post('/refresh-tokens', validate(authValidation.refreshTokens), accountController.refreshTokens);
+// router.post('/forgot-password', validate(authValidation.forgotPassword), accountController.forgotPassword);
+// router.post('/reset-password', validate(authValidation.resetPassword), accountController.resetPassword);
 
 export default router;

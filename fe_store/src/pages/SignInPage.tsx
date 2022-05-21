@@ -1,8 +1,11 @@
+import API from "api/axios";
 import { Button } from "common/components/Button";
 import SvgGoogle from "common/components/svg/Google";
 import SvgLeftArrow from "common/components/svg/LeftArrow";
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import { Link } from "react-router-dom";
+import { Formik, Field, Form, ErrorMessage, FormikValues } from "formik";
+import { useLoading } from "hooks/useLoading";
+import { Link, useNavigate } from "react-router-dom";
+import { LoginResponseProps } from "types/auth";
 import * as yup from "yup";
 
 interface SigninPageProps {
@@ -10,6 +13,8 @@ interface SigninPageProps {
   password: string;
 }
 export const SigninPage = (): JSX.Element => {
+  const navigate = useNavigate();
+  const [showLoading, hideLoading] = useLoading();
   const initialValues: SigninPageProps = {
     email: "",
     password: "",
@@ -19,11 +24,21 @@ export const SigninPage = (): JSX.Element => {
       .string()
       .required("This field is required!")
       .email("Email format is incorrect!"),
-    password: yup
-      .string()
-      .required("This field is required!")
-      .min(6, "Password must be larger than 6 characters"),
+    password: yup.string().required("This field is required!"),
+    // .min(5, "Password must be larger than 5 characters"),
   });
+
+  const handleLogin = async (values: FormikValues) => {
+    try {
+      showLoading();
+      const data: LoginResponseProps = await API.post("auth/login", values);
+      localStorage.setItem("jwt_token", data.tokens.access.token);
+      hideLoading();
+      navigate("/");
+    } catch (error) {
+      hideLoading();
+    }
+  };
 
   return (
     <div className="flex flex-col">
@@ -49,9 +64,7 @@ export const SigninPage = (): JSX.Element => {
           validateOnChange={false}
           initialValues={initialValues}
           validationSchema={loginSchema}
-          onSubmit={(values) => {
-            console.log("values submit", values);
-          }}
+          onSubmit={(values) => handleLogin(values)}
         >
           <Form
             autoComplete="off"

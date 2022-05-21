@@ -27,8 +27,6 @@ app.use(morgan("combined"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "30mb" }));
 
-app.use("/api", routes);
-
 // gzip compression
 app.use(compression());
 
@@ -36,11 +34,15 @@ app.use(compression());
 // app.use(xss());
 app.use(mongoSanitize());
 
+const corsOptions = {
+  origin: "http://localhost:3000",
+  optionsSuccessStatus: 200, // For legacy browser support
+};
 // enable cors
-app.use(cors());
-// app.options("*", cors());
+app.use(cors(corsOptions));
+// app.options("*", cors(corsOptions));
 
-// app.use("/", routes);
+app.use("/api", routes);
 
 // app.get("/", (req: Request, res: Response, next: NextFunction) => {
 //   res.send("Welcome to Minh's server");
