@@ -5,8 +5,11 @@ import { envConfig } from "./config/config";
 import mongoSanitize from "express-mongo-sanitize";
 import compression from "compression";
 import morgan from "morgan";
+import passport from "passport";
 
 import routes from "./routes";
+import jwtStrategy from "./config/passport";
+import errorMiddleware from "./middleware/error";
 
 let server;
 const app: Application = express();
@@ -42,8 +45,14 @@ const corsOptions = {
 app.use(cors(corsOptions));
 // app.options("*", cors(corsOptions));
 
+// jwt authentication
+app.use(passport.initialize());
+passport.use("jwt", jwtStrategy);
+
 app.use("/api", routes);
 
-// app.get("/", (req: Request, res: Response, next: NextFunction) => {
-//   res.send("Welcome to Minh's server");
-// });
+// convert error to ApiError, if needed
+app.use(errorMiddleware.errorConverter);
+
+// handle error
+app.use(errorMiddleware.errorHandler);

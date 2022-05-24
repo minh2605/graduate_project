@@ -33,6 +33,7 @@ export const SigninPage = (): JSX.Element => {
       showLoading();
       const data: LoginResponseProps = await API.post("auth/login", values);
       localStorage.setItem("jwt_token", data.tokens.access.token);
+      localStorage.setItem("jwt_refresh_token", data.tokens.refresh.token);
       hideLoading();
       navigate("/");
     } catch (error) {

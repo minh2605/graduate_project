@@ -16,6 +16,10 @@ export interface AccountDocument extends mongoose.Document {
   checkPasswordMatch: (password: string) => Promise<boolean>;
 }
 
+interface IAccountModel extends mongoose.Model<AccountDocument> {
+  isEmailTaken: (email: string) => Promise<boolean>;
+}
+
 const accountSchema = new mongoose.Schema(
   {
     email: {
@@ -58,5 +62,16 @@ accountSchema.methods.checkPasswordMatch = async function (password: string) {
   return result;
 };
 
-const AccountModel = mongoose.model<AccountDocument>("Account", accountSchema);
+accountSchema.statics.isEmailTaken = async function (
+  email: string,
+  excludeUserId: Types.ObjectId
+) {
+  const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
+  return !!user;
+};
+
+const AccountModel = mongoose.model<AccountDocument, IAccountModel>(
+  "Account",
+  accountSchema
+);
 export default AccountModel;

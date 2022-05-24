@@ -45,6 +45,10 @@ axiosInstance.interceptors.response.use(
       // window.location.href = '/forbi?dden';
       return;
     }
+    if (statusCode === 409) {
+      console.log("error.response", error.message);
+      return;
+    }
     if (statusCode === 500) {
       // show notification
       toast.error("System has an error");

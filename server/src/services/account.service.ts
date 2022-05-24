@@ -20,7 +20,10 @@ export interface LoginResponseProps {
 }
 
 const createAccount = async (accountBody: AccountRegister) => {
-  const { password } = accountBody;
+  const { email, password } = accountBody;
+  if (await AccountModel.isEmailTaken(email)) {
+    throw new ApiError(httpStatus.CONFLICT, "Email already taken");
+  }
   const newAccount = await AccountModel.create(accountBody);
   newAccount.setPassword(password);
   return newAccount;

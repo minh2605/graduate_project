@@ -39,11 +39,10 @@ const saveToken = async (
 
 const verifyToken = async (token: string, type: TokenType) => {
   const payload = jwt.verify(token, envConfig.jwt.secret);
+  console.log("payload", payload);
   const tokenDoc = await TokenModel.findOne({
-    token,
     type,
-    user: payload.sub,
-    blacklisted: false,
+    account: payload.sub,
   });
   if (!tokenDoc) {
     throw new Error("Token not found");
@@ -93,6 +92,7 @@ const generateAuthTokens = async (user: LoginResponseProps) => {
 const tokenServices = {
   saveToken,
   generateAuthTokens,
+  verifyToken,
 };
 
 export default tokenServices;

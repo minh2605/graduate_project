@@ -4,7 +4,8 @@ import httpStatus from "http-status";
 import passport from "passport";
 import { AccountRole } from "../models/account.model";
 import ApiError from "../utils/ApiError";
-import { envConfig } from "../config/config";
+import tokenServices from "../services/token.service";
+import { TokenType } from "../config/token";
 
 const verifyCallback =
   (req: Request, resolve: any, reject: any, requiredRights: string[]) =>
@@ -42,19 +43,22 @@ const authCheck =
       .catch((err) => next(err));
   };
 
-const tokenCheck = (req: Request, res: Response, next: NextFunction) => {
+const tokenCheck = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const bearerHeader = req.headers["authorization"];
     if (bearerHeader) {
       const bearer = bearerHeader.split(" ");
       const bearerToken = bearer[1];
-      const payload = jwt.verify(bearerToken, envConfig.jwt.secret);
-      if (payload) {
+      const token = await tokenServices.verifyToken(
+        bearerToken,
+        TokenType.ACCESS
+      );
+      if (token) {
         next();
       }
     } else throw new Error("Token not found");
   } catch (error) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, "Please authenticate");
+    next(error);
   }
 };
 

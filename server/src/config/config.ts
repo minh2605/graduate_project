@@ -37,6 +37,7 @@ export const envConfig = {
   },
   jwt: {
     secret: envVars.JWT_SECRET,
+    refresh_secret: envVars.JWT_SECRET_REFRESH,
     accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,
     refreshExpirationDays: envVars.JWT_REFRESH_EXPIRATION_DAYS,
     resetPasswordExpirationMinutes: 10,

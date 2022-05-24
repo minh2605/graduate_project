@@ -1,7 +1,10 @@
+import API from "api/axios";
 import { Button } from "common/components/Button";
 import SvgLeftArrow from "common/components/svg/LeftArrow";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { Link } from "react-router-dom";
+import { useLoading } from "hooks/useLoading";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import * as yup from "yup";
 
 interface SigninPageProps {
@@ -11,6 +14,8 @@ interface SigninPageProps {
   confirmPassword: string;
 }
 export const RegisterPage = (): JSX.Element => {
+  const [showLoading, hideLoading] = useLoading();
+  const navigate = useNavigate();
   const initialValues: SigninPageProps = {
     name: "",
     email: "",
@@ -30,8 +35,35 @@ export const RegisterPage = (): JSX.Element => {
     confirmPassword: yup
       .string()
       .required("This field is required!")
-      .min(6, "Password must be larger than 6 characters"),
+      .test(
+        "confirm-password",
+        "Confirm password doest not match",
+        (value, context) => {
+          return value === context.parent.password;
+        }
+      ),
   });
+
+  const handleRegister = async (values: Partial<SigninPageProps>) => {
+    const { email, password, name } = values;
+    const registerValues = {
+      name,
+      email,
+      password,
+    };
+    try {
+      showLoading();
+      const data = await API.post("auth/register", registerValues);
+      if (data.status) {
+        hideLoading();
+        toast.success("Create account successfully");
+        navigate("../sign-in");
+      }
+    } catch (error) {
+      hideLoading();
+      toast.error("Email is already taken");
+    }
+  };
 
   return (
     <div className="flex flex-col">
@@ -47,9 +79,7 @@ export const RegisterPage = (): JSX.Element => {
           validateOnChange={false}
           initialValues={initialValues}
           validationSchema={registerSchema}
-          onSubmit={(values) => {
-            console.log("values submit", values);
-          }}
+          onSubmit={(values) => handleRegister(values)}
         >
           <Form
             autoComplete="off"

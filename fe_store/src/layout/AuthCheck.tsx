@@ -1,6 +1,6 @@
 import useLocalStorage from "hooks/useLocalStorage";
 import React from "react";
-import { Location, Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 type AuthCheckProps = {
   isPublic?: boolean;

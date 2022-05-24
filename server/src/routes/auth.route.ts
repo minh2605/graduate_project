@@ -11,7 +11,7 @@ router.post(
   accountController.register
 );
 router.post("/login", validate(authValidation.login), accountController.login);
-router.post(
+router.delete(
   "/logout",
   validate(authValidation.logout),
   accountController.logout
