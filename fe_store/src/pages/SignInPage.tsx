@@ -5,6 +5,8 @@ import SvgLeftArrow from "common/components/svg/LeftArrow";
 import { Formik, Field, Form, ErrorMessage, FormikValues } from "formik";
 import { useLoading } from "hooks/useLoading";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "redux/hook";
+import { setCurrentUser, setLoggedIn } from "redux/slices/auth/authSlice";
 import { LoginResponseProps } from "types/auth";
 import * as yup from "yup";
 
@@ -14,6 +16,7 @@ interface SigninPageProps {
 }
 export const SigninPage = (): JSX.Element => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showLoading, hideLoading] = useLoading();
   const initialValues: SigninPageProps = {
     email: "",
@@ -32,10 +35,21 @@ export const SigninPage = (): JSX.Element => {
     try {
       showLoading();
       const data: LoginResponseProps = await API.post("auth/login", values);
-      localStorage.setItem("jwt_token", data.tokens.access.token);
-      localStorage.setItem("jwt_refresh_token", data.tokens.refresh.token);
-      hideLoading();
-      navigate("/");
+      if (data) {
+        dispatch(setLoggedIn());
+        dispatch(setCurrentUser(data.user));
+        localStorage.setItem(
+          "authInfo",
+          JSON.stringify({
+            currentUserProfile: data.user,
+            isLoggedIn: true,
+          })
+        );
+        localStorage.setItem("jwt_token", data.tokens.access.token);
+        localStorage.setItem("jwt_refresh_token", data.tokens.refresh.token);
+        hideLoading();
+        navigate("/");
+      }
     } catch (error) {
       hideLoading();
     }

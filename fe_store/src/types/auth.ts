@@ -11,6 +11,11 @@ export interface LoginResponseProps {
   tokens: TokensResponse;
 }
 
+export interface CurrentUserProfile extends UserDataResponse {
+  gender?: boolean;
+  birthday?: Date;
+}
+
 interface TokensResponse {
   access: TokenProps;
   refresh: TokenProps;

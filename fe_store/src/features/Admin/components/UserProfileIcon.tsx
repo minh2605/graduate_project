@@ -1,16 +1,26 @@
 import { getInitialsFromName } from "common/utils/common";
+import { useState } from "react";
+import { ProfileDropDown } from "./ProfileDropDown";
 
 interface UserProfileIconProps {
   type: "image" | "text";
   name: string;
   url?: string;
 }
+
 export const UserProfileIcon = ({
   name,
   type,
 }: UserProfileIconProps): JSX.Element => {
+  const [isShowDropDown, setShowDropDown] = useState(false);
+  const handleProfileClicked = () => {
+    setShowDropDown((prev) => !prev);
+  };
   return (
-    <div className="flex items-center gap-2">
+    <div
+      className="relative flex items-center gap-2 "
+      onClick={handleProfileClicked}
+    >
       {type === "image" ? (
         <div className="h-10 w-10 rounded-full border overflow-hidden cursor-pointer">
           <img
@@ -27,6 +37,7 @@ export const UserProfileIcon = ({
       <div>
         <span className="font-medium">{name}</span>
       </div>
+      {isShowDropDown && <ProfileDropDown />}
     </div>
   );
 };

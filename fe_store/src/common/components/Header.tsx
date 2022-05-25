@@ -6,6 +6,8 @@ import tw, { styled } from "twin.macro";
 import { MenuBar } from "common/components/MenuBar";
 import SvgMenuBar from "common/components/svg/MenuBar";
 import { useState } from "react";
+import { UserProfileIcon } from "features/Admin/components/UserProfileIcon";
+import useAuth from "hooks/useAuth";
 
 const HeaderWrapper = styled.div(
   tw`fixed z-fixed inset-0 h-24 px-5 py-2 bg-white border border-border-grey flex justify-center items-center font-medium md:px-14 md:justify-between lg:px-20`
@@ -24,6 +26,9 @@ export const LogoText = styled.h2(
 
 export const Header = (): JSX.Element => {
   const [isMenuBarShow, setMenuBarShow] = useState(false);
+  const { isLoggedIn, currentUserProfile } = useAuth();
+  console.log("currentUserProfile", currentUserProfile);
+
   const handleShowMenuBar = () => {
     setMenuBarShow((isMenubarShow) => !isMenubarShow);
   };
@@ -57,11 +62,17 @@ export const Header = (): JSX.Element => {
           <SvgCart />
           <span className="flex-1 text-center">3</span>
         </HeaderActionButton>
-        <HeaderActionButton>
-          <Link to="/public/sign-in" className="block w-full">
-            <span className="w-full">Sign in</span>
-          </Link>
-        </HeaderActionButton>
+        {isLoggedIn && currentUserProfile ? (
+          <div>
+            <UserProfileIcon type="text" name={currentUserProfile.name} />
+          </div>
+        ) : (
+          <HeaderActionButton>
+            <Link to="/public/sign-in" className="block w-full">
+              <span className="w-full">Sign in</span>
+            </Link>
+          </HeaderActionButton>
+        )}
       </div>
 
       <MenuBar isMenuBarShow={isMenuBarShow} onClose={handleShowMenuBar} />

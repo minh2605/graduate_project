@@ -1,10 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SvgClose from "common/components/svg/Close";
 import SvgHome from "common/components/svg/Home";
 import SvgOrder from "common/components/svg/Order";
 import SvgAccount from "common/components/svg/Account";
 import SvgPayment from "common/components/svg/Payment";
 import SvgCart from "./svg/Cart";
+import useAuth from "hooks/useAuth";
+import SvgLogout from "./svg/Logout";
+import API from "api/axios";
+import { clearAuth } from "redux/slices/auth/authSlice";
+import { useDispatch } from "redux/hook";
 
 interface MenuBarProps {
   isMenuBarShow: boolean;
@@ -15,9 +20,21 @@ export const MenuBar = ({
   isMenuBarShow,
   onClose,
 }: MenuBarProps): JSX.Element => {
+  const { isLoggedIn } = useAuth();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleMenuBarClose = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
     onClose();
+  };
+  const handleLogout = async () => {
+    await API.delete("/auth/logout", {
+      data: {
+        refreshToken: localStorage.getItem("jwt_refresh_token"),
+      },
+    });
+    dispatch(clearAuth());
+    navigate("/");
   };
   return (
     <div
@@ -56,13 +73,23 @@ export const MenuBar = ({
             <SvgOrder />
             <span>Order</span>
           </Link>
-          <Link
-            to="/public/sign-in"
-            className="py-4 px-8 flex items-center gap-4 border-t border-border-grey"
-          >
-            <SvgAccount />
-            <span>Sign up / Sign In</span>
-          </Link>
+          {isLoggedIn ? (
+            <div
+              className="py-4 px-8 flex items-center gap-4 border-t border-border-grey cursor-pointer"
+              onClick={handleLogout}
+            >
+              <SvgLogout />
+              <span>Logout</span>
+            </div>
+          ) : (
+            <Link
+              to="/public/sign-in"
+              className="py-4 px-8 flex items-center gap-4 border-t border-border-grey"
+            >
+              <SvgAccount />
+              <span>Sign up / Sign In</span>
+            </Link>
+          )}
         </nav>
       </div>
     </div>

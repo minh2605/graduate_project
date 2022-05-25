@@ -1,4 +1,5 @@
-import useLocalStorage from "hooks/useLocalStorage";
+import { AccountRole } from "common/types/auth";
+import useAuth from "hooks/useAuth";
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
@@ -11,12 +12,14 @@ export const AuthCheck = ({
   isPublic,
   children,
 }: AuthCheckProps): JSX.Element => {
-  const [getToken] = useLocalStorage("jwt_token");
-  const isLoggedIn = !!getToken();
+  const { isLoggedIn, currentUserProfile } = useAuth();
   const location = useLocation();
-  console.log("location", location);
-  // const locationState = location.pathname as { from?: Location } | null;
-  if (isLoggedIn) {
+
+  if (
+    isLoggedIn &&
+    currentUserProfile &&
+    currentUserProfile.role_name === AccountRole.ADMIN
+  ) {
     return <>{children}</>;
   } else {
     return <Navigate to="/public/sign-in" state={{ from: location }} replace />;

@@ -1,6 +1,7 @@
 import SvgMenuBar from "common/components/svg/MenuBar";
 import SvgNotification from "common/components/svg/Notification";
 import SvgSearch from "common/components/svg/Search";
+import useAuth from "hooks/useAuth";
 import tw, { styled } from "twin.macro";
 import { UserProfileIcon } from "./UserProfileIcon";
 
@@ -17,6 +18,7 @@ export const HeaderAdmin = ({
   isToggle,
   setToggle,
 }: HeaderAdminProps): JSX.Element => {
+  const { currentUserProfile } = useAuth();
   return (
     <div
       className={`fixed z-fixed ${
@@ -35,10 +37,12 @@ export const HeaderAdmin = ({
         />
         <SvgSearch className="shrink-0" />
       </HeaderSeachBar>
-      <div className="flex items-center justify-between basis-1/4">
-        <SvgNotification className="text-dark-red" />
-        <UserProfileIcon type="text" name="Minology Tran" />
-      </div>
+      {currentUserProfile && (
+        <div className="flex items-center justify-between basis-1/4">
+          <SvgNotification className="text-dark-red" />
+          <UserProfileIcon type="text" name={currentUserProfile.name} />
+        </div>
+      )}
     </div>
   );
 };
