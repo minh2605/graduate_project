@@ -2,32 +2,40 @@ import { Button } from "common/components/Button";
 import SvgLeftArrow from "common/components/svg/LeftArrow";
 import { Formik, Field, Form, ErrorMessage, FormikValues } from "formik";
 import { useLoading } from "hooks/useLoading";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import * as yup from "yup";
 import API from "api/axios";
 
-interface SigninPageProps {
-  email: string;
+interface ResetPasswordPageProps {
+  password: string;
+  confirmPassword: string;
 }
-export const ForgotPasswordPage = (): JSX.Element => {
+export const ResetPasswordPage = (): JSX.Element => {
   const [showLoading, hideLoading] = useLoading();
-  const initialValues: SigninPageProps = {
-    email: "",
+  const [searchParams] = useSearchParams();
+  const resetToken = searchParams.get("token");
+
+  const initialValues: ResetPasswordPageProps = {
+    password: "",
+    confirmPassword: "",
   };
-  const forgotPasswordSchema: yup.SchemaOf<SigninPageProps> = yup
+  const resetPasswordSchema: yup.SchemaOf<ResetPasswordPageProps> = yup
     .object()
     .shape({
-      email: yup
-        .string()
-        .required("This field is required!")
-        .email("Email format is incorrect!"),
+      password: yup.string().required("This field is required!"),
+      confirmPassword: yup.string().required("This field is required!"),
     });
 
   const handleForgotPassword = async (values: FormikValues) => {
+    delete values.confirmPassword;
     try {
-      showLoading();
-      await API.post("auth/forgot-password", values);
-      hideLoading();
+      if (resetToken) {
+        showLoading();
+        await API.post(
+          `auth/reset-password?token=${resetToken}`,
+          values.password
+        );
+      }
     } catch (error) {
       hideLoading();
     }
@@ -40,13 +48,13 @@ export const ForgotPasswordPage = (): JSX.Element => {
           <Link to="../sign-in">
             <SvgLeftArrow width={32} height={32} />
           </Link>
-          <h1>Forgot password</h1>
+          <h1>Enter new password</h1>
         </div>
         <Formik
           validateOnBlur={false}
           validateOnChange={false}
           initialValues={initialValues}
-          validationSchema={forgotPasswordSchema}
+          validationSchema={resetPasswordSchema}
           onSubmit={(values) => {
             handleForgotPassword(values);
           }}
@@ -58,14 +66,27 @@ export const ForgotPasswordPage = (): JSX.Element => {
           >
             <div className="px-20 flex flex-col">
               <div className="flex flex-col flex-1 gap-2 mb-4 text-base">
-                <label htmlFor="email">Email*</label>
+                <label htmlFor="email">Password*</label>
                 <Field
-                  name="email"
-                  type="text"
+                  name="password"
+                  type="password"
                   className="border py-2 px-4 rounded text-sm"
                 />
                 <ErrorMessage
-                  name="email"
+                  name="password"
+                  component="div"
+                  className={`text-light-red text-xs`}
+                />
+              </div>
+              <div className="flex flex-col flex-1 gap-2 mb-4 text-base">
+                <label htmlFor="email">Confirm Password*</label>
+                <Field
+                  name="confirmPassword"
+                  type="password"
+                  className="border py-2 px-4 rounded text-sm"
+                />
+                <ErrorMessage
+                  name="confirmPassword"
                   component="div"
                   className={`text-light-red text-xs`}
                 />

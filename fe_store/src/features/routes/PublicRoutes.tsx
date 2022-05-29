@@ -1,6 +1,7 @@
 import { PublicRouteLayout } from "layout/PublicRouteLayout";
 import { ForgotPasswordPage } from "pages/ForgotPasswordPage";
 import { RegisterPage } from "pages/RegisterPage";
+import { ResetPasswordPage } from "pages/ResetPasswordPage";
 import { SigninPage } from "pages/SignInPage";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 
@@ -8,6 +9,7 @@ const PUBLIC_ROUTES = [
   { path: "/sign-in", element: <SigninPage /> },
   { path: "/sign-up", element: <RegisterPage /> },
   { path: "/forgot-password", element: <ForgotPasswordPage /> },
+  { path: "/reset-password", element: <ResetPasswordPage /> },
 ];
 
 export const PublicRoutes = (): JSX.Element => {

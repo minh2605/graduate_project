@@ -5,6 +5,7 @@ import userService from "./user.service";
 import { Types } from "mongoose";
 import { TokenType } from "../config/token";
 import TokenModel from "../models/token.model";
+import tokenService from "./token.service";
 export type AccountRegister = Pick<AccountDocument, "email" | "password">;
 
 export interface LoginResponseProps {
@@ -54,7 +55,7 @@ const login = async (loginBody: AccountRegister) => {
   return loginResponse;
 };
 
-const logout = async (refreshToken: Types.ObjectId) => {
+const logout = async (refreshToken: string) => {
   const refreshTokenDoc = await TokenModel.findOne({
     token: refreshToken,
     type: TokenType.REFRESH,
@@ -66,11 +67,38 @@ const logout = async (refreshToken: Types.ObjectId) => {
   await refreshTokenDoc.remove();
 };
 
+const resetPassword = async (
+  resetPasswordToken: string,
+  newPassword: string
+) => {
+  try {
+    const resetPasswordTokenDoc = await tokenService.verifyToken(
+      resetPasswordToken,
+      TokenType.RESET_PASSWORD
+    );
+    const user = await userService.getUserByAccountId(
+      resetPasswordTokenDoc.account.toString()
+    );
+    if (!user) {
+      throw new Error();
+    }
+    console.log("user", user);
+    // await userService.updateUserById(user.id, { password: newPassword });
+    // await TokenModel.deleteMany({
+    //   user: user.id,
+    //   type: TokenType.RESET_PASSWORD,
+    // });
+  } catch (error) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Password reset failed");
+  }
+};
+
 const accountService = {
   createAccount,
   getAccountByEmail,
   login,
   logout,
+  resetPassword,
 };
 
 export default accountService;

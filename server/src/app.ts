@@ -6,10 +6,12 @@ import mongoSanitize from "express-mongo-sanitize";
 import compression from "compression";
 import morgan from "morgan";
 import passport from "passport";
+import { engine } from "express-handlebars";
 
 import routes from "./routes";
 import jwtStrategy from "./config/passport";
 import errorMiddleware from "./middleware/error";
+import path from "path";
 
 let server;
 const app: Application = express();
@@ -43,11 +45,18 @@ const corsOptions = {
 };
 // enable cors
 app.use(cors(corsOptions));
+// app.options('*', cors())
 // app.options("*", cors(corsOptions));
 
 // jwt authentication
 app.use(passport.initialize());
 passport.use("jwt", jwtStrategy);
+
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
+app.set("views", path.join(__dirname, "views"));
+
+app.use(express.static("images"));
 
 app.use("/api", routes);
 

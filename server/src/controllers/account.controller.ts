@@ -4,6 +4,8 @@ import httpStatus from "http-status";
 import { catchAsync } from "../utils/catchAsync";
 import userService, { UserCreateProps } from "../services/user.service";
 import tokenServices from "../services/token.service";
+import tokenService from "../services/token.service";
+import emailService from "../services/email.service";
 
 const register = catchAsync(async (req: Request, res: Response) => {
   const { email, password, name } = req.body;
@@ -37,21 +39,35 @@ const logout = catchAsync(async (req: Request, res: Response) => {
 //   res.send({ ...tokens });
 // });
 
-// const forgotPassword = catchAsync(async (req, res) => {
-//   const resetPasswordToken = await tokenService.generateResetPasswordToken(req.body.email);
-//   await emailService.sendResetPasswordEmail(req.body.email, resetPasswordToken);
-//   res.status(httpStatus.NO_CONTENT).send();
-// });
+const forgotPassword = catchAsync(async (req: Request, res: Response) => {
+  const resetPasswordToken = await tokenService.generateResetPasswordToken(
+    req.body.email
+  );
+  await emailService.sendResetPasswordEmail(req.body.email, resetPasswordToken);
+  res.json({
+    message:
+      "Send request reset password successfully. Please check your email",
+    status: httpStatus.OK,
+  });
+});
 
-// const resetPassword = catchAsync(async (req, res) => {
-//   await authService.resetPassword(req.query.token, req.body.password);
-//   res.status(httpStatus.NO_CONTENT).send();
-// });
+const resetPassword = catchAsync(async (req: Request, res: Response) => {
+  const resetToken = req.query.token;
+  if (resetToken) {
+    await accountService.resetPassword(
+      resetToken.toString(),
+      req.body.password
+    );
+    res.status(httpStatus.OK).send();
+  }
+});
 
 const accountController = {
   register,
   login,
   logout,
+  forgotPassword,
+  resetPassword,
 };
 
 export default accountController;

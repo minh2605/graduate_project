@@ -4,8 +4,9 @@ import httpStatus from "http-status";
 import { envConfig } from "../config/config";
 import { TokenType } from "../config/token";
 import TokenModel from "../models/token.model";
-import { LoginResponseProps } from "./account.service";
+import accountService, { LoginResponseProps } from "./account.service";
 import { Types } from "mongoose";
+import ApiError from "../utils/ApiError";
 
 const generateToken = (
   accountId: Types.ObjectId | string,
@@ -48,6 +49,29 @@ const verifyToken = async (token: string, type: TokenType) => {
     throw new Error("Token not found");
   }
   return tokenDoc;
+};
+
+const generateResetPasswordToken = async (email: string) => {
+  const account = await accountService.getAccountByEmail(email);
+  if (!account) {
+    throw new ApiError(httpStatus.NOT_FOUND, "No users found with this email");
+  }
+  const expires = moment().add(
+    envConfig.jwt.resetPasswordExpirationMinutes,
+    "minutes"
+  );
+  const resetPasswordToken = generateToken(
+    account._id,
+    expires,
+    TokenType.RESET_PASSWORD
+  );
+  await saveToken(
+    resetPasswordToken,
+    account._id,
+    expires,
+    TokenType.RESET_PASSWORD
+  );
+  return resetPasswordToken;
 };
 
 const generateAuthTokens = async (user: LoginResponseProps) => {
@@ -93,6 +117,7 @@ const tokenServices = {
   saveToken,
   generateAuthTokens,
   verifyToken,
+  generateResetPasswordToken,
 };
 
 export default tokenServices;
