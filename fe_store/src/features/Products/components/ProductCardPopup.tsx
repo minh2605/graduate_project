@@ -1,12 +1,13 @@
 import { Button } from "common/components/Button";
 import { Modal } from "common/components/Modal";
+import { ProductProps } from "common/components/ProductCard";
 import SvgMinor from "common/components/svg/Minor";
 import SvgPlus from "common/components/svg/Plus";
 
 interface ProductCardPopupProps {
   isOpen: boolean;
   onClose: () => void;
-  productDetail: number;
+  productDetail: ProductProps;
 }
 
 export const ProductCardPopup = ({
@@ -18,7 +19,7 @@ export const ProductCardPopup = ({
     <Modal open={isOpen} onClose={onClose} size="md">
       <div className="flex flex-col">
         <h2 className="text-h2 font-bold leading-6 mb-4">
-          Product {productDetail}
+          Product {productDetail.name}
         </h2>
         <p className="text-sm mb-4">
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse
@@ -26,7 +27,7 @@ export const ProductCardPopup = ({
         </p>
         <div className="mb-8">
           <img
-            src="https://img.cdn4dd.com/p/fit=cover,width=600,format=auto,quality=50/media/photosV2/95101ca4-bb3a-417b-8f73-58b73952219b-e2af1df3-e073-41e3-8b9a-5a9ea996f83a-retina-large.JPG"
+            src={productDetail.image}
             alt="product-img"
             className="w-full object-cover"
           />

@@ -42,7 +42,6 @@ const verifyToken = async (token: string, type: TokenType) => {
   const payload = jwt.verify(token, envConfig.jwt.secret);
   console.log("payload", payload);
   const tokenDoc = await TokenModel.findOne({
-    type,
     account: payload.sub,
   });
   if (!tokenDoc) {

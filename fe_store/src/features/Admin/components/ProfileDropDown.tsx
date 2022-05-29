@@ -7,7 +7,13 @@ import API from "api/axios";
 const DropDownTab = styled.div(
   tw`block px-4 py-2 hover:bg-light-red hover:text-white `
 );
-export const ProfileDropDown = (): JSX.Element => {
+
+interface ProfileDropDownProps {
+  isAdmin: boolean;
+}
+export const ProfileDropDown = ({
+  isAdmin,
+}: ProfileDropDownProps): JSX.Element => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = async () => {
@@ -21,6 +27,11 @@ export const ProfileDropDown = (): JSX.Element => {
   };
   return (
     <div className="z-dropdown absolute top-full mt-2 w-40 bg-white shadow-xl rounded overflow-hidden flex flex-col gap-2">
+      {isAdmin && (
+        <Link to="/admin">
+          <DropDownTab>Dashboard</DropDownTab>
+        </Link>
+      )}
       <Link to="/profile">
         <DropDownTab>Profile</DropDownTab>
       </Link>

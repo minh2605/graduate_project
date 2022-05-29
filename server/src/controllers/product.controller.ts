@@ -1,11 +1,7 @@
-import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 import productService from "../services/product.service";
 import { catchAsync } from "../utils/catchAsync";
-import { envConfig } from "../config/config";
-import TokenModel from "../models/token.model";
-import { TokenType } from "../config/token";
 
 const createProduct = catchAsync(async (req: Request, res: Response) => {
   const newProduct = await productService.createProduct(req.body);
@@ -24,7 +20,11 @@ const getProductById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateProduct = catchAsync(async (req: Request, res: Response) => {
-  const updateProduct = await productService.createProduct(req.body);
+  const { id: productId } = req.params;
+  const updateProduct = await productService.updateProductById(
+    productId,
+    req.body
+  );
   res.status(httpStatus.OK).send(updateProduct);
 });
 const deleteProduct = catchAsync(async (req: Request, res: Response) => {

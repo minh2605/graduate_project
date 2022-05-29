@@ -1,9 +1,9 @@
-import { ProductCard, ProductProps } from "common/components/ProductCard";
-import API from "api/axios";
-import { useEffect, useState } from "react";
+import { ProductProps } from "common/components/ProductCard";
 import { useLoading } from "hooks/useLoading";
+import { useState, useEffect } from "react";
+import API from "api/axios";
 
-export const Products = (): JSX.Element => {
+export const ManageProductsPage = (): JSX.Element => {
   const [products, setProducts] = useState<ProductProps[]>();
   const [showLoading, hideLoading] = useLoading();
   useEffect(() => {
@@ -15,13 +15,9 @@ export const Products = (): JSX.Element => {
     };
     fetchData();
   }, [showLoading, hideLoading]);
-
   return (
-    <div className="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-4">
-      {products &&
-        products.map((product) => (
-          <ProductCard key={product._id} product={product} />
-        ))}
+    <div>
+      <h1>Manage Products Page</h1>
     </div>
   );
 };

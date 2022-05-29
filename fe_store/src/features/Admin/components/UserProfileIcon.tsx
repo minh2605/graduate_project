@@ -1,4 +1,6 @@
+import { AccountRole } from "common/types/auth";
 import { getInitialsFromName } from "common/utils/common";
+import useAuth from "hooks/useAuth";
 import { useState } from "react";
 import { ProfileDropDown } from "./ProfileDropDown";
 
@@ -13,6 +15,7 @@ export const UserProfileIcon = ({
   type,
 }: UserProfileIconProps): JSX.Element => {
   const [isShowDropDown, setShowDropDown] = useState(false);
+  const { currentUserProfile } = useAuth();
   const handleProfileClicked = () => {
     setShowDropDown((prev) => !prev);
   };
@@ -37,7 +40,11 @@ export const UserProfileIcon = ({
       <div>
         <span className="font-medium">{name}</span>
       </div>
-      {isShowDropDown && <ProfileDropDown />}
+      {isShowDropDown && (
+        <ProfileDropDown
+          isAdmin={currentUserProfile?.role_name === AccountRole.ADMIN}
+        />
+      )}
     </div>
   );
 };

@@ -1,14 +1,13 @@
+import { ManageOrdersPage } from "features/Admin/pages/ManageOrdersPage";
+import { ManageProductsPage } from "features/Admin/pages/ManageProductsPage";
 import { DashboardLayout } from "layout/DashboardLayout";
 import { DashboardPage } from "pages/DashboardPage";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 
-const ManageProductPage = <div>Manage Product Page</div>;
-const ManageOrderPage = <div>Manage Order Page</div>;
-
 const PRIVATE_ROUTES = [
-  { path: "/dashboard", element: <DashboardPage /> },
-  { path: "/product", element: ManageProductPage },
-  { path: "/order", element: ManageOrderPage },
+  { path: "/dashboard/*", element: <DashboardPage /> },
+  { path: "/product/*", element: <ManageProductsPage /> },
+  { path: "/order/*", element: <ManageOrdersPage /> },
 ];
 
 export const PrivateRoutes = (): JSX.Element => {
