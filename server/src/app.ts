@@ -1,4 +1,4 @@
-import express, { Application } from "express";
+import express, { Application, Request } from "express";
 import cors from "cors";
 import mongoose, { ConnectOptions } from "mongoose";
 import { envConfig } from "./config/config";
@@ -39,13 +39,13 @@ app.use(compression());
 // app.use(xss());
 app.use(mongoSanitize());
 
-const corsOptions = {
-  origin: "http://localhost:3000",
-  optionsSuccessStatus: 200, // For legacy browser support
-};
-// enable cors
-app.use(cors(corsOptions));
-// app.options('*', cors())
+// const corsOptions = {
+//   origin: ["http://localhost:3000", "*"],
+//   optionsSuccessStatus: 200, // For legacy browser support
+// };
+// // enable cors
+// app.use(cors(corsOptions));
+app.use("*", cors<Request>());
 // app.options("*", cors(corsOptions));
 
 // jwt authentication

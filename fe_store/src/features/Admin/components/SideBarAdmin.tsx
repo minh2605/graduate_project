@@ -3,6 +3,7 @@ import FoogleLogo from "assets/svg/foogle-logo.svg";
 import { Link } from "react-router-dom";
 import SvgDashboard from "common/components/svg/Dashboard";
 import SvgOrder from "common/components/svg/Order";
+import SvgItem from "common/components/svg/Item";
 
 interface SideBarAdminProps {
   isToggle: boolean;
@@ -41,7 +42,7 @@ export const SidebarAdmin = ({ isToggle }: SideBarAdminProps): JSX.Element => {
       <DisclosureAdmin
         title="Product"
         href="../product"
-        icon={<SvgOrder color="white" />}
+        icon={<SvgItem color="white" />}
         options={[
           { label: "A", href: "./product/a" },
           { label: "B", href: "./product/b" },

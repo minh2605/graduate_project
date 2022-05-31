@@ -3,11 +3,12 @@ import { ManageProductsPage } from "features/Admin/pages/ManageProductsPage";
 import { DashboardLayout } from "layout/DashboardLayout";
 import { DashboardPage } from "pages/DashboardPage";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { DashboardProductRoutes } from "./DashboardProductRoute";
 
 const PRIVATE_ROUTES = [
-  { path: "/dashboard/*", element: <DashboardPage /> },
-  { path: "/product/*", element: <ManageProductsPage /> },
-  { path: "/order/*", element: <ManageOrdersPage /> },
+  { path: "dashboard/*", element: <DashboardPage /> },
+  { path: "product/*", element: <DashboardProductRoutes /> },
+  { path: "order/*", element: <ManageOrdersPage /> },
 ];
 
 export const PrivateRoutes = (): JSX.Element => {
