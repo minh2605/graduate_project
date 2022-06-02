@@ -28,7 +28,8 @@ const updateProduct = catchAsync(async (req: Request, res: Response) => {
   res.status(httpStatus.OK).send(updateProduct);
 });
 const deleteProduct = catchAsync(async (req: Request, res: Response) => {
-  await productService.createProduct(req.body);
+  const { id: productId } = req.params;
+  await productService.deleteProduct(productId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

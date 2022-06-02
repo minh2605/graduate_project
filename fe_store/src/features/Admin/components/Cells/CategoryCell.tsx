@@ -5,7 +5,7 @@ import API from "api/axios";
 type CategoryCellProps = {
   value: string;
 };
-interface CategoryProps {
+export interface CategoryProps {
   _id: string;
   name: string;
   productTypeId: string;

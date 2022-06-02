@@ -1,19 +1,21 @@
-import { Column, useFlexLayout, useTable } from "react-table";
+import { Column, Row, useFlexLayout, useTable } from "react-table";
 interface DashboardTableProps<T extends object> {
   className?: string;
   data: T[];
   columns: Array<Column<T>>;
+  onRowSelected: (selectedRow: Row<T>) => void;
 }
 export const DashboardTable = <T extends object>({
   data,
   columns,
   className,
+  onRowSelected,
 }: DashboardTableProps<T>): JSX.Element => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data }, useFlexLayout);
 
   return (
-    <div className={`shadow-2xl rounded-xl ${className}`}>
+    <div className={`shadow-2xl rounded-xl py-2 ${className}`}>
       <div {...getTableProps()}>
         {headerGroups.map((headerGroup) => (
           <div {...headerGroup.getHeaderGroupProps()}>
@@ -41,6 +43,7 @@ export const DashboardTable = <T extends object>({
                 <div
                   {...row.getRowProps()}
                   className="mb-4 hover:bg-light-red-opacity"
+                  onClick={() => onRowSelected(row)}
                 >
                   {row.cells.map((cell) => {
                     return (

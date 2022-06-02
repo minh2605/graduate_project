@@ -23,7 +23,7 @@ export const HeaderAdmin = ({
     <div
       className={`fixed z-fixed ${
         isToggle ? "left-0" : "left-72"
-      }  top-0 right-0 px-6 h-20 flex items-center justify-between border-b transition-all`}
+      }  top-0 right-0 px-6 h-20 flex items-center justify-between border-b transition-all bg-white`}
     >
       <SvgMenuBar
         onClick={() => setToggle(!isToggle)}

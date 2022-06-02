@@ -14,6 +14,7 @@ router
 router
   .route("/:id")
   .get(productController.getProductById)
-  .put(authMiddleware.tokenCheck, productController.updateProduct);
+  .put(authMiddleware.tokenCheck, productController.updateProduct)
+  .delete(authMiddleware.tokenCheck, productController.deleteProduct);
 
 export default router;

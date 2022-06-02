@@ -8,7 +8,7 @@ export interface ProductProps {
   productCategoryId: string;
   productCode: string;
   productTypeId: string;
-  slideImages: string[];
+  slideImages?: string[];
   updatedAt?: Date;
   createdAt?: Date;
   _id: string;

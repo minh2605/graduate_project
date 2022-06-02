@@ -1,15 +1,20 @@
-import { ProductProps } from "common/components/ProductCard";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import SvgEdit from "common/components/svg/Edit";
 import SvgBin from "common/components/svg/Bin";
 import SvgChevronDown from "common/components/svg/ChevronDown";
 
-type OptionMenuCellProps = {
-  value: ProductProps;
+type OptionMenuCellProps<T extends object> = {
+  value: T;
+  onDelete: (value: T) => void;
+  onEdit: (value: T) => void;
 };
 
-export const OptionMenuCell = ({ value }: OptionMenuCellProps): JSX.Element => (
+export const OptionMenuCell = <T extends object>({
+  value,
+  onDelete,
+  onEdit,
+}: OptionMenuCellProps<T>): JSX.Element => (
   <div className="flex justify-center items-center h-full text-center text-sm">
     <div className="max-w-[140px] text-ellipsis">
       <div className="w-full">
@@ -36,6 +41,10 @@ export const OptionMenuCell = ({ value }: OptionMenuCellProps): JSX.Element => (
                       className={`${
                         active ? "text-dark-red" : "text-gray-900"
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm font-medium`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEdit(value);
+                      }}
                     >
                       <SvgEdit className="mr-2 h-5 w-5" aria-hidden="true" />
                       Edit
@@ -48,6 +57,10 @@ export const OptionMenuCell = ({ value }: OptionMenuCellProps): JSX.Element => (
                       className={`${
                         active ? "text-dark-red" : "text-gray-900"
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm font-medium`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(value);
+                      }}
                     >
                       <SvgBin className="mr-2 h-5 w-5" aria-hidden="true" />
                       Delete
