@@ -5,6 +5,7 @@ export interface UserDataResponse {
   email: string;
   name: string;
   role_name: string;
+  avatar?: string;
 }
 export interface LoginResponseProps {
   user: UserDataResponse;

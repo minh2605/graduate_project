@@ -1,5 +1,4 @@
 import { ManageOrdersPage } from "features/Admin/pages/ManageOrdersPage";
-import { ManageProductsPage } from "features/Admin/pages/ManageProductsPage";
 import { DashboardLayout } from "layout/DashboardLayout";
 import { DashboardPage } from "pages/DashboardPage";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";

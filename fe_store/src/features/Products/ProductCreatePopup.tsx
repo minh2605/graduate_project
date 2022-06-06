@@ -176,11 +176,16 @@ export const ProductCreatePopup = ({
                             key={key}
                             name={key}
                             label={value}
+                            defaultValue={{
+                              label: "Select Category",
+                              value: "",
+                            }}
                             options={categoryOptions || []}
                             onChange={handleChange}
                             setFieldValue={setFieldValue}
                             dependField="productTypeId"
                             dependValue={values.productTypeId}
+                            isDisable={!values.productTypeId}
                           />
                         );
                       }
@@ -190,6 +195,10 @@ export const ProductCreatePopup = ({
                             key={key}
                             name={key}
                             label={value}
+                            defaultValue={{
+                              label: "Select Product Type",
+                              value: "",
+                            }}
                             options={productTypeOptions || []}
                             onChange={handleChange}
                             setFieldValue={setFieldValue}

@@ -1,6 +1,6 @@
 import { ManageProductsPage } from "features/Admin/pages/ManageProductsPage";
 import { ProductDetailPage } from "features/Admin/pages/ProductDetailPage";
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 
 export const DashboardProductRoutes = (): JSX.Element => {
   return (

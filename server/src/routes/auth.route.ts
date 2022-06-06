@@ -26,6 +26,8 @@ router.post(
   validate(authValidation.resetPassword),
   accountController.resetPassword
 );
+
+router.post("/google-login", accountController.googleLogin);
 // router.post('/refresh-tokens', validate(authValidation.refreshTokens), accountController.refreshTokens);
 
 export default router;

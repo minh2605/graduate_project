@@ -6,7 +6,10 @@ import { Types } from "mongoose";
 import { TokenType } from "../config/token";
 import TokenModel from "../models/token.model";
 import tokenService from "./token.service";
-export type AccountRegister = Pick<AccountDocument, "email" | "password">;
+export type AccountRegister = {
+  email: string;
+  password?: string;
+};
 
 export interface LoginResponseProps {
   email: string;
@@ -26,7 +29,9 @@ const createAccount = async (accountBody: AccountRegister) => {
     throw new ApiError(httpStatus.CONFLICT, "Email already taken");
   }
   const newAccount = await AccountModel.create(accountBody);
-  newAccount.setPassword(password);
+  if (password) {
+    newAccount.setPassword(password);
+  }
   return newAccount;
 };
 
@@ -38,12 +43,32 @@ const login = async (loginBody: AccountRegister) => {
   const { email, password } = loginBody;
   const account = await getAccountByEmail(email);
   const user = await userService.getUserByAccountId(account?._id);
-  if (!account || !(await account.checkPasswordMatch(password))) {
+
+  if (!account || (password && !(await account.checkPasswordMatch(password)))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email or password");
   }
   const loginResponse: LoginResponseProps = {
     email: account.email,
     role_name: account.role_name ?? "",
+    name: user?.name ?? "",
+    account_id: user?.account_id ?? "",
+    address: user?.address ?? "",
+    city: user?.city ?? "",
+    birthday: user?.birthday,
+    gender: user?.gender,
+    avatar: user?.avatar,
+  };
+  return loginResponse;
+};
+
+const loginGoogle = async (email: string) => {
+  const account = await getAccountByEmail(email);
+
+  const user = await userService.getUserByAccountId(account?._id);
+
+  const loginResponse: LoginResponseProps = {
+    email: email,
+    role_name: account ? account.role_name : "",
     name: user?.name ?? "",
     account_id: user?.account_id ?? "",
     address: user?.address ?? "",
@@ -83,6 +108,7 @@ const resetPassword = async (
       throw new Error();
     }
     console.log("user", user);
+    /*TODO: CORS when send request with params/query*/
     // await userService.updateUserById(user.id, { password: newPassword });
     // await TokenModel.deleteMany({
     //   user: user.id,
@@ -97,6 +123,7 @@ const accountService = {
   createAccount,
   getAccountByEmail,
   login,
+  loginGoogle,
   logout,
   resetPassword,
 };

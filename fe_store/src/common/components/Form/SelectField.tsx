@@ -5,10 +5,12 @@ interface SelectFieldProps<T extends object> {
   label: string;
   name: string;
   options: any[];
+  defaultValue: any;
   onChange: (selectOption: SelectFieldOptionsProps<T>) => void;
   setFieldValue: (field: string, value: any) => void;
   dependValue?: any;
   dependField?: string;
+  isDisable?: boolean;
 }
 
 export interface SelectFieldOptionsProps<T extends any> {
@@ -25,6 +27,8 @@ export const SelectField = <T extends object>({
   setFieldValue,
   dependValue,
   dependField,
+  defaultValue,
+  isDisable,
 }: SelectFieldProps<T>) => {
   const cleanOptions = useMemo(() => {
     if (dependField && dependValue) {
@@ -41,7 +45,12 @@ export const SelectField = <T extends object>({
     <div className="flex flex-col gap-2 mb-4 text-base">
       <label htmlFor="name">{label}*</label>
 
-      <Select options={cleanOptions} onChange={handleSelectedOptionChange} />
+      <Select
+        options={cleanOptions}
+        defaultValue={defaultValue}
+        onChange={handleSelectedOptionChange}
+        isDisabled={isDisable}
+      />
       <ErrorMessage
         name={name}
         component="div"

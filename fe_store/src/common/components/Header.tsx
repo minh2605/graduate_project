@@ -27,6 +27,7 @@ export const LogoText = styled.h2(
 export const Header = (): JSX.Element => {
   const [isMenuBarShow, setMenuBarShow] = useState(false);
   const { isLoggedIn, currentUserProfile } = useAuth();
+  console.log("currentUserProfile", currentUserProfile);
 
   const handleShowMenuBar = () => {
     setMenuBarShow((isMenubarShow) => !isMenubarShow);
@@ -63,7 +64,11 @@ export const Header = (): JSX.Element => {
         </HeaderActionButton>
         {isLoggedIn && currentUserProfile ? (
           <div>
-            <UserProfileIcon type="text" name={currentUserProfile.name} />
+            <UserProfileIcon
+              type={`${currentUserProfile.avatar ? "image" : "text"}`}
+              name={currentUserProfile.name}
+              url={currentUserProfile.avatar}
+            />
           </div>
         ) : (
           <HeaderActionButton>

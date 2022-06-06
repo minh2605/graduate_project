@@ -6,6 +6,12 @@ import userService, { UserCreateProps } from "../services/user.service";
 import tokenServices from "../services/token.service";
 import tokenService from "../services/token.service";
 import emailService from "../services/email.service";
+import admin from "firebase-admin";
+const serviceAccount = require("../serviceAccount.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
 const register = catchAsync(async (req: Request, res: Response) => {
   const { email, password, name } = req.body;
@@ -62,12 +68,34 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
   }
 });
 
+const googleLogin = catchAsync(async (req: Request, res: Response) => {
+  const { idToken } = req.body;
+  const decodeValue = await admin.auth().verifyIdToken(idToken);
+  const { name, picture, email } = decodeValue;
+  if (email) {
+    const account = await accountService.getAccountByEmail(email);
+    if (!account) {
+      const newAccount = await accountService.createAccount({ email: email });
+      const userCreateBody: UserCreateProps = {
+        account_id: newAccount._id,
+        name,
+        avatar: picture,
+      };
+      await userService.createUser(userCreateBody);
+    }
+    const userResponse = await accountService.loginGoogle(email);
+    const tokens = await tokenServices.generateAuthTokens(userResponse);
+    res.send({ user: userResponse, tokens });
+  }
+});
+
 const accountController = {
   register,
   login,
   logout,
   forgotPassword,
   resetPassword,
+  googleLogin,
 };
 
 export default accountController;

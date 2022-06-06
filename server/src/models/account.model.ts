@@ -8,7 +8,7 @@ export enum AccountRole {
 export interface AccountDocument extends mongoose.Document {
   email: string;
   password: string;
-  role_name?: string;
+  role_name: string;
   order_ids?: Types.ObjectId[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -33,7 +33,6 @@ const accountSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
       trim: true,
     },
     role_name: {

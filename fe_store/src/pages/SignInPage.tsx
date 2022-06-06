@@ -4,6 +4,8 @@ import SvgGoogle from "common/components/svg/Google";
 import SvgLeftArrow from "common/components/svg/LeftArrow";
 import { Formik, Field, Form, ErrorMessage, FormikValues } from "formik";
 import { useLoading } from "hooks/useLoading";
+import { authentication } from "firebaseConfig";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "redux/hook";
 import { setCurrentUser, setLoggedIn } from "redux/slices/auth/authSlice";
@@ -14,22 +16,23 @@ interface SigninPageProps {
   email: string;
   password: string;
 }
+const initialValues: SigninPageProps = {
+  email: "",
+  password: "",
+};
+const loginSchema: yup.SchemaOf<SigninPageProps> = yup.object().shape({
+  email: yup
+    .string()
+    .required("This field is required!")
+    .email("Email format is incorrect!"),
+  password: yup.string().required("This field is required!"),
+  // .min(5, "Password must be larger than 5 characters"),
+});
+
 export const SigninPage = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showLoading, hideLoading] = useLoading();
-  const initialValues: SigninPageProps = {
-    email: "",
-    password: "",
-  };
-  const loginSchema: yup.SchemaOf<SigninPageProps> = yup.object().shape({
-    email: yup
-      .string()
-      .required("This field is required!")
-      .email("Email format is incorrect!"),
-    password: yup.string().required("This field is required!"),
-    // .min(5, "Password must be larger than 5 characters"),
-  });
 
   const handleLogin = async (values: FormikValues) => {
     try {
@@ -55,6 +58,41 @@ export const SigninPage = (): JSX.Element => {
     }
   };
 
+  const provider = new GoogleAuthProvider();
+
+  const signInWithGoogle = () => {
+    signInWithPopup(authentication, provider)
+      .then(async (res) => {
+        const idToken = await res.user.getIdToken();
+        const userPayload = {
+          idToken,
+        };
+        const data: LoginResponseProps = await API.post(
+          "auth/google-login",
+          userPayload
+        );
+        if (data) {
+          console.log("data", data);
+          dispatch(setLoggedIn());
+          dispatch(setCurrentUser(data.user));
+          localStorage.setItem(
+            "authInfo",
+            JSON.stringify({
+              currentUserProfile: data.user,
+              isLoggedIn: true,
+            })
+          );
+          localStorage.setItem("jwt_token", data.tokens.access.token);
+          localStorage.setItem("jwt_refresh_token", data.tokens.refresh.token);
+          hideLoading();
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        console.log("That bai", error);
+      });
+  };
+
   return (
     <div className="flex flex-col">
       <div className="px-14 flex flex-col ">
@@ -69,9 +107,17 @@ export const SigninPage = (): JSX.Element => {
             className="flex items-center gap-4 w-1/2 justify-center mb-8"
             variant="white"
             type="button"
+            onClick={signInWithGoogle}
           >
             <SvgGoogle />
             <span>Sign in with Google</span>
+            {/* <GoogleLogin
+              clientId="1088386338403-fsl9dknfuo9ajdv2epcu6qrqjl9rfa18.apps.googleusercontent.com"
+              buttonText="Login"
+              onSuccess={responseSuccessGoogle}
+              onFailure={responseErrorGoogle}
+              cookiePolicy={"single_host_origin"}
+            /> */}
           </Button>
         </div>
         <Formik
