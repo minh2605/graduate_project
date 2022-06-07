@@ -39,13 +39,17 @@ app.use(compression());
 // app.use(xss());
 app.use(mongoSanitize());
 
-// const corsOptions = {
-//   origin: ["http://localhost:3000", "*"],
-//   optionsSuccessStatus: 200, // For legacy browser support
-// };
+const corsOptions = {
+  origin: ["http://localhost:3000"],
+  optionsSuccessStatus: 200, // For legacy browser support
+};
 // // enable cors
-// app.use(cors(corsOptions));
-app.use("*", cors<Request>());
+app.use(cors(corsOptions));
+// routes.use(cors());
+// app.use((req, resp, next) => {
+//   next();
+// }, cors({ maxAge: 84600 }));
+// app.use("*", cors<Request>());
 // app.options("*", cors(corsOptions));
 
 // jwt authentication

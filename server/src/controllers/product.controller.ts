@@ -1,12 +1,20 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
 import productService from "../services/product.service";
 import { catchAsync } from "../utils/catchAsync";
 
-const createProduct = catchAsync(async (req: Request, res: Response) => {
-  const newProduct = await productService.createProduct(req.body);
-  res.status(httpStatus.CREATED).send(newProduct);
-});
+const createProduct = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log("file", req.files);
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+    const image = files.image[0].path;
+    const newProduct = await productService.createProduct({
+      ...req.body,
+      image,
+    });
+    res.status(httpStatus.CREATED).send(newProduct);
+  }
+);
 
 const getProducts = catchAsync(async (req: Request, res: Response) => {
   const products = await productService.getProducts();

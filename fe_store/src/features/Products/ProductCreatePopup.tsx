@@ -13,6 +13,7 @@ import * as yup from "yup";
 import API from "api/axios";
 import { toast } from "react-toastify";
 import { useLoading } from "hooks/useLoading";
+import { UploadField } from "common/components/Form/UploadField";
 
 interface ProductCreatePopupProps {
   isOpen: boolean;
@@ -71,9 +72,19 @@ export const ProductCreatePopup = ({
 
   const handleCreateProduct = async (values: FormikValues) => {
     console.log("values submit", values);
+    console.log("values.file", values.image);
+
     try {
       showLoading();
-      await API.post(`/product/create`, values);
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("description", values.description);
+      formData.append("price", values.price);
+      formData.append("productCategoryId", values.productCategoryId);
+      formData.append("productTypeId", values.productTypeId);
+      formData.append("image", values.image);
+
+      await API.post(`/product/create`, formData);
       hideLoading();
     } catch (error: any) {
       hideLoading();
@@ -139,11 +150,12 @@ export const ProductCreatePopup = ({
           validationSchema={productCreateSchema}
           onSubmit={(values) => handleCreateProduct(values)}
         >
-          {({ values, handleChange, setFieldValue }) => (
+          {({ values, handleChange, setFieldValue, setFieldError, errors }) => (
             <Form
               autoComplete="off"
               noValidate
               className="flex flex-col font-medium"
+              encType="multipart/form-data"
             >
               <div className="flex flex-col mb-4">
                 <>
@@ -151,11 +163,12 @@ export const ProductCreatePopup = ({
                     ([key, value], index) => {
                       if (key === "image") {
                         return (
-                          <InputField
+                          <UploadField
                             name={key}
                             label={value}
                             key={key}
-                            type="file"
+                            setFieldValue={setFieldValue}
+                            setFieldError={setFieldError}
                           />
                         );
                       }

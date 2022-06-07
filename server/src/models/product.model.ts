@@ -49,7 +49,6 @@ const productSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      required: true,
     },
     slideImages: {
       type: Array,

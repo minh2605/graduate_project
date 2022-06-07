@@ -46,7 +46,6 @@ const authCheck =
 const tokenCheck = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const bearerHeader = req.headers["authorization"];
-    console.log("bearerHeader ", bearerHeader);
     if (bearerHeader) {
       const bearer = bearerHeader.split(" ");
       const bearerToken = bearer[1];

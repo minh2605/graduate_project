@@ -1,16 +1,18 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDTNKu7whhBYsxLsV_glvTgC-UU8gSFerg",
-  authDomain: "foogle-store.firebaseapp.com",
-  projectId: "foogle-store",
-  storageBucket: "foogle-store.appspot.com",
-  messagingSenderId: "461203878447",
-  appId: "1:461203878447:web:852d187e1bcfd59362ccda",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGEGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+export const storage = getStorage(app, process.env.REACT_APP_IMG_URL);
 export const authentication = getAuth(app);

@@ -28,7 +28,11 @@ export const UserProfileIcon = ({
     >
       {type === "image" && url ? (
         <div className="h-10 w-10 rounded-full border overflow-hidden cursor-pointer">
-          <img src={url} className="w-full h-full object-cover" alt="avatar" />
+          <img
+            src={`${url}`}
+            className="w-full h-full object-cover"
+            alt="avatar"
+          />
         </div>
       ) : (
         <div className="h-10 w-10 rounded-full flex items-center justify-center bg-light-red text-white font-medium cursor-pointer">
