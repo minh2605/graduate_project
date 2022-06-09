@@ -37,6 +37,7 @@ module.exports = {
       "dark-red-opacity": "rgba(185, 47, 40, 0.75)",
       "border-grey": "#E7E7E7",
       backdrop: "rgba(0,0,0,0.8)",
+      overlay: "rgba(0,0,0,0.4)",
     },
     extend: {
       zIndex: {

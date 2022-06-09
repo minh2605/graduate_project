@@ -5,7 +5,6 @@ import { bucket, BUCKET_URL } from "../firebaseAdmin";
 const storage = multer.memoryStorage();
 
 const fileFilter = (req: any, file: any, callback: any) => {
-  console.log("Filter file", file);
   const extArray = ["jpeg", "jpg", "png", "gif"];
   const ext = file.mimetype.slice(6);
   const flag = extArray.find((e) => e === ext);

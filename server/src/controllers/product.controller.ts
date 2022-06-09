@@ -5,7 +5,6 @@ import { catchAsync } from "../utils/catchAsync";
 
 const createProduct = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("file", req.files);
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
     const image = files.image[0].path;
     const newProduct = await productService.createProduct({

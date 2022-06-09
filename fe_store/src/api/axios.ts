@@ -9,9 +9,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(async (config) => {
   const token = localStorage.getItem("jwt_token");
-  config.headers = {
-    "Content-Type": "application/json",
-  };
+  config.headers = {};
   if (token) {
     config.headers["Authorization"] = `Bearer ${token}`;
   }
@@ -46,13 +44,13 @@ axiosInstance.interceptors.response.use(
       return;
     }
     if (statusCode === 409) {
-      console.log("error.response", error.message);
+      console.error("error.response", error.message);
       return;
     }
     if (statusCode === 500) {
       // show notification
       toast.error("System has an error");
-      console.log("error", error);
+      console.error("error", error);
       return;
     }
     throw error;

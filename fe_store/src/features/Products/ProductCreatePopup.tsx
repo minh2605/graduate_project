@@ -18,6 +18,7 @@ import { UploadField } from "common/components/Form/UploadField";
 interface ProductCreatePopupProps {
   isOpen: boolean;
   onClose: () => void;
+  mutate: () => void;
 }
 
 interface ProductCreateFormProps {
@@ -47,8 +48,8 @@ const initialValues: ProductCreateFormProps = {
   image: "",
 };
 
-const RequiredErrorMessage = "This field is required";
-const PriceErrorMessage = "Price must be over than 0$";
+export const RequiredErrorMessage = "This field is required";
+export const PriceErrorMessage = "Price must be over than 0$";
 
 const productCreateSchema: yup.SchemaOf<ProductCreateFormProps> = yup
   .object()
@@ -67,25 +68,22 @@ const productCreateSchema: yup.SchemaOf<ProductCreateFormProps> = yup
 export const ProductCreatePopup = ({
   isOpen,
   onClose,
+  mutate,
 }: ProductCreatePopupProps): JSX.Element => {
   const [showLoading, hideLoading] = useLoading();
 
   const handleCreateProduct = async (values: FormikValues) => {
-    console.log("values submit", values);
-    console.log("values.file", values.image);
-
     try {
       showLoading();
       const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("description", values.description);
-      formData.append("price", values.price);
-      formData.append("productCategoryId", values.productCategoryId);
-      formData.append("productTypeId", values.productTypeId);
-      formData.append("image", values.image);
-
+      Object.entries(values).forEach(([key, value], index) => {
+        formData.append(key, value);
+      });
       await API.post(`/product/create`, formData);
       hideLoading();
+      toast.success("Create product successfully");
+      mutate();
+      onClose();
     } catch (error: any) {
       hideLoading();
       toast.error(error.message);
@@ -155,7 +153,6 @@ export const ProductCreatePopup = ({
               autoComplete="off"
               noValidate
               className="flex flex-col font-medium"
-              encType="multipart/form-data"
             >
               <div className="flex flex-col mb-4">
                 <>
@@ -163,13 +160,16 @@ export const ProductCreatePopup = ({
                     ([key, value], index) => {
                       if (key === "image") {
                         return (
-                          <UploadField
-                            name={key}
-                            label={value}
-                            key={key}
-                            setFieldValue={setFieldValue}
-                            setFieldError={setFieldError}
-                          />
+                          <div className="flex items-center justify-center">
+                            <UploadField
+                              name={key}
+                              label={value}
+                              key={key}
+                              setFieldValue={setFieldValue}
+                              setFieldError={setFieldError}
+                              errors={errors}
+                            />
+                          </div>
                         );
                       }
                       if (key === "description") {

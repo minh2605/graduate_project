@@ -18,6 +18,7 @@ import { ProductCreatePopup } from "features/Products/ProductCreatePopup";
 export const ManageProductsPage = (): JSX.Element => {
   const [products, setProducts] = useState<ProductProps[]>();
   const [isShowPopup, setShowPopup] = useState(false);
+  const [refetch, setRefetch] = useState({});
   const [showLoading, hideLoading] = useLoading();
   const navigate = useNavigate();
 
@@ -29,7 +30,7 @@ export const ManageProductsPage = (): JSX.Element => {
       hideLoading();
     };
     fetchData();
-  }, [showLoading, hideLoading]);
+  }, [showLoading, hideLoading, refetch]);
 
   const handleRowDelete = useCallback(
     async (value: ProductProps) => {
@@ -134,6 +135,7 @@ export const ManageProductsPage = (): JSX.Element => {
       <ProductCreatePopup
         isOpen={isShowPopup}
         onClose={() => setShowPopup(false)}
+        mutate={() => setRefetch({})}
       />
     </div>
   );

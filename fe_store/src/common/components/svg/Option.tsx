@@ -9,7 +9,7 @@ const SvgOption = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 24 24"
     {...props}
   >
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g stroke="none" strokeWidth="1" fill="none" fill-rule="evenodd">
       <rect x="5" y="5" width="5" height="5" rx="1" fill="currentColor"></rect>
       <rect
         x="14"
