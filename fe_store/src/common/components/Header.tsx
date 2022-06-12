@@ -1,5 +1,5 @@
 import FoogleLogo from "assets/svg/foogle-logo.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SvgSearch from "common/components/svg/Search";
 import SvgCart from "common/components/svg/Cart";
 import tw, { styled } from "twin.macro";
@@ -8,6 +8,7 @@ import SvgMenuBar from "common/components/svg/MenuBar";
 import { useState } from "react";
 import { UserProfileIcon } from "features/Admin/components/UserProfileIcon";
 import useAuth from "hooks/useAuth";
+import useCart from "hooks/useCart";
 
 const HeaderWrapper = styled.div(
   tw`fixed z-fixed inset-0 h-24 px-5 py-2 bg-white border border-border-grey flex justify-center items-center font-medium md:px-14 md:justify-between lg:px-20`
@@ -17,7 +18,7 @@ const HeaderSeachBar = styled.div(
 );
 
 export const HeaderActionButton = styled.div(
-  tw`flex items-center w-32 py-2 px-4 border rounded-3xl gap-6 border-2 border-dark-red text-center`
+  tw`flex items-center w-32 py-2 px-4 border rounded-3xl gap-6 border-2 border-dark-red text-center cursor-pointer`
 );
 
 export const LogoText = styled.h2(
@@ -25,12 +26,16 @@ export const LogoText = styled.h2(
 );
 
 export const Header = (): JSX.Element => {
+  const navigate = useNavigate();
   const [isMenuBarShow, setMenuBarShow] = useState(false);
   const { isLoggedIn, currentUserProfile } = useAuth();
-  console.log("currentUserProfile", currentUserProfile);
+  const cartInfo = useCart();
 
   const handleShowMenuBar = () => {
     setMenuBarShow((isMenubarShow) => !isMenubarShow);
+  };
+  const handleCartClicked = () => {
+    navigate("../checkout");
   };
   return (
     <HeaderWrapper>
@@ -58,9 +63,14 @@ export const Header = (): JSX.Element => {
       </div>
 
       <div className="hidden md:flex items-center gap-4">
-        <HeaderActionButton className="bg-dark-red text-white">
+        <HeaderActionButton
+          className="bg-dark-red text-white"
+          onClick={handleCartClicked}
+        >
           <SvgCart />
-          <span className="flex-1 text-center">3</span>
+          <span className="flex-1 text-center">
+            {cartInfo.productCart?.length || 0}
+          </span>
         </HeaderActionButton>
         {isLoggedIn && currentUserProfile ? (
           <div>

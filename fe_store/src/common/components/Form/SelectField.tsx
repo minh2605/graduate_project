@@ -11,6 +11,7 @@ interface SelectFieldProps<T extends object> {
   dependValue?: any;
   dependField?: string;
   isDisable?: boolean;
+  value?: string;
 }
 
 export interface SelectFieldOptionsProps<T extends any> {
@@ -29,7 +30,15 @@ export const SelectField = <T extends object>({
   dependField,
   defaultValue,
   isDisable,
+  value,
 }: SelectFieldProps<T>) => {
+  const currentValue = useMemo(() => {
+    if (value) {
+      return options.find((it) => {
+        return it.value === value;
+      });
+    }
+  }, [options, value]);
   const cleanOptions = useMemo(() => {
     if (dependField && dependValue) {
       return options.filter((it) => {
@@ -37,6 +46,7 @@ export const SelectField = <T extends object>({
       });
     } else return options;
   }, [options, dependField, dependValue]);
+  // console.log("cleanOptions", cleanOptions);
 
   const handleSelectedOptionChange = (value: any) => {
     setFieldValue(name, value.value);
@@ -48,6 +58,7 @@ export const SelectField = <T extends object>({
       <Select
         options={cleanOptions}
         defaultValue={defaultValue}
+        value={currentValue}
         onChange={handleSelectedOptionChange}
         isDisabled={isDisable}
       />

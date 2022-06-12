@@ -1,14 +1,14 @@
 import SvgBin from "common/components/svg/Bin";
+import { ProductCartProps } from "redux/slices/cart/cartSlice";
 import tw, { styled } from "twin.macro";
 
-interface CartProductItemProps {
-  product: number;
-}
+type CartProductItemProps = ProductCartProps;
 const ProductItemWrapper = styled.div(
   tw`flex h-24 py-2 px-4 gap-4 items-center font-medium border-b-2 border-border-grey cursor-pointer`
 );
 export const CartProductItem = ({
   product,
+  amount,
 }: CartProductItemProps): JSX.Element => {
   const handleProductItemClicked = () => {
     console.log("Product clicked");
@@ -21,16 +21,16 @@ export const CartProductItem = ({
     <ProductItemWrapper onClick={handleProductItemClicked}>
       <div className="relative w-16 h-16 shrink-0">
         <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-dark-grey text-white flex items-center text-center">
-          <span className="w-full">1 x</span>
+          <span className="w-full">{amount} x</span>
         </div>
         <img
-          src="https://img.cdn4dd.com/p/fit=cover,width=150,height=150,format=jpeg,quality=50/media/photosV2/7d4f4c92-9d3d-4f50-a0d2-aa9dc696bc0a-a13c8e30-8aa9-44b4-a18d-5fb1c26d156e-retina-large.JPG"
+          src={product.image}
           alt="product-img"
-          className="object-cover"
+          className="object-cover w-full h-full"
         />
       </div>
       <div className="flex-1">
-        <h5 className="text-base">Product {product}</h5>
+        <h5 className="text-sm">{product.name}</h5>
         <span>$10.24</span>
       </div>
       <div

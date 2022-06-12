@@ -62,7 +62,7 @@ export const ManageProductsPage = (): JSX.Element => {
       {
         id: "code",
         Header: "Code",
-        accessor: (product) => product.productCode,
+        accessor: (product) => product.productCode?.toUpperCase(),
         Cell: TextCell,
       },
       {

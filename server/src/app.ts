@@ -26,7 +26,7 @@ mongoose
     });
   })
   .catch((error) => {
-    console.log("Error", error);
+    console.error("Error", error);
   });
 
 app.use(morgan("combined"));

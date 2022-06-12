@@ -72,7 +72,6 @@ export const SigninPage = (): JSX.Element => {
           userPayload
         );
         if (data) {
-          console.log("data", data);
           dispatch(setLoggedIn());
           dispatch(setCurrentUser(data.user));
           localStorage.setItem(
@@ -89,7 +88,7 @@ export const SigninPage = (): JSX.Element => {
         }
       })
       .catch((error) => {
-        console.log("That bai", error);
+        console.error("Error", error);
       });
   };
 

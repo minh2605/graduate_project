@@ -1,6 +1,7 @@
 import tw, { styled } from "twin.macro";
 import { CartProductItem } from "features/Order/components/CartProductItem";
 import { useNavigate } from "react-router-dom";
+import { CartState } from "redux/slices/cart/cartSlice";
 
 const CartCheckoutButton = styled.div(
   tw`flex items-center justify-between bg-light-red p-3 rounded-3xl text-white hover:bg-dark-red cursor-pointer font-medium`
@@ -14,12 +15,16 @@ const ProductsWrapper = styled.div`
     border-radius: 6px;
   }
 `;
-export const CartProducts = (): JSX.Element => {
+
+type CartProductsProps = CartState;
+
+export const CartProducts = ({
+  productCart,
+}: CartProductsProps): JSX.Element => {
   const navigate = useNavigate();
   const handleCheckout = () => {
     navigate("/checkout");
   };
-  const products = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
   return (
     <div className="h-full flex flex-col">
@@ -37,8 +42,12 @@ export const CartProducts = (): JSX.Element => {
         </div>
       </div>
       <ProductsWrapper className="flex-1 overflow-y-auto">
-        {products.map((item) => (
-          <CartProductItem product={item} key={item} />
+        {productCart.map((item) => (
+          <CartProductItem
+            key={item.product._id}
+            product={item.product}
+            amount={item.amount}
+          />
         ))}
       </ProductsWrapper>
     </div>

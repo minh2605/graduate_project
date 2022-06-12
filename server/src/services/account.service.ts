@@ -39,6 +39,10 @@ const getAccountByEmail = async (email: string) => {
   return AccountModel.findOne({ email });
 };
 
+const getAccountById = async (id: string) => {
+  return AccountModel.findById(id);
+};
+
 const login = async (loginBody: AccountRegister) => {
   const { email, password } = loginBody;
   const account = await getAccountByEmail(email);
@@ -101,13 +105,19 @@ const resetPassword = async (
       resetPasswordToken,
       TokenType.RESET_PASSWORD
     );
+    console.log("resetPasswordTokenDoc", resetPasswordTokenDoc);
     const user = await userService.getUserByAccountId(
+      resetPasswordTokenDoc.account.toString()
+    );
+    const account = await accountService.getAccountById(
       resetPasswordTokenDoc.account.toString()
     );
     if (!user) {
       throw new Error();
     }
     console.log("user", user);
+    console.log("pass", newPassword);
+    console.log("account", account);
     /*TODO: CORS when send request with params/query*/
     // await userService.updateUserById(user.id, { password: newPassword });
     // await TokenModel.deleteMany({
@@ -126,6 +136,7 @@ const accountService = {
   loginGoogle,
   logout,
   resetPassword,
+  getAccountById,
 };
 
 export default accountService;

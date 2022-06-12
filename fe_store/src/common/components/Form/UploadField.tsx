@@ -1,10 +1,12 @@
-import { ErrorMessage, Field, FormikErrors } from "formik";
+import { Field } from "formik";
 import { ChangeEvent, useRef, useState } from "react";
 import tw, { styled } from "twin.macro";
 import SvgBin from "../svg/Bin";
 import SvgPlus from "../svg/Plus";
+import ImagePlaceholder from "assets/images/img_placeholder.jpg";
 
 interface UploadFieldProps {
+  index?: number;
   label: string;
   name: string;
   className?: string;
@@ -30,15 +32,16 @@ const validateUpload = (file: File) => {
 };
 
 export const UploadField = ({
+  index,
   label,
   name,
   setFieldValue,
   setFieldError,
   value,
   errors,
+  className,
 }: UploadFieldProps) => {
-  console.log("errors");
-  const [previewImg, setPreviewImg] = useState(value || "");
+  const [previewImg, setPreviewImg] = useState("");
   const fileRef = useRef<any>(null);
   const handleImageChange = (e: ChangeEvent<any>) => {
     if (e.target && e.target.files[0]) {
@@ -54,11 +57,22 @@ export const UploadField = ({
       }
     }
   };
-  return (
-    <div className="flex flex-col gap-2 mb-4 text-base">
-      <label htmlFor="name">{label}*</label>
+  const handleDeleteImage = () => {
+    setPreviewImg("");
+    setFieldValue(name, null);
+  };
 
-      <div className="relative h-60 w-96 border-2 border-light-red rounded-xl overflow-hidden">
+  console.log("errors", errors);
+  console.log("index", index);
+
+  return (
+    <div
+      className={`flex flex-col justify-between gap-2 mb-4 text-base ${className}`}
+    >
+      <label htmlFor="name">{label}*</label>
+      <div
+        className={`relative border-2 border-light-red rounded-xl overflow-hidden w-full h-full`}
+      >
         <Field
           name={name}
           type="file"
@@ -69,10 +83,18 @@ export const UploadField = ({
           hidden
           innerRef={fileRef}
         />
-        {previewImg && (
-          <div className="absolute inset-0 bg-dark-red">
+        {value || previewImg ? (
+          <div className="absolute inset-0 bg-dark-red rounded-xl shrink-0">
             <img
-              src={previewImg}
+              src={typeof value === "string" ? value : previewImg}
+              alt="product-preview"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ) : (
+          <div className="absolute inset-0 bg-dark-red rounded-xl shrink-0">
+            <img
+              src={ImagePlaceholder}
               alt="product-preview"
               className="w-full h-full object-cover"
             />
@@ -82,12 +104,17 @@ export const UploadField = ({
           <ActionButton onClick={() => fileRef.current.click()}>
             <SvgPlus />
           </ActionButton>
-          <ActionButton onClick={() => setPreviewImg("")}>
+          <ActionButton onClick={handleDeleteImage}>
             <SvgBin />
           </ActionButton>
         </UploadActionArea>
       </div>
-      <span className="text-light-red text-xs">{errors.image}</span>
+
+      <span className="text-light-red text-xs">
+        {index && errors && errors.slideImages
+          ? errors.slideImages[index]
+          : errors.image || ""}
+      </span>
     </div>
   );
 };

@@ -162,6 +162,7 @@ export const ProductCreatePopup = ({
                         return (
                           <div className="flex items-center justify-center">
                             <UploadField
+                              className="h-60 w-96"
                               name={key}
                               label={value}
                               key={key}

@@ -53,6 +53,7 @@ const forgotPassword = catchAsync(async (req: Request, res: Response) => {
 });
 
 const resetPassword = catchAsync(async (req: Request, res: Response) => {
+  console.log("req.body.password", req.body.password);
   const resetToken = req.query.token;
   if (resetToken) {
     await accountService.resetPassword(

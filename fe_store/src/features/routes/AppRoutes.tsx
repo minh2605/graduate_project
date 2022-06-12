@@ -4,6 +4,7 @@ import { HomePage } from "pages/HomePage";
 import { CheckoutPage } from "pages/CheckoutPage";
 import { OrderPage } from "pages/OrderPage";
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { AuthCheck } from "layout/AuthCheck";
 
 const APP_ROUTES = [
   {
@@ -12,7 +13,11 @@ const APP_ROUTES = [
   },
   {
     path: "/checkout",
-    element: <CheckoutPage />,
+    element: (
+      <AuthCheck>
+        <CheckoutPage />
+      </AuthCheck>
+    ),
   },
   {
     path: "/order",

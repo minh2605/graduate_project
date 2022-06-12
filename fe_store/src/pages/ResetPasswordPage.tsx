@@ -31,10 +31,9 @@ export const ResetPasswordPage = (): JSX.Element => {
     try {
       if (resetToken) {
         showLoading();
-        await API.post(
-          `auth/reset-password?token=${resetToken}`,
-          values.password
-        );
+        await API.post(`auth/reset-password?token=${resetToken}`, {
+          password: values.password,
+        });
       }
     } catch (error) {
       hideLoading();
