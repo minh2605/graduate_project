@@ -27,15 +27,24 @@ const getProductById = async (id: string) => {
 const updateProductById = async (
   productId: string,
   updateBody: any,
-  files?: any
+  files?: { [fieldname: string]: Express.Multer.File[] }
 ) => {
   const product = await getProductById(productId);
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
   }
-
+  console.log("========= updateBody ===========", updateBody);
+  // console.log("========= REQ.Files ===========", req.files);
+  // const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  // console.log("========= product ===========", product);
+  const newSlideImages = files
+    ? files.slideImages.map((it) => it.path)
+    : product?.slideImages;
+  updateBody.slideImages = newSlideImages;
   Object.assign(product, updateBody);
+  product.markModified("slideImages");
   await product.save();
+  console.log("UPDATE PRODUCT", product);
   return product;
 };
 const deleteProduct = async (id: string) => {

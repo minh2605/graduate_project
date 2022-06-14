@@ -9,6 +9,7 @@ const createProduct = catchAsync(
     const image = files.image[0].path;
     const newProduct = await productService.createProduct({
       ...req.body,
+      slideImages: [null, null, null, null],
       image,
     });
     res.status(httpStatus.CREATED).send(newProduct);
@@ -27,12 +28,13 @@ const getProductById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateProduct = catchAsync(async (req: Request, res: Response) => {
-  const { id: productId } = req.params;
-  const updateProduct = await productService.updateProductById(
-    productId,
-    req.body
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  const product = await productService.updateProductById(
+    req.params.id,
+    req.body,
+    files
   );
-  res.status(httpStatus.OK).send(updateProduct);
+  res.status(httpStatus.OK).send(product);
 });
 const deleteProduct = catchAsync(async (req: Request, res: Response) => {
   const { id: productId } = req.params;

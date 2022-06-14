@@ -10,7 +10,7 @@ interface UploadFieldProps {
   label: string;
   name: string;
   className?: string;
-  value?: string;
+  value?: string | null;
   errors?: any;
   setFieldValue: (field: string, value: any) => void;
   setFieldError: (field: string, value: any) => void;
@@ -41,6 +41,7 @@ export const UploadField = ({
   errors,
   className,
 }: UploadFieldProps) => {
+  console.log("value", value);
   const [previewImg, setPreviewImg] = useState("");
   const fileRef = useRef<any>(null);
   const handleImageChange = (e: ChangeEvent<any>) => {
@@ -62,9 +63,6 @@ export const UploadField = ({
     setFieldValue(name, null);
   };
 
-  console.log("errors", errors);
-  console.log("index", index);
-
   return (
     <div
       className={`flex flex-col justify-between gap-2 mb-4 text-base ${className}`}
@@ -84,7 +82,7 @@ export const UploadField = ({
           innerRef={fileRef}
         />
         {value || previewImg ? (
-          <div className="absolute inset-0 bg-dark-red rounded-xl shrink-0">
+          <div className="absolute inset-0 rounded-xl shrink-0">
             <img
               src={typeof value === "string" ? value : previewImg}
               alt="product-preview"

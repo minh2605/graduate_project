@@ -5,7 +5,7 @@ interface SelectFieldProps<T extends object> {
   label: string;
   name: string;
   options: any[];
-  defaultValue: any;
+  defaultValue?: any;
   onChange: (selectOption: SelectFieldOptionsProps<T>) => void;
   setFieldValue: (field: string, value: any) => void;
   dependValue?: any;

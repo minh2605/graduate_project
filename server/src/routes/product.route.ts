@@ -15,12 +15,14 @@ router
     productController.createProduct
   );
 router
-  .route("/delete")
-  .delete(authMiddleware.tokenCheck, productController.deleteProduct);
-router
   .route("/:id")
   .get(productController.getProductById)
-  .put(authMiddleware.tokenCheck, productController.updateProduct)
+  .put(
+    authMiddleware.tokenCheck,
+    uploadImages,
+    uploadImageToFirebase,
+    productController.updateProduct
+  )
   .delete(authMiddleware.tokenCheck, productController.deleteProduct);
 
 export default router;

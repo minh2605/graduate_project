@@ -1,6 +1,6 @@
 import { Button } from "common/components/Button";
 import { ProductProps } from "common/components/ProductCard";
-import { Formik, Form, FieldArray } from "formik";
+import { Formik, Form, FieldArray, FormikValues } from "formik";
 import { useLoading } from "hooks/useLoading";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
@@ -27,7 +27,7 @@ interface ProductEditFormProps {
   price: number;
   productCategoryId: string;
   productTypeId: string;
-  slideImages?: string[];
+  slideImages?: string[] | null[];
 }
 const productUpdateSchema: yup.SchemaOf<ProductEditFormProps> = yup
   .object()
@@ -120,7 +120,7 @@ export const ProductEditPage = (): JSX.Element => {
         productCategoryId: product.productCategoryId,
         productTypeId: product.productTypeId,
         image: product.image,
-        slideImages: ["a", "b", "c", "d"],
+        slideImages: product.slideImages,
       }
     : {
         description: "",
@@ -129,8 +129,38 @@ export const ProductEditPage = (): JSX.Element => {
         productCategoryId: "",
         productTypeId: "",
         image: "",
-        slideImages: [],
+        slideImages: [null, null, null, null],
       };
+
+  const handleEditProduct = async (values: FormikValues) => {
+    console.log("values submit", values);
+    try {
+      showLoading();
+      const formData = new FormData();
+      const slideIndexes = values.slideImages.map((it: File, index: number) => {
+        if (it) {
+          return index;
+        } else return null;
+      });
+      console.log("slideIndexes", slideIndexes);
+      formData.append("slideIndexes", slideIndexes);
+      Object.entries(values).forEach(([key, value], index) => {
+        if (key === "slideImages") {
+          value.forEach((it: string) => {
+            formData.append(key, it);
+          });
+        } else {
+          formData.append(key, value);
+        }
+      });
+      await API.put(`/product/${productId}`, formData);
+      hideLoading();
+      toast.success("Update product successfully");
+    } catch (error: any) {
+      hideLoading();
+      toast.error(error.message);
+    }
+  };
 
   return (
     <Formik
@@ -139,11 +169,18 @@ export const ProductEditPage = (): JSX.Element => {
       initialValues={initialValues}
       validationSchema={productUpdateSchema}
       onSubmit={(values) => {
-        console.log("values submit", values);
+        handleEditProduct(values);
       }}
       enableReinitialize={true}
     >
-      {({ values, errors, setFieldValue, setFieldError, handleChange }) => {
+      {({
+        values,
+        errors,
+        setFieldValue,
+        setFieldError,
+        handleChange,
+        dirty,
+      }) => {
         // console.log("errors", errors);
         return (
           <Form
@@ -178,6 +215,7 @@ export const ProductEditPage = (): JSX.Element => {
                                 index={index}
                                 className="h-40"
                                 name={`slideImages.${index}`}
+                                value={values.slideImages?.[index]}
                                 label="Image"
                                 setFieldValue={setFieldValue}
                                 setFieldError={setFieldError}
@@ -199,10 +237,6 @@ export const ProductEditPage = (): JSX.Element => {
                 <SelectField
                   name="productTypeId"
                   label="Product Type"
-                  defaultValue={{
-                    label: "Select Product Type",
-                    value: "",
-                  }}
                   value={values.productTypeId}
                   options={productTypeOptions || []}
                   onChange={handleChange}
@@ -211,10 +245,6 @@ export const ProductEditPage = (): JSX.Element => {
                 <SelectField
                   name="productCategoryId"
                   label="Category"
-                  defaultValue={{
-                    label: "Select Category",
-                    value: "",
-                  }}
                   value={values.productCategoryId}
                   options={categoryOptions || []}
                   onChange={handleChange}
@@ -234,6 +264,7 @@ export const ProductEditPage = (): JSX.Element => {
             <Button
               className="flex items-center gap-4 justify-center w-1/2 m-auto"
               type="submit"
+              disabled={!dirty}
             >
               <span>Save</span>
             </Button>

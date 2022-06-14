@@ -30,8 +30,24 @@ export const uploadImageToFirebase = async (
 ) => {
   if (!req.files) return next();
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
-  const image = files.image[0];
-  const fileName = Date.now() + "." + image.originalname.split(".").pop();
+  if (files.image) {
+    const image = files.image[0];
+    const fileName = Date.now() + "." + image.originalname.split(".").pop();
+    handleUploadToFirebase(fileName, image, next);
+  }
+  if (files.slideImages && files.slideImages.length > 0) {
+    files.slideImages.forEach((image) => {
+      const fileName = Date.now() + "." + image.originalname.split(".").pop();
+      handleUploadToFirebase(fileName, image, next);
+    });
+  }
+};
+
+const handleUploadToFirebase = (
+  fileName: string,
+  image: Express.Multer.File,
+  next: NextFunction
+) => {
   const fileCreate = bucket.file(fileName);
   const stream = fileCreate.createWriteStream({
     metadata: {
