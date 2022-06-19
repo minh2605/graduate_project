@@ -29,6 +29,7 @@ export const ProductCard = ({ product }: ProductCardProps): JSX.Element => {
         <p className="text-sm">
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Et, totam?
         </p>
+        <h3 className="text-h3 font-medium text-dark-red">${product.price}</h3>
       </div>
       <div className="basis-2/5 rounded overflow-hidden h-24 max-h-full">
         <img

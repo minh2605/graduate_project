@@ -43,6 +43,7 @@
     "nodemailer-express-handlebars": "^5.0.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
+    "stripe": "^9.8.0",
     "uniqid": "^5.4.0"
   },
   "devDependencies": {

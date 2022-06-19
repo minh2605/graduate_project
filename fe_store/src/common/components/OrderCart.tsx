@@ -3,12 +3,12 @@ import { CartProducts } from "features/Order/components/CartProducts";
 import useCart from "hooks/useCart";
 
 export const OrderCart = (): JSX.Element => {
-  const { productCart } = useCart();
+  const { productCart, totalPrice } = useCart();
 
   return (
     <div className="w-1/5 fixed inset-y-0 right-0 mt-24 text-sm border-l-[1px] border-border-grey p-4">
       {productCart?.length > 0 ? (
-        <CartProducts productCart={productCart} />
+        <CartProducts productCart={productCart} totalPrice={totalPrice} />
       ) : (
         <div>
           <img

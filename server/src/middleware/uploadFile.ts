@@ -28,44 +28,49 @@ export const uploadImageToFirebase = async (
   res: Response,
   next: NextFunction
 ) => {
-  if (!req.files) return next();
+  console.log("req.files", req.files);
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return next();
+  }
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
-  if (files.image) {
-    const image = files.image[0];
-    const fileName = Date.now() + "." + image.originalname.split(".").pop();
-    handleUploadToFirebase(fileName, image, next);
-  }
-  if (files.slideImages && files.slideImages.length > 0) {
-    files.slideImages.forEach((image) => {
+  await Promise.all(
+    Object.keys(files).map(async (it) => {
+      const image = files[`${it}`][0];
       const fileName = Date.now() + "." + image.originalname.split(".").pop();
-      handleUploadToFirebase(fileName, image, next);
-    });
-  }
+      await handleUploadToFirebase(fileName, image, next);
+    })
+  );
 };
 
-const handleUploadToFirebase = (
+const handleUploadToFirebase = async (
   fileName: string,
   image: Express.Multer.File,
   next: NextFunction
 ) => {
   const fileCreate = bucket.file(fileName);
-  const stream = fileCreate.createWriteStream({
-    metadata: {
-      contentType: image.mimetype,
-    },
-  });
-  stream.on("error", (e) => {
-    console.error(e);
-  });
-  stream.on("finish", async () => {
-    await fileCreate.makePublic();
-    image.path = `https://storage.googleapis.com/${BUCKET_URL}/${fileName}`;
-    next();
-  });
-  stream.end(image.buffer);
+  if (fileCreate) {
+    const stream = fileCreate.createWriteStream({
+      metadata: {
+        contentType: image.mimetype,
+      },
+    });
+    stream.on("error", (e) => {
+      console.error(e);
+    });
+    stream.on("finish", async () => {
+      console.log("fileName", fileName);
+      image.path = `https://storage.googleapis.com/${BUCKET_URL}/${fileName}`;
+      await fileCreate.makePublic();
+      next();
+    });
+    stream.end(image.buffer);
+  } else next();
 };
 
 export const uploadImages = upload.fields([
   { name: "image", maxCount: 1 },
-  { name: "slideImages", maxCount: 4 },
+  { name: "slideImages0", maxCount: 1 },
+  { name: "slideImages1", maxCount: 1 },
+  { name: "slideImages2", maxCount: 1 },
+  { name: "slideImages3", maxCount: 1 },
 ]);

@@ -6,6 +6,7 @@ import { CartState } from "redux/slices/cart/cartSlice";
 const CartCheckoutButton = styled.div(
   tw`flex items-center justify-between bg-light-red p-3 rounded-3xl text-white hover:bg-dark-red cursor-pointer font-medium`
 );
+
 const ProductsWrapper = styled.div`
   &::-webkit-scrollbar {
     width: 8px;
@@ -20,11 +21,14 @@ type CartProductsProps = CartState;
 
 export const CartProducts = ({
   productCart,
+  totalPrice,
 }: CartProductsProps): JSX.Element => {
   const navigate = useNavigate();
   const handleCheckout = () => {
     navigate("/checkout");
   };
+
+  // const createOrder = () => {};
 
   return (
     <div className="h-full flex flex-col">
@@ -37,7 +41,7 @@ export const CartProducts = ({
         <div className="pb-4 border-b-2 border-border-grey">
           <CartCheckoutButton onClick={handleCheckout}>
             <span>Checkout</span>
-            <span className="text-base">$10.45</span>
+            <span className="text-base">${totalPrice}</span>
           </CartCheckoutButton>
         </div>
       </div>

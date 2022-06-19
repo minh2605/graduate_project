@@ -5,7 +5,7 @@ import SvgMinor from "common/components/svg/Minor";
 import SvgPlus from "common/components/svg/Plus";
 import { useState } from "react";
 import { useDispatch } from "redux/hook";
-import { addToCart } from "redux/slices/cart/cartSlice";
+import { addToCart, updateTotalPrice } from "redux/slices/cart/cartSlice";
 
 interface ProductCardPopupProps {
   isOpen: boolean;
@@ -28,6 +28,7 @@ export const ProductCardPopup = ({
         amount: productAmount,
       })
     );
+    dispatch(updateTotalPrice());
     setProductAmount(1);
     onClose();
   };
@@ -40,6 +41,10 @@ export const ProductCardPopup = ({
         setProductAmount((prevProductAmount) => prevProductAmount - 1);
       }
     }
+  };
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setProductAmount(Number(e.target.value));
   };
   return (
     <Modal open={isOpen} onClose={onClose} size="md">
@@ -65,9 +70,10 @@ export const ProductCardPopup = ({
               onClick={() => handleAmount(false)}
             />
             <input
-              type="text"
+              type="number"
               className="bg-border-grey p-2 w-16 rounded text-center font-medium"
               value={productAmount}
+              onChange={handleAmountChange}
             />
             <SvgPlus
               className="cursor-pointer"

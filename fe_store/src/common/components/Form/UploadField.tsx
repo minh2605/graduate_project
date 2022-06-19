@@ -41,7 +41,7 @@ export const UploadField = ({
   errors,
   className,
 }: UploadFieldProps) => {
-  console.log("value", value);
+  // console.log("value", value);
   const [previewImg, setPreviewImg] = useState("");
   const fileRef = useRef<any>(null);
   const handleImageChange = (e: ChangeEvent<any>) => {
@@ -81,7 +81,7 @@ export const UploadField = ({
           hidden
           innerRef={fileRef}
         />
-        {value || previewImg ? (
+        {(value && value !== "null") || previewImg ? (
           <div className="absolute inset-0 rounded-xl shrink-0">
             <img
               src={typeof value === "string" ? value : previewImg}

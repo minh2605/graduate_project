@@ -27,25 +27,34 @@ const getProductById = async (id: string) => {
 const updateProductById = async (
   productId: string,
   updateBody: any,
-  files?: { [fieldname: string]: Express.Multer.File[] }
+  files: { [fieldname: string]: Express.Multer.File[] }
 ) => {
   const product = await getProductById(productId);
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
   }
-  console.log("========= updateBody ===========", updateBody);
-  // console.log("========= REQ.Files ===========", req.files);
-  // const files = req.files as { [fieldname: string]: Express.Multer.File[] };
-  // console.log("========= product ===========", product);
-  const newSlideImages = files
-    ? files.slideImages.map((it) => it.path)
-    : product?.slideImages;
-  updateBody.slideImages = newSlideImages;
-  Object.assign(product, updateBody);
-  product.markModified("slideImages");
-  await product.save();
-  console.log("UPDATE PRODUCT", product);
-  return product;
+
+  if (files) {
+    const slideImageInfo = Object.keys(files).map((it) => {
+      console.log(files[it][0]);
+      const fileInfo = files[it][0];
+      return {
+        index: Number(fileInfo.fieldname.split("slideImages")[1]),
+        path: fileInfo.path || "null",
+      };
+    });
+    console.log("slideImageInfo", slideImageInfo);
+    console.log("updateBody", updateBody);
+
+    slideImageInfo.forEach((it) => {
+      product.slideImages[it.index] = it.path;
+    });
+    Object.assign(product, updateBody);
+    product.markModified("slideImages");
+    await product.save();
+    console.log("UPDATE PRODUCT", product);
+    return product;
+  }
 };
 const deleteProduct = async (id: string) => {
   const product = await getProductById(id);

@@ -146,8 +146,8 @@ export const ProductEditPage = (): JSX.Element => {
       formData.append("slideIndexes", slideIndexes);
       Object.entries(values).forEach(([key, value], index) => {
         if (key === "slideImages") {
-          value.forEach((it: string) => {
-            formData.append(key, it);
+          value.forEach((it: string, index: number) => {
+            formData.append(`${key}${index}`, it);
           });
         } else {
           formData.append(key, value);

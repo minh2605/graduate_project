@@ -22,6 +22,8 @@ const envVariablesSchema = Joi.object()
     EMAIL_FROM: Joi.string().description(
       "the from field in the emails sent by the app"
     ),
+    STRIPE_PRIVATE_KEY: Joi.string(),
+    CLIENT_SITE: Joi.string(),
   })
   .unknown();
 
@@ -60,4 +62,8 @@ export const envConfig = {
     },
     from: `Foogle Store 🍖"${envVars.EMAIL_FROM}`,
   },
+  stripe: {
+    privateKey: envVars.STRIPE_PRIVATE_KEY,
+  },
+  clientSite: envVars.CLIENT_SITE,
 };

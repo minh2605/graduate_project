@@ -3,6 +3,7 @@ import categoryRoute from "./category.route";
 import productTypeRoute from "./productType.route";
 import authRoute from "./auth.route";
 import express from "express";
+import orderRoute from "./order.route";
 
 const router = express.Router();
 
@@ -18,6 +19,10 @@ const defaultRoutes = [
   {
     path: "/product_type/",
     route: productTypeRoute,
+  },
+  {
+    path: "/order/",
+    route: orderRoute,
   },
   {
     path: "/auth/",

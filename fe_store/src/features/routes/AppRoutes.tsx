@@ -3,8 +3,10 @@ import { OrderCart } from "common/components/OrderCart";
 import { HomePage } from "pages/HomePage";
 import { CheckoutPage } from "pages/CheckoutPage";
 import { OrderPage } from "pages/OrderPage";
-import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { AuthCheck } from "layout/AuthCheck";
+import { useMemo } from "react";
+import { ProfilePage } from "pages/ProfilePage";
 
 const APP_ROUTES = [
   {
@@ -23,18 +25,30 @@ const APP_ROUTES = [
     path: "/order",
     element: <OrderPage />,
   },
+  {
+    path: "/profile",
+    element: <ProfilePage />,
+  },
 ];
 
 export const AppRoutes = (): JSX.Element => {
+  const { pathname } = useLocation();
+  const isOrderCartShow = useMemo(() => {
+    return !pathname.includes("checkout");
+  }, [pathname]);
   return (
     <div>
       <Header />
-      <OrderCart />
+      {isOrderCartShow && <OrderCart />}
       <Routes>
         <Route
           path="/"
           element={
-            <div className="mt-24 w-4/5 py-8 px-16">
+            <div
+              className={`mt-24 py-8 px-16 ${
+                isOrderCartShow ? "w-4/5 mt-24" : "w-full"
+              }`}
+            >
               <Outlet />
             </div>
           }

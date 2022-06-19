@@ -35,6 +35,10 @@ export const Header = (): JSX.Element => {
     setMenuBarShow((isMenubarShow) => !isMenubarShow);
   };
   const handleCartClicked = () => {
+    if (cartInfo.productCart?.length === 0) {
+      alert("No product in cart");
+      return;
+    }
     navigate("../checkout");
   };
   return (
