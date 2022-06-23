@@ -10,11 +10,11 @@ import { ProfilePage } from "pages/ProfilePage";
 
 const APP_ROUTES = [
   {
-    path: "/home",
+    path: "home",
     element: <HomePage />,
   },
   {
-    path: "/checkout",
+    path: "checkout",
     element: (
       <AuthCheck>
         <CheckoutPage />
@@ -22,11 +22,11 @@ const APP_ROUTES = [
     ),
   },
   {
-    path: "/order",
+    path: "order",
     element: <OrderPage />,
   },
   {
-    path: "/profile",
+    path: "profile",
     element: <ProfilePage />,
   },
 ];
@@ -54,7 +54,7 @@ export const AppRoutes = (): JSX.Element => {
           }
         >
           <Route index element={<Navigate to="home" />} />
-          <Route path="/home" element={<HomePage />} />
+          <Route path="home" element={<HomePage />} />
           {APP_ROUTES.map((route) => (
             <Route key={route.path} path={route.path} element={route.element} />
           ))}

@@ -4,6 +4,7 @@ import productTypeRoute from "./productType.route";
 import authRoute from "./auth.route";
 import express from "express";
 import orderRoute from "./order.route";
+import orderTypeRoute from "./orderType.route";
 
 const router = express.Router();
 
@@ -23,6 +24,10 @@ const defaultRoutes = [
   {
     path: "/order/",
     route: orderRoute,
+  },
+  {
+    path: "/order_type/",
+    route: orderTypeRoute,
   },
   {
     path: "/auth/",

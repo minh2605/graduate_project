@@ -39,7 +39,7 @@ export const Header = (): JSX.Element => {
       alert("No product in cart");
       return;
     }
-    navigate("../checkout");
+    navigate("./checkout");
   };
   return (
     <HeaderWrapper>

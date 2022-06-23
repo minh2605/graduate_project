@@ -1,13 +1,18 @@
-import OrderModel from "../models/order.model";
+import OrderModel, { OrderDocument } from "../models/order.model";
 import { UserCreateProps } from "./user.service";
 
-const createOrder = async (userBody: UserCreateProps) => {
-  const newUser = await OrderModel.create(userBody);
-  return newUser;
+const createOrder = async (orderBody: OrderDocument) => {
+  const newOrder = await OrderModel.create(orderBody);
+  return newOrder;
+};
+
+const getOrderById = async (id: string) => {
+  return OrderModel.findById(id);
 };
 
 const orderService = {
   createOrder,
+  getOrderById,
 };
 
 export default orderService;

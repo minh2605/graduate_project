@@ -1,5 +1,10 @@
 import mongoose, { Types } from "mongoose";
 
+export interface ProductItemPayload {
+  productId: Types.ObjectId;
+  name: string;
+  price: number;
+}
 export interface OrderDocument extends mongoose.Document {
   account_id: Types.ObjectId;
   total_gross_amount: number;
@@ -8,10 +13,16 @@ export interface OrderDocument extends mongoose.Document {
   city: string;
   order_type_id: Types.ObjectId;
   discount_id: Types.ObjectId;
-  product_ids: Types.ObjectId[];
+  product_list: ProductItemPayload[];
   date: Date;
+  status: OrderStatus;
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export enum OrderStatus {
+  PENDING = "PENDING",
+  FULLFILL = "FULLFILL",
 }
 
 const orderSchema = new mongoose.Schema(
@@ -24,7 +35,7 @@ const orderSchema = new mongoose.Schema(
     },
     discount_id: {
       type: mongoose.SchemaTypes.ObjectId,
-      required: true,
+      // required: true,
       trim: true,
       ref: "Discount",
     },
@@ -34,12 +45,20 @@ const orderSchema = new mongoose.Schema(
       trim: true,
       ref: "OrderType",
     },
-    product_ids: [
+    product_list: [
       {
-        type: mongoose.SchemaTypes.ObjectId,
-        required: true,
-        trim: true,
-        ref: "Product",
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+        },
+        name: {
+          type: String,
+          require: true,
+        },
+        price: {
+          type: Number,
+          require: true,
+        },
       },
     ],
     total_gross_amount: {
@@ -47,7 +66,7 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
     total_net_amount: {
-      type: Boolean,
+      type: Number,
       required: true,
     },
     address: {
@@ -61,6 +80,14 @@ const orderSchema = new mongoose.Schema(
     date: {
       type: Date,
       required: true,
+    },
+    order_note: {
+      type: String,
+    },
+    status: {
+      type: String,
+      enum: OrderStatus,
+      default: OrderStatus.PENDING,
     },
   },
   {

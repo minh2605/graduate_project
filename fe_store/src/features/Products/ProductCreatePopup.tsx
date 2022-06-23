@@ -79,7 +79,7 @@ export const ProductCreatePopup = ({
       Object.entries(values).forEach(([key, value], index) => {
         formData.append(key, value);
       });
-      await API.post(`/product/create`, formData);
+      await API.post("product/create", formData);
       hideLoading();
       toast.success("Create product successfully");
       mutate();

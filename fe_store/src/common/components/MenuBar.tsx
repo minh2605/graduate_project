@@ -53,21 +53,21 @@ export const MenuBar = ({
         </div>
         <nav className="flex flex-col">
           <Link
-            to="/home"
+            to="/store/home"
             className="py-4 px-8 flex items-center gap-4 border-t border-border-grey"
           >
             <SvgHome />
             <span>Home</span>
           </Link>
           <Link
-            to="/checkout"
+            to="/store/checkout"
             className="py-4 px-8 flex items-center gap-4 border-t border-border-grey"
           >
             <SvgPayment />
             <span>Checkout</span>
           </Link>
           <Link
-            to="/order"
+            to="/store/order"
             className="py-4 px-8 flex items-center gap-4 border-t border-border-grey"
           >
             <SvgOrder />

@@ -13,7 +13,7 @@ export const InputField = ({
   className,
 }: InputFieldProps) => {
   return (
-    <div className="flex flex-col gap-2 mb-4 text-base">
+    <div className={`flex flex-col gap-2 mb-4 text-base ${className}`}>
       <label htmlFor="name">{label}*</label>
 
       <Field

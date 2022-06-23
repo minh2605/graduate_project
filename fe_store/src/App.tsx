@@ -2,6 +2,7 @@ import { AppRoutes } from "features/routes/AppRoutes";
 import { PrivateRoutes } from "features/routes/PrivateRoutes";
 import { PublicRoutes } from "features/routes/PublicRoutes";
 import { AuthCheck } from "layout/AuthCheck";
+import { NotFoundPage } from "pages/NotFoundPage";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,8 +21,9 @@ const App = (): JSX.Element => {
             </AuthCheck>
           }
         />
-        <Route index element={<Navigate to="home" />} />
-        <Route path="*" element={<AppRoutes />} />
+        <Route index element={<Navigate to="/store/home" />} />
+        <Route path="/store/*" element={<AppRoutes />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>
   );

@@ -50,7 +50,7 @@ export const ProductCardPopup = ({
     <Modal open={isOpen} onClose={onClose} size="md">
       <div className="flex flex-col">
         <h2 className="text-h2 font-bold leading-6 mb-4">
-          Product {productDetail.name}
+          {productDetail.name}
         </h2>
         <p className="text-sm mb-4">
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse

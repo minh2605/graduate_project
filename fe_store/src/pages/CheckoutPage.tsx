@@ -1,6 +1,7 @@
 import SvgBin from "common/components/svg/Bin";
 import SvgMinor from "common/components/svg/Minor";
 import SvgPlus from "common/components/svg/Plus";
+import { CheckoutForm } from "features/Checkout/CheckoutForm";
 import useCart from "hooks/useCart";
 import { useDispatch } from "redux/hook";
 import {
@@ -42,7 +43,7 @@ export const CheckoutPage = (): JSX.Element => {
   return (
     <div className="max-h-screen">
       <h1 className="text-h1 font-medium mb-6 uppercase">Your cart</h1>
-      <div className="flex items-center h-[500px] gap-10 mx-10">
+      <div className="flex items-center h-fit gap-10 mx-10">
         <div className="max-h-full overflow-auto w-fit flex flex-col">
           {productCart &&
             productCart.map((it) => {
@@ -91,7 +92,10 @@ export const CheckoutPage = (): JSX.Element => {
               );
             })}
         </div>
-        <div className="basis-1/2">ABC</div>
+
+        <div className="basis-1/2">
+          <CheckoutForm />
+        </div>
       </div>
     </div>
   );

@@ -25,7 +25,7 @@ export const CartProducts = ({
 }: CartProductsProps): JSX.Element => {
   const navigate = useNavigate();
   const handleCheckout = () => {
-    navigate("/checkout");
+    navigate("/store/checkout");
   };
 
   // const createOrder = () => {};

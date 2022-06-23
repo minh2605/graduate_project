@@ -51,41 +51,45 @@ export const CartProductItem = ({
 
   return (
     <ProductItemWrapper onClick={handleProductItemClicked}>
-      <div className="relative w-16 h-16 shrink-0">
-        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-dark-grey text-white flex items-center text-center">
-          <span className="w-full">{amount} x</span>
+      <div className="flex items-center justify-between gap-2">
+        <div className="relative w-16 h-16 shrink-0 border border-light-red p-1 rounded">
+          <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-dark-grey text-white flex items-center text-center">
+            <span className="w-full">{amount} x</span>
+          </div>
+          <img
+            src={product.image}
+            alt="product-img"
+            className="object-cover w-full h-full"
+          />
         </div>
-        <img
-          src={product.image}
-          alt="product-img"
-          className="object-cover w-full h-full"
-        />
-      </div>
-      <div className="flex-1">
-        <h5 className="text-base font-medium mb-2">{product.name}</h5>
-        <div className="text-dark-red mb-2">${product.price}</div>
+        <div className="flex-1">
+          <h5 className="text-base font-medium mb-2">{product.name}</h5>
+          <div className="text-dark-red mb-2">${product.price}</div>
+        </div>
       </div>
       <div className="flex items-center">
-        <SvgMinor
-          className="cursor-pointer"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleAmount(false);
-          }}
-        />
-        <SvgPlus
-          className="cursor-pointer"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleAmount();
-          }}
-        />
-      </div>
-      <div
-        className="w-8 h-8 flex justify-center items-center rounded-full hover:bg-light-red-opacity"
-        onClick={(e) => handleDeleteItem(e, product._id)}
-      >
-        <SvgBin />
+        <div className="flex items-center">
+          <SvgMinor
+            className="cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAmount(false);
+            }}
+          />
+          <SvgPlus
+            className="cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAmount();
+            }}
+          />
+        </div>
+        <div
+          className="w-8 h-8 flex justify-center items-center rounded-full hover:bg-light-red-opacity"
+          onClick={(e) => handleDeleteItem(e, product._id)}
+        >
+          <SvgBin />
+        </div>
       </div>
     </ProductItemWrapper>
   );
