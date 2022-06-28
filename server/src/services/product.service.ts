@@ -1,8 +1,9 @@
 import ProductModel, { ProductDocument } from "../models/product.model";
-import { Types } from "mongoose";
+
 import ApiError from "../utils/ApiError";
 import httpStatus from "http-status";
 import uniqid from "uniqid";
+import { Request, Response } from "express";
 
 const createProduct = async (
   productBody: Omit<ProductDocument, "productCode">
@@ -16,9 +17,26 @@ const createProduct = async (
   return newProduct;
 };
 
-const getProducts = async () => {
-  const productTypeList = await ProductModel.find();
-  return productTypeList;
+const getProducts = async (req: Request, res: Response) => {
+  const limit = Number(req.query.limit);
+  let perPage = limit > 1 && limit < 9 ? limit : 9;
+  let page = Number(req.query.page) || 1;
+
+  console.log("perPage", perPage);
+
+  const productList = await ProductModel.find()
+    .skip(perPage * (page - 1))
+    .limit(perPage);
+  const totalProduct = await ProductModel.countDocuments({});
+  const totalPage = Math.ceil(totalProduct / perPage);
+
+  return {
+    productList,
+    currentPage: page,
+    limit: perPage,
+    totalProduct,
+    totalPage: totalPage,
+  };
 };
 
 const getProductById = async (id: string) => {

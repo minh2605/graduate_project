@@ -17,6 +17,14 @@ interface ProductCardProps {
   product: ProductProps;
 }
 
+export interface ProductPaginationProps {
+  productList: ProductProps[];
+  currentPage: number;
+  limit: number;
+  totalProduct: number;
+  totalPage: number;
+}
+
 export const ProductCard = ({ product }: ProductCardProps): JSX.Element => {
   const [isOpen, setOpen] = useState(false);
   return (

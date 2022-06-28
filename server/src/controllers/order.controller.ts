@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 import { envConfig } from "../config/config";
-import { OrderStatus } from "../models/order.model";
+import { OrderStatus, PaymentType } from "../models/order.model";
 import accountService from "../services/account.service";
 import orderService from "../services/order.service";
 import { catchAsync } from "../utils/catchAsync";
@@ -11,9 +11,18 @@ const stripe = require("stripe")(envConfig.stripe.privateKey);
 const CLIENT_DOMAIN = envConfig.clientSite;
 
 const createOrder = catchAsync(async (req: Request, res: Response) => {
+  console.log("req.body", req.body);
   const account = await accountService.getAccountById(req.body.account_id);
   const newOrder = await orderService.createOrder(req.body);
-  const { product_list } = req.body;
+  const successUrl = `${CLIENT_DOMAIN}/store/checkout/${newOrder._id.toString()}?success=true`;
+  const cancelUrl = `${CLIENT_DOMAIN}/store/checkout/${newOrder._id.toString()}?cancel=true`;
+  const { product_list, payment_type } = req.body;
+  if (payment_type === PaymentType.CASH) {
+    res
+      .status(httpStatus.CREATED)
+      .send(`/store/checkout/${newOrder._id.toString()}?success=true`);
+    return;
+  }
   const line_items = product_list.map((product: any) => {
     return {
       price_data: {
@@ -31,10 +40,15 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
     line_items: line_items,
     mode: "payment",
     payment_method_types: ["card"],
-    success_url: `${CLIENT_DOMAIN}/checkout?success=true&order_id=${newOrder._id.toString()}`,
-    cancel_url: `${CLIENT_DOMAIN}/checkout?canceled=true`,
+    success_url: successUrl,
+    cancel_url: cancelUrl,
   });
   res.status(httpStatus.CREATED).send(session.url);
+});
+
+const getOrders = catchAsync(async (req: Request, res: Response) => {
+  const orderList = await orderService.getOrders(req, res);
+  res.status(httpStatus.OK).send(orderList);
 });
 
 const fullFillOrder = catchAsync(async (req: Request, res: Response) => {
@@ -60,6 +74,7 @@ const fullFillOrder = catchAsync(async (req: Request, res: Response) => {
 const orderController = {
   createOrder,
   fullFillOrder,
+  getOrders,
 };
 
 export default orderController;

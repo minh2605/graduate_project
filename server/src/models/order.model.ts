@@ -5,7 +5,13 @@ export interface ProductItemPayload {
   name: string;
   price: number;
 }
+
+export enum PaymentType {
+  CASH = "CASH",
+  CREDIT_CARD = "CREDIT_CARD",
+}
 export interface OrderDocument extends mongoose.Document {
+  orderCode?: string;
   account_id: Types.ObjectId;
   total_gross_amount: number;
   total_net_amount: number;
@@ -16,6 +22,7 @@ export interface OrderDocument extends mongoose.Document {
   product_list: ProductItemPayload[];
   date: Date;
   status: OrderStatus;
+  payment_type: PaymentType;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -27,6 +34,12 @@ export enum OrderStatus {
 
 const orderSchema = new mongoose.Schema(
   {
+    orderCode: {
+      type: String,
+      required: true,
+      trim: true,
+      index: true,
+    },
     account_id: {
       type: mongoose.SchemaTypes.ObjectId,
       required: true,
@@ -88,6 +101,11 @@ const orderSchema = new mongoose.Schema(
       type: String,
       enum: OrderStatus,
       default: OrderStatus.PENDING,
+    },
+    payment_type: {
+      type: String,
+      enum: PaymentType,
+      default: PaymentType.CASH,
     },
   },
   {

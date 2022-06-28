@@ -1,18 +1,25 @@
-import { ProductCard, ProductProps } from "common/components/ProductCard";
+import {
+  ProductCard,
+  ProductPaginationProps,
+  ProductProps,
+} from "common/components/ProductCard";
 import API from "api/axios";
 import { useEffect, useState } from "react";
 import { useLoading } from "hooks/useLoading";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+// import Skeleton from "react-loading-skeleton";
+// import "react-loading-skeleton/dist/skeleton.css";
 
 export const Products = (): JSX.Element => {
-  const [products, setProducts] = useState<ProductProps[]>();
+  const [products, setProducts] = useState<ProductProps[]>([]);
   const [showLoading, hideLoading] = useLoading();
   useEffect(() => {
     const fetchData = async () => {
       showLoading();
-      const data: ProductProps[] = await API.get("/product/list");
-      setProducts(data);
+      const data: ProductPaginationProps = await API.get(
+        "/product/list?page=1"
+      );
+      console.log("data", data);
+      setProducts(data.productList);
       hideLoading();
     };
     fetchData();

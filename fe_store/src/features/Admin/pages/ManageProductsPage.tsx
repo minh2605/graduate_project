@@ -1,4 +1,7 @@
-import { ProductProps } from "common/components/ProductCard";
+import {
+  ProductPaginationProps,
+  ProductProps,
+} from "common/components/ProductCard";
 import { useLoading } from "hooks/useLoading";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import API from "api/axios";
@@ -14,6 +17,17 @@ import { toast } from "react-toastify";
 import { Button } from "common/components/Button";
 import SvgPlus from "common/components/svg/Plus";
 import { ProductCreatePopup } from "features/Products/ProductCreatePopup";
+import queryString from "query-string";
+import SvgLeftArrow from "common/components/svg/LeftArrow";
+import { PaginationControl } from "common/components/PaginationControl";
+import { usePaginationFilter } from "hooks/usePaginationFilter";
+
+export interface PaginationInfoProps {
+  limit: number;
+  currentPage: number;
+  totalPage: number;
+  totalProduct: number;
+}
 
 export const ManageProductsPage = (): JSX.Element => {
   const [products, setProducts] = useState<ProductProps[]>();
@@ -21,16 +35,36 @@ export const ManageProductsPage = (): JSX.Element => {
   const [refetch, setRefetch] = useState({});
   const [showLoading, hideLoading] = useLoading();
   const navigate = useNavigate();
+  const [paginationInfo, setPaginationInfo] = useState<PaginationInfoProps>({
+    limit: 0,
+    currentPage: 0,
+    totalPage: 0,
+    totalProduct: 0,
+  });
+
+  const [paginationFilter, setPaginationFilter] = usePaginationFilter({
+    page: 1,
+    limit: 5,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
       showLoading();
-      const data: ProductProps[] = await API.get("/product/list");
-      setProducts(data);
+      const data: ProductPaginationProps = await API.get(
+        `/product/list?${queryString.stringify(paginationFilter)}`
+      );
+      setProducts(data.productList);
+      const paginationData: PaginationInfoProps = {
+        limit: data.limit,
+        currentPage: data.currentPage,
+        totalPage: data.totalPage,
+        totalProduct: data.totalProduct,
+      };
+      setPaginationInfo(paginationData);
       hideLoading();
     };
     fetchData();
-  }, [showLoading, hideLoading, refetch]);
+  }, [showLoading, hideLoading, refetch, paginationFilter]);
 
   const handleRowDelete = useCallback(
     async (value: ProductProps) => {
@@ -115,6 +149,16 @@ export const ManageProductsPage = (): JSX.Element => {
     navigate(`./detail/${productId}`);
   };
 
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    const pageSelected = selectedItem.selected + 1;
+    console.log("pageSelected", pageSelected);
+    setPaginationFilter({
+      ...paginationFilter,
+      page: pageSelected,
+    });
+    console.log("pageSelected", pageSelected);
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between font-medium mb-6">
@@ -131,6 +175,13 @@ export const ManageProductsPage = (): JSX.Element => {
         data={products ?? []}
         columns={columns}
         onRowSelected={handleRowSelected}
+        className="mb-10"
+      />
+      <PaginationControl
+        previousLabel={<SvgLeftArrow />}
+        nextLabel={<SvgLeftArrow className="rotate-180" />}
+        pageCount={paginationInfo?.totalPage}
+        onPageChange={handlePageChange}
       />
       <ProductCreatePopup
         isOpen={isShowPopup}

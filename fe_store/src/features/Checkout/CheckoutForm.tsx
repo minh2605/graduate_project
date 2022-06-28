@@ -10,6 +10,7 @@ import * as yup from "yup";
 import API from "api/axios";
 import { useLoading } from "hooks/useLoading";
 import useAuth from "hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 type ISODate = string;
 
@@ -68,6 +69,8 @@ export const CheckoutForm = (): JSX.Element => {
   const [showLoading, hideLoading] = useLoading();
   const [orderTypes, setOrderTypes] = useState<OrderTypeValueProps[]>([]);
   const { currentUserProfile } = useAuth();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       const data: OrderTypeValueProps[] = await API.get("order_type/list");
@@ -97,13 +100,17 @@ export const CheckoutForm = (): JSX.Element => {
         total_gross_amount: totalPrice,
         total_net_amount: totalPrice,
         status: OrderStatus.PENDING,
+        payment_type: values.payment_type,
       };
-      const checkoutInfo: string = await API.post(
+      const checkoutUrl: string = await API.post(
         "order/create",
         checkoutPayload
       );
       hideLoading();
-      window.open(checkoutInfo, "_self");
+      // localStorage.removeItem("product_cart");
+      if (values.payment_type === PaymentType.CREDIT_CARD) {
+        window.open(checkoutUrl, "_self");
+      } else navigate(checkoutUrl);
     } catch (error) {
       hideLoading();
       console.error(error);

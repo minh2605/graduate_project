@@ -1,12 +1,12 @@
 import { Header } from "common/components/Header";
 import { OrderCart } from "common/components/OrderCart";
 import { HomePage } from "pages/HomePage";
-import { CheckoutPage } from "pages/CheckoutPage";
 import { OrderPage } from "pages/OrderPage";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { AuthCheck } from "layout/AuthCheck";
 import { useMemo } from "react";
 import { ProfilePage } from "pages/ProfilePage";
+import { CheckoutRoute } from "./CheckoutRoute";
 
 const APP_ROUTES = [
   {
@@ -14,10 +14,10 @@ const APP_ROUTES = [
     element: <HomePage />,
   },
   {
-    path: "checkout",
+    path: "checkout/*",
     element: (
       <AuthCheck>
-        <CheckoutPage />
+        <CheckoutRoute />
       </AuthCheck>
     ),
   },

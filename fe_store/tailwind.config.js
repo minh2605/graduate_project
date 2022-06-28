@@ -6,6 +6,7 @@ module.exports = {
       bangers: ["Bangers", "cursive"],
     },
     fontSize: {
+      xl: "8rem",
       h1: "1.75rem",
       h2: "1.5rem",
       h3: "1.25rem",

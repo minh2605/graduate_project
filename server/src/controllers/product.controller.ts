@@ -17,7 +17,7 @@ const createProduct = catchAsync(
 );
 
 const getProducts = catchAsync(async (req: Request, res: Response) => {
-  const products = await productService.getProducts();
+  const products = await productService.getProducts(req, res);
   res.status(httpStatus.OK).send(products);
 });
 
