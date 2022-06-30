@@ -1,11 +1,9 @@
 import SvgMenuBar from "common/components/svg/MenuBar";
-import SvgNotification from "common/components/svg/Notification";
-import SvgSearch from "common/components/svg/Search";
 import useAuth from "hooks/useAuth";
 import tw, { styled } from "twin.macro";
 import { UserProfileIcon } from "./UserProfileIcon";
 
-const HeaderSeachBar = styled.div(
+export const HeaderSeachBar = styled.div(
   tw`flex items-center border rounded-3xl p-2 ml-8 w-auto justify-self-center`
 );
 
@@ -29,17 +27,17 @@ export const HeaderAdmin = ({
         onClick={() => setToggle(!isToggle)}
         className="cursor-pointer"
       />
-      <HeaderSeachBar>
+      {/* <HeaderSeachBar>
         <input
           type="text"
           placeholder="Search"
           className="border-0 max-w-full focus:outline-none text-sm flex-1 lg:px-4"
         />
         <SvgSearch className="shrink-0" />
-      </HeaderSeachBar>
+      </HeaderSeachBar> */}
       {currentUserProfile && (
-        <div className="flex items-center justify-between basis-1/4">
-          <SvgNotification className="text-dark-red" />
+        <div className="flex items-center justify-end basis-1/4">
+          {/* <SvgNotification className="text-dark-red" /> */}
           <UserProfileIcon type="text" name={currentUserProfile.name} />
         </div>
       )}

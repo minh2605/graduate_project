@@ -27,7 +27,7 @@ axiosInstance.interceptors.response.use(
     const statusCode = error.response.status;
     console.log("statusCOde", statusCode);
     if (statusCode === 404) {
-      window.location.href = "/not-found";
+      // window.location.href = "/not-found";
       return;
     }
     if (statusCode === 400) {

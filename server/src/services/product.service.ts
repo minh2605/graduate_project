@@ -1,10 +1,15 @@
 import ProductModel, { ProductDocument } from "../models/product.model";
-
+import { Types } from "mongoose";
 import ApiError from "../utils/ApiError";
 import httpStatus from "http-status";
 import uniqid from "uniqid";
 import { Request, Response } from "express";
 
+export type SeachQuery = {
+  name: string;
+  productTypeId?: string;
+  categoryId?: string;
+};
 const createProduct = async (
   productBody: Omit<ProductDocument, "productCode">
 ) => {
@@ -21,13 +26,24 @@ const getProducts = async (req: Request, res: Response) => {
   const limit = Number(req.query.limit);
   let perPage = limit > 1 && limit < 9 ? limit : 9;
   let page = Number(req.query.page) || 1;
+  let searchQuery = ProductModel.find({});
+  if (req.query.name) {
+    const baseRegex = new RegExp(req.query.name.toString(), "i");
+    searchQuery = searchQuery.where({
+      $or: [{ productCode: baseRegex }, { name: baseRegex }],
+    });
+  }
+  if (req.query.productTypeId) {
+    searchQuery.where({ productTypeId: req.query.productTypeId });
+  }
+  if (req.query.categoryId) {
+    searchQuery.where({ productCategoryId: req.query.categoryId });
+  }
 
-  console.log("perPage", perPage);
-
-  const productList = await ProductModel.find()
+  const productList = await ProductModel.find(searchQuery)
     .skip(perPage * (page - 1))
     .limit(perPage);
-  const totalProduct = await ProductModel.countDocuments({});
+  const totalProduct = await ProductModel.countDocuments(searchQuery);
   const totalPage = Math.ceil(totalProduct / perPage);
 
   return {

@@ -87,6 +87,8 @@ export const CheckoutForm = (): JSX.Element => {
           productId: product.product._id,
           name: product.product.name,
           price: product.product.price,
+          quantity: product.amount,
+          image: product.product.image,
         };
       });
       const checkoutPayload = {

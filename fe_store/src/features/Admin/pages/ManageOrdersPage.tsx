@@ -17,12 +17,19 @@ import { usePaginationFilter } from "hooks/usePaginationFilter";
 import { PaginationInfoProps } from "features/Admin/pages/ManageProductsPage";
 import { OrderStatus, PaymentType } from "features/Checkout/CheckoutForm";
 
+interface ProductOrderProps {
+  productId: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+}
 export interface OrderProps {
   _id: string;
   orderCode: string;
   account_id: string;
   order_type_id: string;
-  product_list: number;
+  product_list: ProductOrderProps[];
   total_gross_amount: number;
   total_net_amount: number;
   address: string;

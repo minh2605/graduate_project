@@ -30,7 +30,7 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
         product_data: { name: product.name },
         unit_amount: product.price * 100,
       },
-      quantity: 1,
+      quantity: product.quantity,
     };
   });
 
@@ -49,6 +49,12 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
 const getOrders = catchAsync(async (req: Request, res: Response) => {
   const orderList = await orderService.getOrders(req, res);
   res.status(httpStatus.OK).send(orderList);
+});
+
+const getOrderById = catchAsync(async (req: Request, res: Response) => {
+  const { id: orderId } = req.params;
+  const orderById = await orderService.getOrderById(orderId);
+  res.status(httpStatus.OK).send(orderById);
 });
 
 const fullFillOrder = catchAsync(async (req: Request, res: Response) => {
@@ -75,6 +81,7 @@ const orderController = {
   createOrder,
   fullFillOrder,
   getOrders,
+  getOrderById,
 };
 
 export default orderController;

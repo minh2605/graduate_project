@@ -4,6 +4,8 @@ export interface ProductItemPayload {
   productId: Types.ObjectId;
   name: string;
   price: number;
+  quantity: number;
+  image: string;
 }
 
 export enum PaymentType {
@@ -70,6 +72,14 @@ const orderSchema = new mongoose.Schema(
         },
         price: {
           type: Number,
+          require: true,
+        },
+        quantity: {
+          type: Number,
+          require: true,
+        },
+        image: {
+          type: String,
           require: true,
         },
       },

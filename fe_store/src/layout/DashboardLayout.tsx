@@ -15,7 +15,7 @@ export const DashboardLayout = ({
       <div
         className={`${
           isToggle ? "ml-0" : "ml-72"
-        } w-full mt-20 px-6 pt-6 transition-all`}
+        } w-full mt-20 px-4 pt-6 transition-all`}
       >
         {children}
       </div>

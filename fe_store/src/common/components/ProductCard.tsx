@@ -1,5 +1,6 @@
 import { ProductCardPopup } from "features/Products/components/ProductCardPopup";
 import { useState } from "react";
+import { motion } from "framer-motion";
 export interface ProductProps {
   description: string;
   image: string;
@@ -28,7 +29,8 @@ export interface ProductPaginationProps {
 export const ProductCard = ({ product }: ProductCardProps): JSX.Element => {
   const [isOpen, setOpen] = useState(false);
   return (
-    <div
+    <motion.div
+      layout
       className="flex items-center p-2 border border-border-grey gap-2 rounded cursor-pointer h-40"
       onClick={() => setOpen(true)}
     >
@@ -51,6 +53,6 @@ export const ProductCard = ({ product }: ProductCardProps): JSX.Element => {
         productDetail={product}
         onClose={() => setOpen(false)}
       />
-    </div>
+    </motion.div>
   );
 };
