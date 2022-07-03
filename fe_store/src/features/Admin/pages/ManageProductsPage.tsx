@@ -70,7 +70,7 @@ export const ManageProductsPage = (): JSX.Element => {
     async (value: ProductProps) => {
       try {
         showLoading();
-        await API.delete(`/product/${value._id}`);
+        await API.post(`/product/delete/${value._id}`);
         setProducts((previous) =>
           previous?.filter((it) => it._id !== value._id)
         );

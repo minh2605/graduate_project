@@ -43,10 +43,11 @@ export const SidebarAdmin = ({ isToggle }: SideBarAdminProps): JSX.Element => {
         title="Product"
         href="../product"
         icon={<SvgItem color="white" />}
-        // options={[
-        //   { label: "A", href: "./product/a" },
-        //   { label: "B", href: "./product/b" },
-        // ]}
+      />
+      <DisclosureAdmin
+        title="Category"
+        href="../category"
+        icon={<SvgItem color="white" />}
       />
     </div>
   );

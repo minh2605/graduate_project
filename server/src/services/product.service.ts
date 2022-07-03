@@ -1,5 +1,4 @@
 import ProductModel, { ProductDocument } from "../models/product.model";
-import { Types } from "mongoose";
 import ApiError from "../utils/ApiError";
 import httpStatus from "http-status";
 import uniqid from "uniqid";
@@ -26,7 +25,8 @@ const getProducts = async (req: Request, res: Response) => {
   const limit = Number(req.query.limit);
   let perPage = limit > 1 && limit < 9 ? limit : 9;
   let page = Number(req.query.page) || 1;
-  let searchQuery = ProductModel.find({});
+  let searchQuery = ProductModel.find({ isDelete: false });
+
   if (req.query.name) {
     const baseRegex = new RegExp(req.query.name.toString(), "i");
     searchQuery = searchQuery.where({
@@ -41,6 +41,7 @@ const getProducts = async (req: Request, res: Response) => {
   }
 
   const productList = await ProductModel.find(searchQuery)
+    .sort({ _id: -1 })
     .skip(perPage * (page - 1))
     .limit(perPage);
   const totalProduct = await ProductModel.countDocuments(searchQuery);
@@ -90,6 +91,16 @@ const updateProductById = async (
     return product;
   }
 };
+
+const softDeleteProductById = async (id: string) => {
+  const product = await getProductById(id);
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
+  }
+  product.isDelete = true;
+  await product.save();
+};
+
 const deleteProduct = async (id: string) => {
   const product = await getProductById(id);
   if (!product) {
@@ -105,6 +116,7 @@ const productService = {
   getProductById,
   updateProductById,
   deleteProduct,
+  softDeleteProductById,
 };
 
 export default productService;

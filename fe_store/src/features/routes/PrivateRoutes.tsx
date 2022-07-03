@@ -1,12 +1,14 @@
 import { DashboardLayout } from "layout/DashboardLayout";
 import { DashboardPage } from "pages/DashboardPage";
 import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { DashboardCategoryRoutes } from "./DashboardCategoryRoutes";
 import { DashboardOrderRoutes } from "./DashboardOrderRoutes";
 import { DashboardProductRoutes } from "./DashboardProductRoute";
 
 const PRIVATE_ROUTES = [
   { path: "dashboard/*", element: <DashboardPage /> },
   { path: "product/*", element: <DashboardProductRoutes /> },
+  { path: "category/*", element: <DashboardCategoryRoutes /> },
   { path: "order/*", element: <DashboardOrderRoutes /> },
 ];
 

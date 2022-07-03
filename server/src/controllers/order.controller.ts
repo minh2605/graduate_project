@@ -76,12 +76,24 @@ const fullFillOrder = catchAsync(async (req: Request, res: Response) => {
     res.status(httpStatus.OK).send("Create order fail");
   }
 });
+const softDeleteOrderById = catchAsync(async (req: Request, res: Response) => {
+  const { id: orderId } = req.params;
+  await orderService.softDeleteOrderById(orderId);
+  res.status(httpStatus.NO_CONTENT).send();
+});
 
+const deleteOrderById = catchAsync(async (req: Request, res: Response) => {
+  const { id: orderId } = req.params;
+  await orderService.deleteOrder(orderId);
+  res.status(httpStatus.NO_CONTENT).send();
+});
 const orderController = {
   createOrder,
   fullFillOrder,
   getOrders,
   getOrderById,
+  deleteOrderById,
+  softDeleteOrderById,
 };
 
 export default orderController;

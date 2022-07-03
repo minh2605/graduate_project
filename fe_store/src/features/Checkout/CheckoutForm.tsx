@@ -1,6 +1,6 @@
 import { Button } from "common/components/Button";
 import { InputField } from "common/components/Form/InputField";
-import { SelectField } from "common/components/Form/SelectField";
+import { SelectFieldOptionsProps } from "common/components/Form/SelectField";
 import { TextAreaField } from "common/components/Form/TextAreaField";
 import { RequiredErrorMessage } from "features/Products/ProductCreatePopup";
 import { Formik, Form, FormikValues } from "formik";
@@ -11,6 +11,9 @@ import API from "api/axios";
 import { useLoading } from "hooks/useLoading";
 import useAuth from "hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { PaymentTypeRadioGroup } from "features/Checkout/components/PaymentTypeRadioGroup";
+import SvgCard from "common/components/svg/Card";
+import SvgCash from "common/components/svg/Cash";
 
 type ISODate = string;
 
@@ -42,9 +45,9 @@ export enum OrderStatus {
   FULLFILL = "FULLFILL",
 }
 
-const paymentTypeOptions = [
-  { label: "Cash", value: PaymentType.CASH },
-  { label: "Credit card", value: PaymentType.CREDIT_CARD },
+const paymentTypeOptions: SelectFieldOptionsProps<PaymentType>[] = [
+  { label: "Cash", value: PaymentType.CASH, icon: <SvgCash /> },
+  { label: "Credit card", value: PaymentType.CREDIT_CARD, icon: <SvgCard /> },
 ];
 
 const initialValues = {
@@ -70,6 +73,9 @@ export const CheckoutForm = (): JSX.Element => {
   const [orderTypes, setOrderTypes] = useState<OrderTypeValueProps[]>([]);
   const { currentUserProfile } = useAuth();
   const navigate = useNavigate();
+  const [selected, setSelected] = useState<
+    SelectFieldOptionsProps<PaymentType>
+  >(paymentTypeOptions[0]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -109,6 +115,7 @@ export const CheckoutForm = (): JSX.Element => {
         checkoutPayload
       );
       hideLoading();
+      console.log("values.payment_type", values.payment_type);
       // localStorage.removeItem("product_cart");
       if (values.payment_type === PaymentType.CREDIT_CARD) {
         window.open(checkoutUrl, "_self");
@@ -128,7 +135,7 @@ export const CheckoutForm = (): JSX.Element => {
         handleCheckout(values);
       }}
     >
-      {({ values, handleChange, setFieldValue }) => {
+      {({ values, handleChange }) => {
         return (
           <Form
             autoComplete="off"
@@ -171,13 +178,10 @@ export const CheckoutForm = (): JSX.Element => {
                 />
               </div>
               <div className="flex flex-col flex-1 gap-2 mb-4 text-base">
-                <SelectField
-                  name="payment_type"
-                  label="Payment Type"
-                  value={values.payment_type}
+                <PaymentTypeRadioGroup
                   options={paymentTypeOptions}
-                  onChange={handleChange}
-                  setFieldValue={setFieldValue}
+                  selected={selected}
+                  setSelected={setSelected}
                 />
               </div>
               <Button

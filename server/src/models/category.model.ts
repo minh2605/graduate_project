@@ -7,6 +7,7 @@ export interface CategoryDocument extends mongoose.Document {
   image: string;
   createdAt?: Date;
   updatedAt?: Date;
+  isDelete?: boolean;
 }
 
 const categorySchema = new mongoose.Schema(
@@ -30,6 +31,10 @@ const categorySchema = new mongoose.Schema(
     image: {
       type: String,
       required: true,
+    },
+    isDelete: {
+      type: Boolean,
+      default: false,
     },
   },
   {

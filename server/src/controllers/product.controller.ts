@@ -36,6 +36,15 @@ const updateProduct = catchAsync(async (req: Request, res: Response) => {
   );
   res.status(httpStatus.OK).send(product);
 });
+
+const softDeleteProductById = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id: productId } = req.params;
+    await productService.softDeleteProductById(productId);
+    res.status(httpStatus.NO_CONTENT).send();
+  }
+);
+
 const deleteProduct = catchAsync(async (req: Request, res: Response) => {
   const { id: productId } = req.params;
   await productService.deleteProduct(productId);
@@ -48,5 +57,6 @@ const productController = {
   getProductById,
   updateProduct,
   deleteProduct,
+  softDeleteProductById,
 };
 export default productController;

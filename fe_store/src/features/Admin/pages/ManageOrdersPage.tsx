@@ -38,6 +38,7 @@ export interface OrderProps {
   order_note: string;
   status: OrderStatus;
   payment_type: PaymentType;
+  isDelete: boolean;
   updatedAt?: Date;
   createdAt?: Date;
 }
@@ -51,9 +52,7 @@ export interface OrderPaginationProps {
 }
 
 export const ManageOrdersPage = (): JSX.Element => {
-  const [products, setProducts] = useState<OrderProps[]>();
-  const [isShowPopup, setShowPopup] = useState(false);
-  const [refetch, setRefetch] = useState({});
+  const [orders, setOrders] = useState<OrderProps[]>();
   const [showLoading, hideLoading] = useLoading();
   const navigate = useNavigate();
   const [paginationInfo, setPaginationInfo] = useState<PaginationInfoProps>({
@@ -74,7 +73,7 @@ export const ManageOrdersPage = (): JSX.Element => {
       const data: OrderPaginationProps = await API.get(
         `/order/list?${queryString.stringify(paginationFilter)}`
       );
-      setProducts(data.orderList);
+      setOrders(data.orderList);
       const paginationData: PaginationInfoProps = {
         limit: data.limit,
         currentPage: data.currentPage,
@@ -85,16 +84,14 @@ export const ManageOrdersPage = (): JSX.Element => {
       hideLoading();
     };
     fetchData();
-  }, [showLoading, hideLoading, refetch, paginationFilter]);
+  }, [showLoading, hideLoading, paginationFilter]);
 
   const handleRowDelete = useCallback(
     async (value: OrderProps) => {
       try {
         showLoading();
-        await API.delete(`/product/${value._id}`);
-        setProducts((previous) =>
-          previous?.filter((it) => it._id !== value._id)
-        );
+        await API.post(`/order/delete/${value._id}`);
+        setOrders((previous) => previous?.filter((it) => it._id !== value._id));
         hideLoading();
       } catch (error: any) {
         hideLoading();
@@ -122,7 +119,7 @@ export const ManageOrdersPage = (): JSX.Element => {
       },
       {
         id: "date",
-        Header: "Date",
+        Header: "Receive time",
         accessor: (order) => order.date?.substring(0, 10),
         Cell: TextCell,
       },
@@ -178,28 +175,26 @@ export const ManageOrdersPage = (): JSX.Element => {
 
   const handlePageChange = (selectedItem: { selected: number }) => {
     const pageSelected = selectedItem.selected + 1;
-    console.log("pageSelected", pageSelected);
     setPaginationFilter({
       ...paginationFilter,
       page: pageSelected,
     });
-    console.log("pageSelected", pageSelected);
   };
 
   return (
     <div>
       <div className="flex items-center justify-between font-medium mb-6">
-        <div className="text-h2">Manage Products Page</div>
-        <Button
+        <div className="text-h2">Manage Orders Page</div>
+        {/* <Button
           className="flex items-center gap-2"
           onClick={() => setShowPopup(true)}
         >
           <span>Create new product</span>
           <SvgPlus />
-        </Button>
+        </Button> */}
       </div>
       <DashboardTable
-        data={products ?? []}
+        data={orders?.filter((it) => !it.isDelete) ?? []}
         columns={columns}
         onRowSelected={handleRowSelected}
         className="mb-10"
@@ -209,11 +204,6 @@ export const ManageOrdersPage = (): JSX.Element => {
         nextLabel={<SvgLeftArrow className="rotate-180" />}
         pageCount={paginationInfo?.totalPage}
         onPageChange={handlePageChange}
-      />
-      <ProductCreatePopup
-        isOpen={isShowPopup}
-        onClose={() => setShowPopup(false)}
-        mutate={() => setRefetch({})}
       />
     </div>
   );

@@ -24,5 +24,5 @@ router
     productController.updateProduct
   )
   .delete(authMiddleware.tokenCheck, productController.deleteProduct);
-
+router.route("/delete/:id").post(productController.softDeleteProductById);
 export default router;

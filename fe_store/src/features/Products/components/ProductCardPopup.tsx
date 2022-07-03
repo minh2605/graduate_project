@@ -52,10 +52,7 @@ export const ProductCardPopup = ({
         <h2 className="text-h2 font-bold leading-6 mb-4">
           {productDetail.name}
         </h2>
-        <p className="text-sm mb-4">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Esse
-          corrupti dignissimos sapiente autem minima tenetur.
-        </p>
+        <p className="text-sm mb-4">{productDetail.description}</p>
         <div className="mb-8">
           <img
             src={productDetail.image}

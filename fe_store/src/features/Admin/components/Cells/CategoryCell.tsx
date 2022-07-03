@@ -11,6 +11,7 @@ export interface CategoryProps {
   productTypeId: string;
   description: string;
   image: string;
+  isDelete: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }

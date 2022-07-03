@@ -6,7 +6,6 @@ import {
 } from "common/components/Form/SelectField";
 import { TextAreaField } from "common/components/Form/TextAreaField";
 import { Modal } from "common/components/Modal";
-import { CategoryProps } from "features/Admin/components/Cells/CategoryCell";
 import { Formik, Form, FormikValues } from "formik";
 import { useEffect, useState } from "react";
 import * as yup from "yup";
@@ -22,29 +21,23 @@ interface ProductCreatePopupProps {
   mutate: () => void;
 }
 
-interface ProductCreateFormProps {
-  description?: string;
+interface CategoryCreateFormProps {
+  description: string;
   image: string;
   name: string;
-  price: number;
-  productCategoryId: string;
   productTypeId: string;
 }
 
-const productCreateField = {
-  name: "Product Name",
-  price: "Price",
+const categoryCreateField = {
+  name: "Category Name",
   productTypeId: "Product Type",
-  productCategoryId: "Category",
   description: "Description",
   image: "Image",
 };
 
-const initialValues: ProductCreateFormProps = {
+const initialValues: CategoryCreateFormProps = {
   description: "",
   name: "",
-  price: 0,
-  productCategoryId: "",
   productTypeId: "",
   image: "",
 };
@@ -52,35 +45,30 @@ const initialValues: ProductCreateFormProps = {
 export const RequiredErrorMessage = "This field is required";
 export const PriceErrorMessage = "Price must be over than 0$";
 
-const productCreateSchema: yup.SchemaOf<ProductCreateFormProps> = yup
+const categoryCreateSchema: yup.SchemaOf<CategoryCreateFormProps> = yup
   .object()
   .shape({
     name: yup.string().required(RequiredErrorMessage),
-    description: yup.string(),
-    price: yup
-      .number()
-      .required(RequiredErrorMessage)
-      .positive(PriceErrorMessage),
+    description: yup.string().required(RequiredErrorMessage),
     image: yup.string().required(RequiredErrorMessage),
-    productCategoryId: yup.string().required(RequiredErrorMessage),
     productTypeId: yup.string().required(RequiredErrorMessage),
   });
 
-export const ProductCreatePopup = ({
+export const CategoryCreatePopup = ({
   isOpen,
   onClose,
   mutate,
 }: ProductCreatePopupProps): JSX.Element => {
   const [showLoading, hideLoading] = useLoading();
 
-  const handleCreateProduct = async (values: FormikValues) => {
+  const handleCreateCategory = async (values: FormikValues) => {
     try {
       showLoading();
       const formData = new FormData();
       Object.entries(values).forEach(([key, value], index) => {
         formData.append(key, value);
       });
-      await API.post("product/create", formData);
+      await API.post("category/create", formData);
       hideLoading();
       toast.success("Create product successfully");
       mutate();
@@ -90,31 +78,8 @@ export const ProductCreatePopup = ({
       toast.error(error.message);
     }
   };
-
-  const [categoryOptions, setCategoryOptions] =
-    useState<SelectFieldOptionsProps<string>[]>();
   const [productTypeOptions, setProductTypeOptions] =
     useState<SelectFieldOptionsProps<string>[]>();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const categoryList: CategoryProps[] = await API.get(`/category/list`);
-        if (categoryList) {
-          const categoryListsOptions = categoryList.map((it) => {
-            return {
-              value: it._id,
-              label: it.name,
-              productTypeId: it.productTypeId,
-            };
-          });
-          setCategoryOptions(categoryListsOptions);
-        }
-      } catch (error: any) {
-        toast.error(error.message);
-      }
-    };
-    fetchData();
-  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -146,8 +111,8 @@ export const ProductCreatePopup = ({
           validateOnBlur={false}
           validateOnChange={false}
           initialValues={initialValues}
-          validationSchema={productCreateSchema}
-          onSubmit={(values) => handleCreateProduct(values)}
+          validationSchema={categoryCreateSchema}
+          onSubmit={(values) => handleCreateCategory(values)}
         >
           {({ values, handleChange, setFieldValue, setFieldError, errors }) => (
             <Form
@@ -157,7 +122,7 @@ export const ProductCreatePopup = ({
             >
               <div className="flex flex-col mb-4">
                 <>
-                  {Object.entries(productCreateField).map(
+                  {Object.entries(categoryCreateField).map(
                     ([key, value], index) => {
                       if (key === "image") {
                         return (
@@ -180,27 +145,8 @@ export const ProductCreatePopup = ({
                             key={key}
                             name={key}
                             label={value}
-                            value={values.description ?? ""}
+                            value={values.description}
                             onChange={handleChange}
-                          />
-                        );
-                      }
-                      if (key === "productCategoryId") {
-                        return (
-                          <SelectField
-                            key={key}
-                            name={key}
-                            label={value}
-                            defaultValue={{
-                              label: "Select Category",
-                              value: "",
-                            }}
-                            options={categoryOptions || []}
-                            onChange={handleChange}
-                            setFieldValue={setFieldValue}
-                            dependField="productTypeId"
-                            dependValue={values.productTypeId}
-                            isDisable={!values.productTypeId}
                           />
                         );
                       }

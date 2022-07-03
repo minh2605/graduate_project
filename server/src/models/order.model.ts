@@ -27,6 +27,7 @@ export interface OrderDocument extends mongoose.Document {
   payment_type: PaymentType;
   createdAt?: Date;
   updatedAt?: Date;
+  isDelete?: boolean;
 }
 
 export enum OrderStatus {
@@ -116,6 +117,10 @@ const orderSchema = new mongoose.Schema(
       type: String,
       enum: PaymentType,
       default: PaymentType.CASH,
+    },
+    isDelete: {
+      type: Boolean,
+      default: false,
     },
   },
   {

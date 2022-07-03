@@ -6,7 +6,7 @@ type ProductTypeCellProps = {
   value: string;
 };
 
-interface ProductTypeProps {
+export interface ProductTypeProps {
   _id: string;
   name: string;
   createdAt?: Date;

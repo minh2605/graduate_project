@@ -9,6 +9,7 @@ export interface ProductDocument extends mongoose.Document {
   description: string;
   image: string;
   slideImages: string[];
+  isDelete?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -52,6 +53,10 @@ const productSchema = new mongoose.Schema(
     },
     slideImages: {
       type: Array,
+    },
+    isDelete: {
+      type: Boolean,
+      default: false,
     },
   },
   {
