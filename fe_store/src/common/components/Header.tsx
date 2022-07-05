@@ -56,14 +56,14 @@ export const Header = (): JSX.Element => {
           />
           <LogoText className="hidden lg:block">Foogle</LogoText>
         </Link>
-        <HeaderSeachBar>
+        {/* <HeaderSeachBar>
           <input
             type="text"
             placeholder="Search"
             className="border-0 max-w-full focus:outline-none text-sm flex-1 lg:px-4"
           />
           <SvgSearch className="shrink-0" />
-        </HeaderSeachBar>
+        </HeaderSeachBar> */}
       </div>
 
       <div className="hidden md:flex items-center gap-4">

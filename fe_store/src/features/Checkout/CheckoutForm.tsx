@@ -95,6 +95,8 @@ export const CheckoutForm = (): JSX.Element => {
           price: product.product.price,
           quantity: product.amount,
           image: product.product.image,
+          productTypeId: product.product.productTypeId,
+          productCategoryId: product.product.productCategoryId,
         };
       });
       const checkoutPayload = {
@@ -116,7 +118,7 @@ export const CheckoutForm = (): JSX.Element => {
       );
       hideLoading();
       console.log("values.payment_type", values.payment_type);
-      // localStorage.removeItem("product_cart");
+      localStorage.removeItem("product_cart");
       if (values.payment_type === PaymentType.CREDIT_CARD) {
         window.open(checkoutUrl, "_self");
       } else navigate(checkoutUrl);

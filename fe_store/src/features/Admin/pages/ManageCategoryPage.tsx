@@ -151,7 +151,7 @@ export const ManageCategoryPage = (): JSX.Element => {
         </Button>
       </div>
       <DashboardTable
-        data={categories?.filter((it) => !it.isDelete) ?? []}
+        data={categories ?? []}
         columns={columns}
         onRowSelected={handleRowSelected}
         className="mb-10"

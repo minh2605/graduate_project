@@ -23,14 +23,6 @@ const getOrders = async (req: Request, res: Response) => {
   let perPage = limit >= 1 && limit < 9 ? limit : 9;
   let page = Number(req.query.page) || 1;
 
-  // const x = await OrderModel.find({
-  //   date: {
-  //     $gte: new Date("2022-06-27"),
-  //     $lte: new Date("2022-07-20"),
-  //   },
-  // });
-  // console.log("x", x);
-
   const orderList = await OrderModel.find({ isDelete: false })
     .sort({ _id: -1 })
     .skip(perPage * (page - 1))
@@ -45,6 +37,13 @@ const getOrders = async (req: Request, res: Response) => {
     totalOrder,
     totalPage: totalPage,
   };
+};
+
+const getOrdersByAccountId = async (accountId: string) => {
+  const orderList = await OrderModel.find({ account_id: accountId }).sort({
+    _id: -1,
+  });
+  return orderList;
 };
 
 const softDeleteOrderById = async (id: string) => {
@@ -65,12 +64,45 @@ const deleteOrder = async (id: string) => {
   return order;
 };
 
+const getRevenueByDateRange = async (from: any, to: any) => {
+  const toDate = new Date(to);
+  toDate.setDate(toDate.getDate() + 1);
+  const orderListByDateRange = await OrderModel.find({
+    createdAt: {
+      $gte: new Date(from),
+      $lt: new Date(toDate.toISOString().slice(0, 10)),
+    },
+  });
+
+  console.log("orderListByDateRange", orderListByDateRange);
+
+  const revenueData = orderListByDateRange.reduce((result: any, item) => {
+    const dateItem = {
+      date: item?.createdAt?.toISOString().toString().slice(0, 10),
+      price: item.total_net_amount,
+    };
+
+    const itemExist = result.find((it: any) => {
+      return it.date === dateItem.date;
+    });
+
+    if (!!itemExist) {
+      itemExist.price += dateItem.price;
+    } else result.push(dateItem);
+    return result;
+  }, []);
+  console.log("revenueData", revenueData);
+  return revenueData;
+};
+
 const orderService = {
   createOrder,
   getOrderById,
   getOrders,
   deleteOrder,
   softDeleteOrderById,
+  getRevenueByDateRange,
+  getOrdersByAccountId,
 };
 
 export default orderService;

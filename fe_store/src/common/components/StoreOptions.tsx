@@ -26,7 +26,7 @@ export const StoreOptions = (): JSX.Element => {
           <span>More Info</span>
         </Button>
       </div>
-      <OrderTypeBar />
+      {/* <OrderTypeBar /> */}
     </div>
   );
 };

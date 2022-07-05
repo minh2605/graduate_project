@@ -7,6 +7,7 @@ import { AuthCheck } from "layout/AuthCheck";
 import { useMemo } from "react";
 import { ProfilePage } from "pages/ProfilePage";
 import { CheckoutRoute } from "./CheckoutRoute";
+import { HistoryPage } from "pages/HistoryPage";
 
 const APP_ROUTES = [
   {
@@ -18,6 +19,14 @@ const APP_ROUTES = [
     element: (
       <AuthCheck>
         <CheckoutRoute />
+      </AuthCheck>
+    ),
+  },
+  {
+    path: "history/*",
+    element: (
+      <AuthCheck>
+        <HistoryPage />
       </AuthCheck>
     ),
   },

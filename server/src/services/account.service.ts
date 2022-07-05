@@ -96,6 +96,11 @@ const logout = async (refreshToken: string) => {
   await refreshTokenDoc.remove();
 };
 
+const getAccountAmount = async () => {
+  const orderList = await AccountModel.find();
+  return orderList.length;
+};
+
 const resetPassword = async (
   resetPasswordToken: string,
   newPassword: string
@@ -137,6 +142,7 @@ const accountService = {
   logout,
   resetPassword,
   getAccountById,
+  getAccountAmount,
 };
 
 export default accountService;

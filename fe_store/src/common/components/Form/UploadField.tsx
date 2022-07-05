@@ -102,9 +102,9 @@ export const UploadField = ({
           <ActionButton onClick={() => fileRef.current.click()}>
             <SvgPlus />
           </ActionButton>
-          <ActionButton onClick={handleDeleteImage}>
+          {/* <ActionButton onClick={handleDeleteImage}>
             <SvgBin />
-          </ActionButton>
+          </ActionButton> */}
         </UploadActionArea>
       </div>
 

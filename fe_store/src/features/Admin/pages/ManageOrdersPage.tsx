@@ -194,7 +194,7 @@ export const ManageOrdersPage = (): JSX.Element => {
         </Button> */}
       </div>
       <DashboardTable
-        data={orders?.filter((it) => !it.isDelete) ?? []}
+        data={orders ?? []}
         columns={columns}
         onRowSelected={handleRowSelected}
         className="mb-10"

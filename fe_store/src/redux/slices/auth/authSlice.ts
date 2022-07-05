@@ -38,10 +38,10 @@ const authSlice = createSlice({
 const { setLoggedIn, setCurrentUser, resetAuth } = authSlice.actions;
 
 export const clearAuth = (): AppThunk => (dispatch) => {
+  localStorage.removeItem("authInfo");
+  localStorage.removeItem("isLoggedIn");
   localStorage.removeItem("jwt_token");
   localStorage.removeItem("jwt_refresh_token");
-  localStorage.removeItem("isLoggedIn");
-  localStorage.removeItem("authInfo");
   dispatch(resetAuth());
   return;
 };

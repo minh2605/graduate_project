@@ -23,6 +23,11 @@ const register = catchAsync(async (req: Request, res: Response) => {
   res.status(httpStatus.OK).send();
 });
 
+const getAccountAmount = catchAsync(async (req: Request, res: Response) => {
+  const accountAmount = await accountService.getAccountAmount();
+  res.status(httpStatus.OK).send(accountAmount);
+});
+
 const login = catchAsync(async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const user = await accountService.login({ email, password });
@@ -92,6 +97,7 @@ const accountController = {
   forgotPassword,
   resetPassword,
   googleLogin,
+  getAccountAmount,
 };
 
 export default accountController;

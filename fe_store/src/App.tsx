@@ -2,6 +2,7 @@ import { AppRoutes } from "features/routes/AppRoutes";
 import { PrivateRoutes } from "features/routes/PrivateRoutes";
 import { PublicRoutes } from "features/routes/PublicRoutes";
 import { AuthCheck } from "layout/AuthCheck";
+import { HistoryPage } from "pages/HistoryPage";
 import { NotFoundPage } from "pages/NotFoundPage";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";

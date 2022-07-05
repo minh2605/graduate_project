@@ -6,6 +6,7 @@ import SvgPlus from "common/components/svg/Plus";
 import { useState } from "react";
 import { useDispatch } from "redux/hook";
 import { addToCart, updateTotalPrice } from "redux/slices/cart/cartSlice";
+import { SlideShow } from "./SlideShow";
 
 interface ProductCardPopupProps {
   isOpen: boolean;
@@ -54,11 +55,22 @@ export const ProductCardPopup = ({
         </h2>
         <p className="text-sm mb-4">{productDetail.description}</p>
         <div className="mb-8">
-          <img
-            src={productDetail.image}
-            alt="product-img"
-            className="w-full object-cover"
-          />
+          <div className="mb-5">
+            <img
+              src={productDetail.image}
+              alt="product-img"
+              className="w-full object-cover"
+            />
+          </div>
+          <div className="w-50 h-80">
+            {productDetail.slideImages && (
+              <SlideShow
+                slideData={productDetail.slideImages.filter(
+                  (it) => it !== null
+                )}
+              />
+            )}
+          </div>
         </div>
         <div className="flex items-center justify-end gap-2">
           <div className="flex items-center gap-2">

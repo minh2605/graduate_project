@@ -51,6 +51,12 @@ const getOrders = catchAsync(async (req: Request, res: Response) => {
   res.status(httpStatus.OK).send(orderList);
 });
 
+const getOrdersByAccountId = catchAsync(async (req: Request, res: Response) => {
+  const { accountId } = req.params;
+  const orderList = await orderService.getOrdersByAccountId(accountId);
+  res.status(httpStatus.OK).send(orderList);
+});
+
 const getOrderById = catchAsync(async (req: Request, res: Response) => {
   const { id: orderId } = req.params;
   const orderById = await orderService.getOrderById(orderId);
@@ -87,6 +93,17 @@ const deleteOrderById = catchAsync(async (req: Request, res: Response) => {
   await orderService.deleteOrder(orderId);
   res.status(httpStatus.NO_CONTENT).send();
 });
+
+const getRevenueByDateRange = catchAsync(
+  async (req: Request, res: Response) => {
+    const { from: fromDate, to: toDate } = req.query;
+    const revenueData = await orderService.getRevenueByDateRange(
+      fromDate,
+      toDate
+    );
+    res.status(httpStatus.OK).send(revenueData);
+  }
+);
 const orderController = {
   createOrder,
   fullFillOrder,
@@ -94,6 +111,8 @@ const orderController = {
   getOrderById,
   deleteOrderById,
   softDeleteOrderById,
+  getRevenueByDateRange,
+  getOrdersByAccountId,
 };
 
 export default orderController;

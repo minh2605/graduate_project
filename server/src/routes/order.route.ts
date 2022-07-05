@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.route("/create").post(orderController.createOrder);
 router.route("/list").get(orderController.getOrders);
+router.route("/list/:accountId").get(orderController.getOrdersByAccountId);
+router.route("/revenue").get(orderController.getRevenueByDateRange);
 router
   .route("/:id")
   .get(orderController.getOrderById)

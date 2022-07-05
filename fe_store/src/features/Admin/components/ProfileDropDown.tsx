@@ -32,10 +32,10 @@ export const ProfileDropDown = ({
           <DropDownTab>Dashboard</DropDownTab>
         </Link>
       )}
-      <Link to="/profile">
+      {/* <Link to="/profile">
         <DropDownTab>Profile</DropDownTab>
-      </Link>
-      <Link to="/history">
+      </Link> */}
+      <Link to="/store/history">
         <DropDownTab>History</DropDownTab>
       </Link>
       <DropDownTab onClick={handleLogout}>Logout</DropDownTab>

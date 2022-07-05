@@ -21,7 +21,7 @@ import {
 } from "common/components/Form/SelectField";
 
 interface ProductEditFormProps {
-  description: string;
+  description?: string;
   image: string;
   name: string;
   price: number;
@@ -33,7 +33,7 @@ const productUpdateSchema: yup.SchemaOf<ProductEditFormProps> = yup
   .object()
   .shape({
     name: yup.string().required(RequiredErrorMessage),
-    description: yup.string().required(RequiredErrorMessage),
+    description: yup.string(),
     price: yup
       .number()
       .required(RequiredErrorMessage)
@@ -256,7 +256,7 @@ export const ProductEditPage = (): JSX.Element => {
                 <TextAreaField
                   name="description"
                   label="Description"
-                  value={values.description}
+                  value={values.description ?? ""}
                   onChange={handleChange}
                 />
               </div>

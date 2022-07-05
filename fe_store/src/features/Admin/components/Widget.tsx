@@ -4,8 +4,14 @@ interface WidgetProps {
   className?: string;
   name: string;
   icon: JSX.Element;
+  amount: string;
 }
-export const Widget = ({ className, name, icon }: WidgetProps): JSX.Element => {
+export const Widget = ({
+  className,
+  name,
+  icon,
+  amount,
+}: WidgetProps): JSX.Element => {
   return (
     <div className={`p-4 border rounded-xl ${className ?? ""}`}>
       <div className="flex items-center gap-4 mb-8">
@@ -16,8 +22,9 @@ export const Widget = ({ className, name, icon }: WidgetProps): JSX.Element => {
           <h3 className="text-h3 font-medium">{name}</h3>
         </div>
       </div>
-      <div className="w-full h-full">
-        <Chart />
+      <div className="w-full h-full text-center">
+        {/* <Chart /> */}
+        <span className="font-bold text-h1">{amount}</span>
       </div>
     </div>
   );

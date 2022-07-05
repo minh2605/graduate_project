@@ -83,6 +83,14 @@ const orderSchema = new mongoose.Schema(
           type: String,
           require: true,
         },
+        productTypeId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "ProductType",
+        },
+        productCategoryId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Category",
+        },
       },
     ],
     total_gross_amount: {
@@ -121,6 +129,14 @@ const orderSchema = new mongoose.Schema(
     isDelete: {
       type: Boolean,
       default: false,
+    },
+    createdAt: {
+      type: Date,
+      default: new Date().toISOString().slice(0, 10) + "T00:00:00.000Z",
+    },
+    updatedAt: {
+      type: Date,
+      default: new Date().toISOString(),
     },
   },
   {

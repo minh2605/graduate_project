@@ -96,7 +96,7 @@ export const SigninPage = (): JSX.Element => {
     <div className="flex flex-col">
       <div className="px-14 flex flex-col ">
         <div className="flex items-center gap-2 text-h1 font-bold mb-8 text-dark-red">
-          <Link to="../../../home">
+          <Link to="../../../store/home">
             <SvgLeftArrow width={32} height={32} />
           </Link>
           <h1>Sign in</h1>
