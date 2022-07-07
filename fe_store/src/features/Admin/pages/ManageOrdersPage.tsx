@@ -73,14 +73,16 @@ export const ManageOrdersPage = (): JSX.Element => {
       const data: OrderPaginationProps = await API.get(
         `/order/list?${queryString.stringify(paginationFilter)}`
       );
-      setOrders(data.orderList);
-      const paginationData: PaginationInfoProps = {
-        limit: data.limit,
-        currentPage: data.currentPage,
-        totalPage: data.totalPage,
-        totalProduct: data.totalProduct,
-      };
-      setPaginationInfo(paginationData);
+      if (data) {
+        setOrders(data.orderList);
+        const paginationData: PaginationInfoProps = {
+          limit: data.limit,
+          currentPage: data.currentPage,
+          totalPage: data.totalPage,
+          totalProduct: data.totalProduct,
+        };
+        setPaginationInfo(paginationData);
+      }
       hideLoading();
     };
     fetchData();

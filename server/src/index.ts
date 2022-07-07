@@ -15,14 +15,14 @@ import path from "path";
 
 let server;
 const app: Application = express();
-
+const port = process.env.PORT || 5000;
 app.use(cors({ origin: "*" }));
 mongoose
   .connect(envConfig.mongoose.url, envConfig.mongoose.options as ConnectOptions)
   .then(() => {
     console.log(`Connected to DB URL ${envConfig.mongoose.url}`);
-    server = app.listen(envConfig.port, () => {
-      console.log(`Listening to port ${envConfig.port}`);
+    server = app.listen(port, () => {
+      console.log(`Listening to port ${port}`);
     });
   })
   .catch((error) => {

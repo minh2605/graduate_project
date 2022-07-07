@@ -1,10 +1,10 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const PORT = process.env.REACT_APP_PORT;
+// const PORT = process.env.REACT_APP_PORT;
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const axiosInstance = axios.create({
-  baseURL: `${BASE_URL}:${PORT}/api/`,
+  baseURL: `${BASE_URL}/api/`,
 });
 
 axiosInstance.interceptors.request.use(async (config) => {

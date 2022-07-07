@@ -36,7 +36,7 @@ if (error) {
 }
 
 export const envConfig = {
-  port: envVars.PORT,
+  port: envVars.PORT || 8000,
   mongoose: {
     url: envVars.MONGODB_URL,
     options: {
