@@ -25,10 +25,10 @@ export const SidebarAdmin = ({ isToggle }: SideBarAdminProps): JSX.Element => {
         title="Dashboard"
         href="../dashboard"
         icon={<SvgDashboard />}
-        options={[
-          { label: "A", href: "./dashboard/a" },
-          { label: "B", href: "./dashboard/b" },
-        ]}
+        // options={[
+        //   { label: "A", href: "./dashboard/a" },
+        //   { label: "B", href: "./dashboard/b" },
+        // ]}
       />
       <DisclosureAdmin
         title="Orders"

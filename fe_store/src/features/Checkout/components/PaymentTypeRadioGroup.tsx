@@ -14,10 +14,8 @@ export const PaymentTypeRadioGroup = ({
   selected,
   setSelected,
 }: PaymentTypeRadioGroupProps): JSX.Element => {
-  const { setFieldValue } = useFormikContext();
   const handleRadioChecked = (value: SelectFieldOptionsProps<PaymentType>) => {
     setSelected(value);
-    setFieldValue("payment_type", selected.value);
   };
 
   return (

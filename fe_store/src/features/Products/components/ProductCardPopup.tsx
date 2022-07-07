@@ -3,7 +3,7 @@ import { Modal } from "common/components/Modal";
 import { ProductProps } from "common/components/ProductCard";
 import SvgMinor from "common/components/svg/Minor";
 import SvgPlus from "common/components/svg/Plus";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useDispatch } from "redux/hook";
 import { addToCart, updateTotalPrice } from "redux/slices/cart/cartSlice";
 import { SlideShow } from "./SlideShow";
@@ -47,6 +47,13 @@ export const ProductCardPopup = ({
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProductAmount(Number(e.target.value));
   };
+  const listImage = useMemo(() => {
+    return productDetail.slideImages
+      ? [productDetail.image].concat(
+          productDetail.slideImages?.filter((it) => it !== null)
+        )
+      : [productDetail.image];
+  }, [productDetail.image, productDetail.slideImages]);
   return (
     <Modal open={isOpen} onClose={onClose} size="md">
       <div className="flex flex-col">
@@ -55,22 +62,17 @@ export const ProductCardPopup = ({
         </h2>
         <p className="text-sm mb-4">{productDetail.description}</p>
         <div className="mb-8">
-          <div className="mb-5">
-            <img
-              src={productDetail.image}
-              alt="product-img"
-              className="w-full object-cover"
-            />
-          </div>
-          <div className="w-50 h-80">
-            {productDetail.slideImages && (
-              <SlideShow
-                slideData={productDetail.slideImages.filter(
-                  (it) => it !== null
-                )}
+          {listImage.length === 1 ? (
+            <div className="mb-5 w-full h-96">
+              <img
+                src={productDetail.image}
+                alt="product-img"
+                className="w-full h-full object-cover"
               />
-            )}
-          </div>
+            </div>
+          ) : (
+            <SlideShow slideData={listImage} />
+          )}
         </div>
         <div className="flex items-center justify-end gap-2">
           <div className="flex items-center gap-2">

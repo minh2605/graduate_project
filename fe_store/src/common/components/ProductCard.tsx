@@ -1,6 +1,7 @@
 import { ProductCardPopup } from "features/Products/components/ProductCardPopup";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { styled } from "twin.macro";
 export interface ProductProps {
   description: string;
   image: string;
@@ -26,6 +27,13 @@ export interface ProductPaginationProps {
   totalProduct: number;
   totalPage: number;
 }
+const DescriptionStyled = styled.p`
+  display: -webkit-box;
+  max-width: 200px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`;
 
 export const ProductCard = ({ product }: ProductCardProps): JSX.Element => {
   const [isOpen, setOpen] = useState(false);
@@ -37,7 +45,9 @@ export const ProductCard = ({ product }: ProductCardProps): JSX.Element => {
     >
       <div className="basis-3/5">
         <h5 className="text-base font-medium">{product.name}</h5>
-        <p className="text-sm">{product.description}</p>
+        <DescriptionStyled className="text-sm">
+          {product.description}
+        </DescriptionStyled>
         <h3 className="text-h3 font-medium text-dark-red">${product.price}</h3>
       </div>
       <div className="basis-2/5 rounded overflow-hidden h-24 max-h-full">

@@ -43,6 +43,7 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
     success_url: successUrl,
     cancel_url: cancelUrl,
   });
+  console.log("session", session);
   res.status(httpStatus.CREATED).send(session.url);
 });
 
@@ -88,6 +89,12 @@ const softDeleteOrderById = catchAsync(async (req: Request, res: Response) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const resolveOrder = catchAsync(async (req: Request, res: Response) => {
+  const { id: orderId } = req.params;
+  await orderService.resolveOrder(orderId);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 const deleteOrderById = catchAsync(async (req: Request, res: Response) => {
   const { id: orderId } = req.params;
   await orderService.deleteOrder(orderId);
@@ -113,6 +120,7 @@ const orderController = {
   softDeleteOrderById,
   getRevenueByDateRange,
   getOrdersByAccountId,
+  resolveOrder,
 };
 
 export default orderController;

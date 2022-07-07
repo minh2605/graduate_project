@@ -1,4 +1,4 @@
-import OrderModel, { OrderDocument } from "../models/order.model";
+import OrderModel, { OrderDocument, OrderStatus } from "../models/order.model";
 import uniqid from "uniqid";
 import { Request, Response } from "express";
 import httpStatus from "http-status";
@@ -64,6 +64,16 @@ const deleteOrder = async (id: string) => {
   return order;
 };
 
+const resolveOrder = async (id: string) => {
+  const order = await getOrderById(id);
+  if (!order) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
+  }
+  order.status = OrderStatus.FULLFILL;
+  order.save();
+  return order;
+};
+
 const getRevenueByDateRange = async (from: any, to: any) => {
   const toDate = new Date(to);
   toDate.setDate(toDate.getDate() + 1);
@@ -103,6 +113,7 @@ const orderService = {
   softDeleteOrderById,
   getRevenueByDateRange,
   getOrdersByAccountId,
+  resolveOrder,
 };
 
 export default orderService;

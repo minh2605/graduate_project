@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import API from "api/axios";
 import { useParams } from "react-router-dom";
 import { OrderProps } from "features/Admin/pages/ManageOrdersPage";
+import { OrderStatus } from "features/Checkout/CheckoutForm";
 
 export const OrderDetailPage = (): JSX.Element => {
   const { orderId } = useParams();
@@ -33,7 +34,7 @@ export const OrderDetailPage = (): JSX.Element => {
   const handleEditOrder = async () => {
     try {
       showLoading();
-      // await API.put(`/order/${orderId}`, formData);
+      await API.put(`/order/resolve/${orderId}`);
       hideLoading();
       toast.success("Update product successfully");
     } catch (error: any) {
@@ -46,14 +47,16 @@ export const OrderDetailPage = (): JSX.Element => {
     <div>
       {orderDetail && (
         <div>
-          <div className="text-h2 mb-4">Edit Product</div>
-          <div className="flex items-center gap-4">
+          <div className="text-h2 mb-4">Order details</div>
+          <div className="flex items-center gap-4 mb-2">
             <span className="text-base font-bold">Order Code:</span>
             <span>{orderDetail.orderCode.toUpperCase()}</span>
           </div>
-          <div className="grid grid-rows-3 grid-cols-3 gap-x-10 gap-y-8">
+          <div className="grid grid-rows-2 grid-cols-3 gap-x-10 gap-y-8 mb-10">
             <div className="col-span-2 border p-2 rounded">
-              <span className="text-base font-bold">Products Section</span>
+              <div className="text-base font-bold bg-light-red text-white p-2 rounded mb-2">
+                Products Section
+              </div>
               <table className="w-full text-center border rounded">
                 <tr>
                   <th>Product</th>
@@ -89,40 +92,71 @@ export const OrderDetailPage = (): JSX.Element => {
               </table>
             </div>
             <div className="col-span-1 border p-2 rounded">
-              Order Preference
-              <div>
-                <span>PREFERRED DATE & TIME</span>
-                <div>{orderDetail.date}</div>
+              <div className="bg-light-red text-white p-2 rounded mb-2">
+                Order Preference
               </div>
-              <div>
+              <div className="flex items-center justify-between">
+                <span>PREFERRED DATE & TIME</span>
+                <div className="font-bold text-light-red">
+                  {orderDetail.date}
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
                 <span>Order Note</span>
-                <div>{orderDetail.order_note}</div>
+                <div className="font-bold text-light-red">
+                  {orderDetail.order_note}
+                </div>
               </div>
             </div>
             <div className="col-span-2 border p-2 rounded">
-              <span>Fee section</span>
+              <div className="bg-light-red text-white p-2 rounded mb-2">
+                Fee section
+              </div>
               <div>
                 <span>Address</span>
-                <div>{orderDetail.total_gross_amount}</div>
-                <div>{orderDetail.total_net_amount}</div>
+                <div className="flex items-center justify-between">
+                  <span>Total gross</span>
+                  <span className="font-bold text-light-red">
+                    ${orderDetail.total_gross_amount}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Total net</span>
+                  <span className="font-bold text-light-red">
+                    ${orderDetail.total_net_amount}
+                  </span>
+                </div>
               </div>
             </div>
             <div className="col-span-1 border p-2 rounded">
-              <span>Customer</span>
+              <div className="bg-light-red text-white p-2 rounded mb-2">
+                Customer
+              </div>
               <div>
-                <span>Address</span>
-                <div>{orderDetail.city}</div>
-                <div>{orderDetail.address}</div>
+                <div className="flex items-center justify-between">
+                  <span>Address</span>
+                  <span className="font-bold text-light-red">
+                    {orderDetail.address}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>City</span>
+                  <span className="font-bold text-light-red">
+                    {orderDetail.city}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-          <Button
-            className="flex items-center gap-4 justify-center w-1/2 m-auto"
-            type="button"
-            onClick={handleEditOrder}
-          >
-            <span>Save</span>
-          </Button>
+          {orderDetail.status === OrderStatus.PENDING && (
+            <Button
+              className="flex items-center gap-4 justify-center w-1/2 m-auto"
+              type="button"
+              onClick={handleEditOrder}
+            >
+              <span>Resolve</span>
+            </Button>
+          )}
         </div>
       )}
     </div>

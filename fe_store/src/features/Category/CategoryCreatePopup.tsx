@@ -22,7 +22,7 @@ interface ProductCreatePopupProps {
 }
 
 interface CategoryCreateFormProps {
-  description: string;
+  description?: string;
   image: string;
   name: string;
   productTypeId: string;
@@ -49,7 +49,7 @@ const categoryCreateSchema: yup.SchemaOf<CategoryCreateFormProps> = yup
   .object()
   .shape({
     name: yup.string().required(RequiredErrorMessage),
-    description: yup.string().required(RequiredErrorMessage),
+    description: yup.string(),
     image: yup.string().required(RequiredErrorMessage),
     productTypeId: yup.string().required(RequiredErrorMessage),
   });
@@ -106,7 +106,7 @@ export const CategoryCreatePopup = ({
   return (
     <Modal open={isOpen} onClose={onClose} size="md">
       <div className="font-medium">
-        <h2 className="text-h2 mb-2 text-dark-red">New product</h2>
+        <h2 className="text-h2 mb-2 text-dark-red">New category</h2>
         <Formik
           validateOnBlur={false}
           validateOnChange={false}
@@ -145,7 +145,7 @@ export const CategoryCreatePopup = ({
                             key={key}
                             name={key}
                             label={value}
-                            value={values.description}
+                            value={values.description ?? ""}
                             onChange={handleChange}
                           />
                         );

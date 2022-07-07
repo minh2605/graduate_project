@@ -110,7 +110,7 @@ export const CheckoutForm = (): JSX.Element => {
         total_gross_amount: totalPrice,
         total_net_amount: totalPrice,
         status: OrderStatus.PENDING,
-        payment_type: values.payment_type,
+        payment_type: selected.value,
       };
       const checkoutUrl: string = await API.post(
         "order/create",
@@ -119,7 +119,7 @@ export const CheckoutForm = (): JSX.Element => {
       hideLoading();
       console.log("values.payment_type", values.payment_type);
       localStorage.removeItem("product_cart");
-      if (values.payment_type === PaymentType.CREDIT_CARD) {
+      if (selected.value === PaymentType.CREDIT_CARD) {
         window.open(checkoutUrl, "_self");
       } else navigate(checkoutUrl);
     } catch (error) {
