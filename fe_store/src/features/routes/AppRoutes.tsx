@@ -17,7 +17,7 @@ const APP_ROUTES = [
   {
     path: "checkout/*",
     element: (
-      <AuthCheck>
+      <AuthCheck allow={true}>
         <CheckoutRoute />
       </AuthCheck>
     ),
@@ -25,7 +25,7 @@ const APP_ROUTES = [
   {
     path: "history/*",
     element: (
-      <AuthCheck>
+      <AuthCheck allow={true}>
         <HistoryPage />
       </AuthCheck>
     ),

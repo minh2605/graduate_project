@@ -4,11 +4,13 @@ import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
 type AuthCheckProps = {
+  allow?: boolean;
   isPublic?: boolean;
   children: React.ReactNode;
 };
 
 export const AuthCheck = ({
+  allow,
   isPublic,
   children,
 }: AuthCheckProps): JSX.Element => {
@@ -16,9 +18,10 @@ export const AuthCheck = ({
   const location = useLocation();
 
   if (
-    isLoggedIn &&
-    currentUserProfile &&
-    currentUserProfile.role_name === AccountRole.ADMIN
+    (isLoggedIn && currentUserProfile && allow) ||
+    (isLoggedIn &&
+      currentUserProfile &&
+      currentUserProfile.role_name === AccountRole.ADMIN)
   ) {
     return <>{children}</>;
   } else {
