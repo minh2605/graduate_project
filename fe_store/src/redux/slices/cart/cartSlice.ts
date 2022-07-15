@@ -90,6 +90,13 @@ const cartSlice = createSlice({
         productCart: newProductInCart,
       };
     },
+    clearCart(state) {
+      localStorage.removeItem("product_cart");
+      return {
+        productCart: [],
+        totalPrice: 0,
+      };
+    },
     updateTotalPrice(state) {
       if (state.productCart.length === 0) {
         localStorage.removeItem("product_cart");
@@ -116,6 +123,7 @@ const {
   updateTotalPrice,
   deleteFromCart,
   updateProductAmount,
+  clearCart,
 } = cartSlice.actions;
 export {
   addToCart,
@@ -123,6 +131,7 @@ export {
   updateTotalPrice,
   deleteFromCart,
   updateProductAmount,
+  clearCart,
 };
 const cartReducer = cartSlice.reducer;
 export default cartReducer;

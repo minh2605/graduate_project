@@ -13,7 +13,7 @@ import tw, { styled } from "twin.macro";
 
 type CartProductItemProps = ProductCartProps;
 const ProductItemWrapper = styled.div(
-  tw`flex h-24 py-2 px-4 gap-4 items-center justify-between font-medium border-b-2 border-border-grey cursor-pointer`
+  tw`flex h-24 py-1 px-3 gap-4 items-center justify-between font-medium border-b-2 border-border-grey cursor-pointer`
 );
 export const CartProductItem = ({
   product,
@@ -63,8 +63,8 @@ export const CartProductItem = ({
           />
         </div>
         <div className="flex-1">
-          <h5 className="text-base font-medium mb-2">{product.name}</h5>
-          <div className="text-dark-red mb-2">${product.price}</div>
+          <h5 className="text-sm font-medium max-h-full">{product.name}</h5>
+          <div className="text-dark-red">${product.price}</div>
         </div>
       </div>
       <div className="flex items-center">

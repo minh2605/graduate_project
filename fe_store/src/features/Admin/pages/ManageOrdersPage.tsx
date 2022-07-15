@@ -7,15 +7,13 @@ import { TextCell } from "features/Admin/components/Cells/TextCell";
 import { OptionMenuCell } from "features/Admin/components/Cells/OptionMenuCell";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Button } from "common/components/Button";
-import SvgPlus from "common/components/svg/Plus";
-import { ProductCreatePopup } from "features/Products/ProductCreatePopup";
 import queryString from "query-string";
 import SvgLeftArrow from "common/components/svg/LeftArrow";
 import { PaginationControl } from "common/components/PaginationControl";
 import { usePaginationFilter } from "hooks/usePaginationFilter";
 import { PaginationInfoProps } from "features/Admin/pages/ManageProductsPage";
 import { OrderStatus, PaymentType } from "features/Checkout/CheckoutForm";
+import { Switch } from "@headlessui/react";
 
 interface ProductOrderProps {
   productId: string;
@@ -62,6 +60,8 @@ export const ManageOrdersPage = (): JSX.Element => {
     totalProduct: 0,
   });
 
+  const [isArchived, setIsArchived] = useState(false);
+
   const [paginationFilter, setPaginationFilter] = usePaginationFilter({
     page: 1,
     limit: 5,
@@ -71,7 +71,10 @@ export const ManageOrdersPage = (): JSX.Element => {
     const fetchData = async () => {
       showLoading();
       const data: OrderPaginationProps = await API.get(
-        `/order/list?${queryString.stringify(paginationFilter)}`
+        `/order/list?${queryString.stringify({
+          ...paginationFilter,
+          archived: isArchived,
+        })}`
       );
       if (data) {
         setOrders(data.orderList);
@@ -86,13 +89,15 @@ export const ManageOrdersPage = (): JSX.Element => {
       hideLoading();
     };
     fetchData();
-  }, [showLoading, hideLoading, paginationFilter]);
+  }, [showLoading, hideLoading, paginationFilter, isArchived]);
 
   const handleRowDelete = useCallback(
-    async (value: OrderProps) => {
+    async (value: OrderProps, archive: boolean = true) => {
       try {
         showLoading();
-        await API.post(`/order/delete/${value._id}`);
+        archive
+          ? await API.post(`/order/delete/${value._id}`)
+          : await API.delete(`/order/${value._id}`);
         setOrders((previous) => previous?.filter((it) => it._id !== value._id));
         hideLoading();
       } catch (error: any) {
@@ -109,6 +114,22 @@ export const ManageOrdersPage = (): JSX.Element => {
       navigate(`./detail/${productId}`);
     },
     [navigate]
+  );
+
+  const handleOrderRetrieve = useCallback(
+    async (value: OrderProps) => {
+      const orderId = value._id;
+      try {
+        showLoading();
+        await API.put(`/order/retrieve/${orderId}`);
+        setOrders((previous) => previous?.filter((it) => it._id !== value._id));
+        hideLoading();
+      } catch (error: any) {
+        hideLoading();
+        toast.error(error.message);
+      }
+    },
+    [showLoading, hideLoading]
   );
 
   const columns = useMemo<Column<Partial<OrderProps>>[]>(() => {
@@ -165,10 +186,12 @@ export const ManageOrdersPage = (): JSX.Element => {
           value={value}
           onDelete={handleRowDelete}
           onEdit={handleRowEdit}
+          onRetrieve={handleOrderRetrieve}
+          isArchived={isArchived}
         />
       ),
     });
-  }, [handleRowDelete, handleRowEdit]);
+  }, [handleRowDelete, handleRowEdit, handleOrderRetrieve, isArchived]);
 
   const handleRowSelected = (selectedRow: Row<Partial<OrderProps>>) => {
     const productId = selectedRow.original._id;
@@ -187,13 +210,27 @@ export const ManageOrdersPage = (): JSX.Element => {
     <div>
       <div className="flex items-center justify-between font-medium mb-6">
         <div className="text-h2">Manage Orders Page</div>
-        {/* <Button
-          className="flex items-center gap-2"
-          onClick={() => setShowPopup(true)}
-        >
-          <span>Create new product</span>
-          <SvgPlus />
-        </Button> */}
+        <div className="flex items-center gap-4">
+          <Switch
+            checked={isArchived}
+            onChange={setIsArchived}
+            className={`${isArchived ? "bg-dark-red" : "bg-light-grey"}
+          relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75 `}
+          >
+            <span
+              aria-hidden="true"
+              className={`${isArchived ? "translate-x-9" : "translate-x-0"}
+            pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+            />
+          </Switch>
+          <span
+            className={`${
+              isArchived ? "text-dark-red" : "text-light-grey"
+            } transition-colors`}
+          >
+            Archived
+          </span>
+        </div>
       </div>
       <DashboardTable
         data={orders ?? []}

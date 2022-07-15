@@ -11,6 +11,7 @@ import { useDispatch } from "redux/hook";
 import { setCurrentUser, setLoggedIn } from "redux/slices/auth/authSlice";
 import { LoginResponseProps } from "types/auth";
 import * as yup from "yup";
+import { toast } from "react-toastify";
 
 interface SigninPageProps {
   email: string;
@@ -25,8 +26,10 @@ const loginSchema: yup.SchemaOf<SigninPageProps> = yup.object().shape({
     .string()
     .required("This field is required!")
     .email("Email format is incorrect!"),
-  password: yup.string().required("This field is required!"),
-  // .min(5, "Password must be larger than 5 characters"),
+  password: yup
+    .string()
+    .required("This field is required!")
+    .min(6, "Password must be larger than 6 characters"),
 });
 
 export const SigninPage = (): JSX.Element => {
@@ -53,7 +56,8 @@ export const SigninPage = (): JSX.Element => {
         hideLoading();
         navigate("/");
       }
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error.message);
       hideLoading();
     }
   };

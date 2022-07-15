@@ -1,10 +1,10 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-// const PORT = process.env.REACT_APP_PORT;
+const PORT = process.env.REACT_APP_PORT;
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const axiosInstance = axios.create({
-  baseURL: `${BASE_URL}/api/`,
+  baseURL: `${BASE_URL}:${PORT}/api/`,
 });
 
 axiosInstance.interceptors.request.use(async (config) => {
@@ -26,13 +26,13 @@ axiosInstance.interceptors.response.use(
   (error) => {
     const statusCode = error.response.status;
     console.log("statusCOde", statusCode);
+    console.log("error.response", error.response);
     if (statusCode === 404) {
       // window.location.href = "/not-found";
       return;
     }
     if (statusCode === 400) {
-      toast.error("Bad Request");
-      return;
+      throw error.response.data;
     }
     if (statusCode === 401) {
       toast.error("Please authenticate!");

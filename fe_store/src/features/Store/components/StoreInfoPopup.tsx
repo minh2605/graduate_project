@@ -25,7 +25,7 @@ export const StoreInfoPopup = ({
         <div className="flex items-center gap-2 px-2 py-4 border-b">
           <SvgLocation />
           <div>
-            <span>10096 East 13th Street North</span>
+            <span>Oude Turfmarkt 153, Amsterdam, The Netherlands, 1012 GC</span>
           </div>
         </div>
         <div className="flex items-center gap-2 px-2 py-4 border-b">
@@ -37,7 +37,7 @@ export const StoreInfoPopup = ({
         <div className="flex items-center gap-2 px-2 py-4 border-b">
           <SvgPhone />
           <div>
-            <span>+13166160969</span>
+            <span>+84905595382</span>
           </div>
         </div>
       </div>

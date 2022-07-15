@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { PaymentTypeRadioGroup } from "features/Checkout/components/PaymentTypeRadioGroup";
 import SvgCard from "common/components/svg/Card";
 import SvgCash from "common/components/svg/Cash";
+import { useDispatch } from "redux/hook";
+import { clearCart } from "redux/slices/cart/cartSlice";
 
 type ISODate = string;
 
@@ -64,7 +66,20 @@ const checkoutInfoSchema: yup.SchemaOf<CheckoutFormValueProps> = yup
     city: yup.string().required(RequiredErrorMessage),
     address: yup.string().required(RequiredErrorMessage),
     phone: yup.string().required(RequiredErrorMessage),
-    date: yup.string().required(RequiredErrorMessage),
+    date: yup
+      .string()
+      .required(RequiredErrorMessage)
+      .test(
+        "invalid-date",
+        "Date receive must start from today",
+        (value: any) => {
+          const today = new Date();
+          const dateSelected = new Date(value);
+          const previousDate = new Date(today.getTime());
+          previousDate.setDate(today.getDate() - 1);
+          return dateSelected.getTime() >= previousDate.getTime();
+        }
+      ),
     order_note: yup.string(),
     payment_type: yup.string(),
   });
@@ -73,6 +88,7 @@ export const CheckoutForm = (): JSX.Element => {
   const [orderTypes, setOrderTypes] = useState<OrderTypeValueProps[]>([]);
   const { currentUserProfile } = useAuth();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [selected, setSelected] = useState<
     SelectFieldOptionsProps<PaymentType>
   >(paymentTypeOptions[0]);
@@ -118,7 +134,7 @@ export const CheckoutForm = (): JSX.Element => {
       );
       hideLoading();
       console.log("values.payment_type", values.payment_type);
-      localStorage.removeItem("product_cart");
+      dispatch(clearCart());
       if (selected.value === PaymentType.CREDIT_CARD) {
         window.open(checkoutUrl, "_self");
       } else navigate(checkoutUrl);

@@ -14,15 +14,17 @@ export const AuthCheck = ({
   isPublic,
   children,
 }: AuthCheckProps): JSX.Element => {
+  console.log("allow", allow);
   const { isLoggedIn, currentUserProfile } = useAuth();
   const location = useLocation();
 
-  if (
-    (isLoggedIn && currentUserProfile && allow) ||
-    (isLoggedIn &&
-      currentUserProfile &&
-      currentUserProfile.role_name === AccountRole.ADMIN)
-  ) {
+  if (isLoggedIn && currentUserProfile) {
+    if (!allow) {
+      return <Navigate to="/store/home" state={{ from: location }} replace />;
+    }
+    if (currentUserProfile.role_name === AccountRole.ADMIN) {
+      return <>{children}</>;
+    }
     return <>{children}</>;
   } else {
     return <Navigate to="/public/sign-in" state={{ from: location }} replace />;

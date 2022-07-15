@@ -21,6 +21,7 @@ import queryString from "query-string";
 import SvgLeftArrow from "common/components/svg/LeftArrow";
 import { PaginationControl } from "common/components/PaginationControl";
 import { usePaginationFilter } from "hooks/usePaginationFilter";
+import { Switch } from "@headlessui/react";
 
 export interface PaginationInfoProps {
   limit: number;
@@ -31,6 +32,7 @@ export interface PaginationInfoProps {
 
 export const ManageProductsPage = (): JSX.Element => {
   const [products, setProducts] = useState<ProductProps[]>();
+  const [isArchived, setIsArchived] = useState(false);
   const [isShowPopup, setShowPopup] = useState(false);
   const [refetch, setRefetch] = useState({});
   const [showLoading, hideLoading] = useLoading();
@@ -51,7 +53,10 @@ export const ManageProductsPage = (): JSX.Element => {
     const fetchData = async () => {
       showLoading();
       const data: ProductPaginationProps = await API.get(
-        `/product/list?${queryString.stringify(paginationFilter)}`
+        `/product/list?${queryString.stringify({
+          ...paginationFilter,
+          archived: isArchived,
+        })}`
       );
       setProducts(data.productList);
       const paginationData: PaginationInfoProps = {
@@ -64,13 +69,15 @@ export const ManageProductsPage = (): JSX.Element => {
       hideLoading();
     };
     fetchData();
-  }, [showLoading, hideLoading, refetch, paginationFilter]);
+  }, [showLoading, hideLoading, refetch, paginationFilter, isArchived]);
 
   const handleRowDelete = useCallback(
-    async (value: ProductProps) => {
+    async (value: ProductProps, archive: boolean = true) => {
       try {
         showLoading();
-        await API.post(`/product/delete/${value._id}`);
+        archive
+          ? await API.post(`/product/delete/${value._id}`)
+          : await API.delete(`/product/${value._id}`);
         setProducts((previous) =>
           previous?.filter((it) => it._id !== value._id)
         );
@@ -89,6 +96,24 @@ export const ManageProductsPage = (): JSX.Element => {
       navigate(`./detail/${productId}`);
     },
     [navigate]
+  );
+
+  const handleProductRetrieve = useCallback(
+    async (value: ProductProps) => {
+      const productId = value._id;
+      try {
+        showLoading();
+        await API.put(`/product/retrieve/${productId}`);
+        setProducts((previous) =>
+          previous?.filter((it) => it._id !== value._id)
+        );
+        hideLoading();
+      } catch (error: any) {
+        hideLoading();
+        toast.error(error.message);
+      }
+    },
+    [showLoading, hideLoading]
   );
 
   const columns = useMemo<Column<Partial<ProductProps>>[]>(() => {
@@ -139,10 +164,12 @@ export const ManageProductsPage = (): JSX.Element => {
           value={value}
           onDelete={handleRowDelete}
           onEdit={handleRowEdit}
+          onRetrieve={handleProductRetrieve}
+          isArchived={isArchived}
         />
       ),
     });
-  }, [handleRowDelete, handleRowEdit]);
+  }, [handleRowDelete, handleRowEdit, handleProductRetrieve, isArchived]);
 
   const handleRowSelected = (selectedRow: Row<Partial<ProductProps>>) => {
     const productId = selectedRow.original._id;
@@ -170,6 +197,27 @@ export const ManageProductsPage = (): JSX.Element => {
           <span>Create new product</span>
           <SvgPlus />
         </Button>
+        <div className="flex items-center gap-4">
+          <Switch
+            checked={isArchived}
+            onChange={setIsArchived}
+            className={`${isArchived ? "bg-dark-red" : "bg-light-grey"}
+          relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75 `}
+          >
+            <span
+              aria-hidden="true"
+              className={`${isArchived ? "translate-x-9" : "translate-x-0"}
+            pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+            />
+          </Switch>
+          <span
+            className={`${
+              isArchived ? "text-dark-red" : "text-light-grey"
+            } transition-colors`}
+          >
+            Archived
+          </span>
+        </div>
       </div>
       <DashboardTable
         data={products ?? []}

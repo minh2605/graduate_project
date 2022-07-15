@@ -8,39 +8,45 @@ import { useMemo } from "react";
 import { ProfilePage } from "pages/ProfilePage";
 import { CheckoutRoute } from "./CheckoutRoute";
 import { HistoryPage } from "pages/HistoryPage";
-
-const APP_ROUTES = [
-  {
-    path: "home",
-    element: <HomePage />,
-  },
-  {
-    path: "checkout/*",
-    element: (
-      <AuthCheck allow={true}>
-        <CheckoutRoute />
-      </AuthCheck>
-    ),
-  },
-  {
-    path: "history/*",
-    element: (
-      <AuthCheck allow={true}>
-        <HistoryPage />
-      </AuthCheck>
-    ),
-  },
-  {
-    path: "order",
-    element: <OrderPage />,
-  },
-  {
-    path: "profile",
-    element: <ProfilePage />,
-  },
-];
+import { NotFoundPage } from "pages/NotFoundPage";
 
 export const AppRoutes = (): JSX.Element => {
+  const productCart = localStorage.getItem("product_cart");
+
+  const APP_ROUTES = [
+    {
+      path: "home",
+      element: <HomePage />,
+    },
+    {
+      path: "checkout/*",
+      element: (
+        <AuthCheck allow={true}>
+          <CheckoutRoute />
+        </AuthCheck>
+      ),
+    },
+    {
+      path: "history/*",
+      element: (
+        <AuthCheck allow={true}>
+          <HistoryPage />
+        </AuthCheck>
+      ),
+    },
+    {
+      path: "order",
+      element: <OrderPage />,
+    },
+    {
+      path: "profile",
+      element: <ProfilePage />,
+    },
+    {
+      path: "*",
+      element: <NotFoundPage />,
+    },
+  ];
   const { pathname } = useLocation();
   const isOrderCartShow = useMemo(() => {
     return !pathname.includes("checkout");

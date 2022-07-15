@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import SvgClose from "common/components/svg/Close";
 import SvgHome from "common/components/svg/Home";
-import SvgOrder from "common/components/svg/Order";
 import SvgAccount from "common/components/svg/Account";
 import SvgPayment from "common/components/svg/Payment";
 import SvgCart from "./svg/Cart";
@@ -66,13 +65,13 @@ export const MenuBar = ({
             <SvgPayment />
             <span>Checkout</span>
           </Link>
-          <Link
+          {/* <Link
             to="/store/order"
             className="py-4 px-8 flex items-center gap-4 border-t border-border-grey"
           >
             <SvgOrder />
             <span>Order</span>
-          </Link>
+          </Link> */}
           {isLoggedIn ? (
             <div
               className="py-4 px-8 flex items-center gap-4 border-t border-border-grey cursor-pointer"

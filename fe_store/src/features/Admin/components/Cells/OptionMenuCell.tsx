@@ -6,14 +6,18 @@ import SvgChevronDown from "common/components/svg/ChevronDown";
 
 type OptionMenuCellProps<T extends object> = {
   value: T;
-  onDelete: (value: T) => void;
+  onDelete: (value: T, archive: boolean) => void;
   onEdit: (value: T) => void;
+  onRetrieve?: (value: T) => void;
+  isArchived?: boolean;
 };
 
 export const OptionMenuCell = <T extends object>({
   value,
   onDelete,
   onEdit,
+  isArchived,
+  onRetrieve,
 }: OptionMenuCellProps<T>): JSX.Element => (
   <div className="flex justify-center items-center h-full text-center text-sm">
     <div className="max-w-[140px] text-ellipsis">
@@ -35,6 +39,44 @@ export const OptionMenuCell = <T extends object>({
           >
             <Menu.Items className="absolute z-modal right-0 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="px-1 py-1 ">
+                {isArchived ? (
+                  <Menu.Item>
+                    {({ active }) => (
+                      <button
+                        className={`${
+                          active ? "text-dark-red" : "text-gray-900"
+                        } group flex w-full items-center rounded-md px-2 py-2 text-sm font-medium`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (onRetrieve) {
+                            onRetrieve(value);
+                          }
+                        }}
+                      >
+                        <SvgEdit className="mr-2 h-5 w-5" aria-hidden="true" />
+                        Retrieve
+                      </button>
+                    )}
+                  </Menu.Item>
+                ) : (
+                  <Menu.Item>
+                    {({ active }) => (
+                      <button
+                        className={`${
+                          active ? "text-dark-red" : "text-gray-900"
+                        } group flex w-full items-center rounded-md px-2 py-2 text-sm font-medium`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEdit(value);
+                        }}
+                      >
+                        <SvgEdit className="mr-2 h-5 w-5" aria-hidden="true" />
+                        Edit
+                      </button>
+                    )}
+                  </Menu.Item>
+                )}
+
                 <Menu.Item>
                   {({ active }) => (
                     <button
@@ -43,23 +85,7 @@ export const OptionMenuCell = <T extends object>({
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm font-medium`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        onEdit(value);
-                      }}
-                    >
-                      <SvgEdit className="mr-2 h-5 w-5" aria-hidden="true" />
-                      Edit
-                    </button>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      className={`${
-                        active ? "text-dark-red" : "text-gray-900"
-                      } group flex w-full items-center rounded-md px-2 py-2 text-sm font-medium`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onDelete(value);
+                        onDelete(value, !isArchived);
                       }}
                     >
                       <SvgBin className="mr-2 h-5 w-5" aria-hidden="true" />
