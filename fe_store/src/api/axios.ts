@@ -24,7 +24,6 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log("error", error);
     const statusCode = error.response.status;
     console.log("statusCOde", statusCode);
     console.log("error.response", error.response);
