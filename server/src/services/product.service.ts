@@ -23,9 +23,11 @@ const createProduct = async (
 
 const getProducts = async (req: Request, res: Response) => {
   const limit = Number(req.query.limit);
+  const archived = req.query.archived === "true" ? true : false;
+  console.log("archived", archived);
   let perPage = limit > 1 && limit < 9 ? limit : 9;
   let page = Number(req.query.page) || 1;
-  let searchQuery = ProductModel.find({ isDelete: false });
+  let searchQuery = ProductModel.find({ isDelete: archived });
 
   if (req.query.name) {
     const baseRegex = new RegExp(req.query.name.toString(), "i");
@@ -110,6 +112,16 @@ const deleteProduct = async (id: string) => {
   return product;
 };
 
+const retrieveProduct = async (id: string) => {
+  const product = await getProductById(id);
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
+  }
+  product.isDelete = false;
+  product.save();
+  return product;
+};
+
 const productService = {
   createProduct,
   getProducts,
@@ -117,6 +129,7 @@ const productService = {
   updateProductById,
   deleteProduct,
   softDeleteProductById,
+  retrieveProduct,
 };
 
 export default productService;

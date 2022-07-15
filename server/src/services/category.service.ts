@@ -1,5 +1,6 @@
 import httpStatus from "http-status";
 import CategoryModel, { CategoryDocument } from "../models/category.model";
+import { Request, Response } from "express";
 import ApiError from "../utils/ApiError";
 
 const createCategory = async (categoryBody: CategoryDocument) => {
@@ -7,8 +8,10 @@ const createCategory = async (categoryBody: CategoryDocument) => {
   return category;
 };
 
-const getCategories = async () => {
-  const categoryList = await CategoryModel.find({ isDelete: false }).sort({
+const getCategories = async (req: Request, res: Response) => {
+  const archived = req.query.archived === "true" ? true : false;
+  console.log("archived", archived);
+  const categoryList = await CategoryModel.find({ isDelete: archived }).sort({
     _id: -1,
   });
   return categoryList;
@@ -55,6 +58,16 @@ const deleteCategory = async (id: string) => {
   return category;
 };
 
+const retrieveCategory = async (id: string) => {
+  const category = await getCategoryById(id);
+  if (!category) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Category not found");
+  }
+  category.isDelete = false;
+  category.save();
+  return category;
+};
+
 const categoryService = {
   createCategory,
   getCategories,
@@ -62,6 +75,7 @@ const categoryService = {
   deleteCategory,
   updateCategoryById,
   softDeleteCategoryById,
+  retrieveCategory,
 };
 
 export default categoryService;

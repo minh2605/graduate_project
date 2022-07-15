@@ -25,4 +25,7 @@ router
   )
   .delete(categoryController.deleteCategory);
 router.route("/delete/:id").post(categoryController.softDeleteCategoryById);
+router
+  .route("/retrieve/:id")
+  .put(authMiddleware.tokenCheck, categoryController.retrieveCategory);
 export default router;

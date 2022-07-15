@@ -45,8 +45,15 @@ const softDeleteProductById = catchAsync(
   }
 );
 
+const retrieveProduct = catchAsync(async (req: Request, res: Response) => {
+  const { id: productId } = req.params;
+  await productService.retrieveProduct(productId);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 const deleteProduct = catchAsync(async (req: Request, res: Response) => {
   const { id: productId } = req.params;
+  console.log("productId", productId);
   await productService.deleteProduct(productId);
   res.status(httpStatus.NO_CONTENT).send();
 });
@@ -58,5 +65,6 @@ const productController = {
   updateProduct,
   deleteProduct,
   softDeleteProductById,
+  retrieveProduct,
 };
 export default productController;

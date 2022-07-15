@@ -21,5 +21,8 @@ router
 router
   .route("/delete/:id")
   .post(authMiddleware.tokenCheck, orderController.softDeleteOrderById);
+router
+  .route("/retrieve/:id")
+  .put(authMiddleware.tokenCheck, orderController.retrieveOrder);
 
 export default router;

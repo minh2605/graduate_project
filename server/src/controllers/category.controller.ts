@@ -15,7 +15,7 @@ const createCategory = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getCategories = catchAsync(async (req: Request, res: Response) => {
-  const categories = await categoryService.getCategories();
+  const categories = await categoryService.getCategories(req, res);
   res.status(httpStatus.OK).send(categories);
 });
 
@@ -44,6 +44,12 @@ const softDeleteCategoryById = catchAsync(
   }
 );
 
+const retrieveCategory = catchAsync(async (req: Request, res: Response) => {
+  const { id: categorytId } = req.params;
+  await categoryService.retrieveCategory(categorytId);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 const deleteCategory = catchAsync(async (req: Request, res: Response) => {
   const { id: categoryId } = req.params;
   await categoryService.deleteCategory(categoryId);
@@ -57,6 +63,7 @@ const categoryController = {
   deleteCategory,
   updateCategory,
   softDeleteCategoryById,
+  retrieveCategory,
 };
 
 export default categoryController;

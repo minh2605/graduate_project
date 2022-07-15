@@ -20,14 +20,17 @@ const getOrderById = async (id: string) => {
 
 const getOrders = async (req: Request, res: Response) => {
   const limit = Number(req.query.limit);
+  const archived = req.query.archived;
   let perPage = limit >= 1 && limit < 9 ? limit : 9;
   let page = Number(req.query.page) || 1;
 
-  const orderList = await OrderModel.find({ isDelete: false })
+  const orderList = await OrderModel.find({ isDelete: archived })
     .sort({ _id: -1 })
     .skip(perPage * (page - 1))
     .limit(perPage);
-  const totalOrder = await OrderModel.countDocuments({});
+  const totalOrder = await OrderModel.find({
+    isDelete: archived,
+  }).countDocuments({});
   const totalPage = Math.ceil(totalOrder / perPage);
 
   return {
@@ -74,6 +77,16 @@ const resolveOrder = async (id: string) => {
   return order;
 };
 
+const retrieveOrder = async (id: string) => {
+  const order = await getOrderById(id);
+  if (!order) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Order not found");
+  }
+  order.isDelete = false;
+  order.save();
+  return order;
+};
+
 const getRevenueByDateRange = async (from: any, to: any) => {
   const toDate = new Date(to);
   toDate.setDate(toDate.getDate() + 1);
@@ -114,6 +127,7 @@ const orderService = {
   getRevenueByDateRange,
   getOrdersByAccountId,
   resolveOrder,
+  retrieveOrder,
 };
 
 export default orderService;
