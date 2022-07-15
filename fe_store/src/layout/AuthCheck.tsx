@@ -19,11 +19,11 @@ export const AuthCheck = ({
   const location = useLocation();
 
   if (isLoggedIn && currentUserProfile) {
-    if (!allow) {
-      return <Navigate to="/store/home" state={{ from: location }} replace />;
-    }
     if (currentUserProfile.role_name === AccountRole.ADMIN) {
       return <>{children}</>;
+    }
+    if (!allow) {
+      return <Navigate to="/store/home" state={{ from: location }} replace />;
     }
     return <>{children}</>;
   } else {
