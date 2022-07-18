@@ -45,7 +45,9 @@ export const ProductCardPopup = ({
   };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setProductAmount(Number(e.target.value));
+    if (Number(e.target.value) > 0) {
+      setProductAmount(Number(e.target.value));
+    }
   };
   const listImage = useMemo(() => {
     return productDetail.slideImages

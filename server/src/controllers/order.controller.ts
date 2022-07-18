@@ -54,7 +54,11 @@ const getOrders = catchAsync(async (req: Request, res: Response) => {
 
 const getOrdersByAccountId = catchAsync(async (req: Request, res: Response) => {
   const { accountId } = req.params;
-  const orderList = await orderService.getOrdersByAccountId(accountId);
+  const orderList = await orderService.getOrdersByAccountId(
+    accountId,
+    req,
+    res
+  );
   res.status(httpStatus.OK).send(orderList);
 });
 

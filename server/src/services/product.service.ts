@@ -72,6 +72,7 @@ const updateProductById = async (
   }
 
   if (files) {
+    const mainImage = files.image ? files.image[0]?.path : null;
     const slideImageInfo = Object.keys(files).map((it) => {
       console.log(files[it][0]);
       const fileInfo = files[it][0];
@@ -86,10 +87,14 @@ const updateProductById = async (
     slideImageInfo.forEach((it) => {
       product.slideImages[it.index] = it.path;
     });
+    if (mainImage) {
+      product.image = mainImage;
+    }
     Object.assign(product, updateBody);
     product.markModified("slideImages");
+    product.markModified("image");
     await product.save();
-    console.log("UPDATE PRODUCT", product);
+    // console.log("UPDATE PRODUCT", product);
     return product;
   }
 };

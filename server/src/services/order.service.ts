@@ -42,11 +42,34 @@ const getOrders = async (req: Request, res: Response) => {
   };
 };
 
-const getOrdersByAccountId = async (accountId: string) => {
-  const orderList = await OrderModel.find({ account_id: accountId }).sort({
-    _id: -1,
-  });
-  return orderList;
+const getOrdersByAccountId = async (
+  accountId: string,
+  req: Request,
+  res: Response
+) => {
+  const limit = Number(req.query.limit);
+  let perPage = limit >= 1 && limit < 9 ? limit : 9;
+  let page = Number(req.query.page) || 1;
+  const orderList = await OrderModel.find({ account_id: accountId })
+    .sort({
+      _id: -1,
+    })
+    .skip(perPage * (page - 1))
+    .limit(perPage);
+  const totalOrder = await OrderModel.find({
+    isDelete: false,
+    account_id: accountId,
+  }).countDocuments({});
+
+  const totalPage = Math.ceil(totalOrder / perPage);
+
+  return {
+    orderList,
+    currentPage: page,
+    limit: perPage,
+    totalOrder,
+    totalPage: totalPage,
+  };
 };
 
 const softDeleteOrderById = async (id: string) => {

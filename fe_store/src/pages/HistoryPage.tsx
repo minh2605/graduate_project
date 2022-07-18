@@ -1,21 +1,58 @@
-import { OrderProps } from "features/Admin/pages/ManageOrdersPage";
-import { useState, useEffect } from "react";
+import {
+  OrderPaginationProps,
+  OrderProps,
+} from "features/Admin/pages/ManageOrdersPage";
+import { useState, useEffect, useMemo } from "react";
 import API from "api/axios";
 import useAuth from "hooks/useAuth";
+import { PaginationControl } from "common/components/PaginationControl";
+import SvgLeftArrow from "common/components/svg/LeftArrow";
+import { PaginationInfoProps } from "features/Admin/pages/ManageProductsPage";
+import queryString from "query-string";
 
 export const HistoryPage = (): JSX.Element => {
   const { currentUserProfile } = useAuth();
+  const [paginationInfo, setPaginationInfo] = useState<PaginationInfoProps>({
+    limit: 5,
+    currentPage: 0,
+    totalPage: 0,
+    totalProduct: 0,
+  });
+
+  const orderFilterUrl = useMemo(() => {
+    const orderFilter = {
+      page: paginationInfo.currentPage,
+      limit: paginationInfo.limit,
+    };
+    return queryString.stringify(orderFilter);
+  }, [paginationInfo.currentPage, paginationInfo.limit]);
 
   const [previousOrders, setPreviousOrders] = useState<OrderProps[]>([]);
   useEffect(() => {
     const fetchData = async () => {
-      const data: OrderProps[] = await API.get(
-        `order/list/${currentUserProfile?.account_id}`
+      const data: OrderPaginationProps = await API.get(
+        `order/list/${currentUserProfile?.account_id}?${orderFilterUrl}`
       );
-      setPreviousOrders(data);
+      setPreviousOrders(data.orderList);
+      const paginationData: PaginationInfoProps = {
+        limit: data.limit,
+        currentPage: data.currentPage,
+        totalPage: data.totalPage,
+        totalProduct: data.totalProduct,
+      };
+      setPaginationInfo(paginationData);
     };
     fetchData();
-  }, [currentUserProfile?.account_id]);
+  }, [currentUserProfile?.account_id, orderFilterUrl]);
+
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    const pageSelected = selectedItem.selected + 1;
+    setPaginationInfo({
+      ...paginationInfo,
+      currentPage: pageSelected,
+    });
+  };
+
   return (
     <div>
       <div>
@@ -24,7 +61,7 @@ export const HistoryPage = (): JSX.Element => {
         </h2>
       </div>
       <div>
-        <table className="w-full text-center border rounded">
+        <table className="w-full text-center border rounded mb-5 max-h-56">
           <tr>
             <th className="p-4">Order date</th>
             <th>Total bill</th>
@@ -34,6 +71,7 @@ export const HistoryPage = (): JSX.Element => {
           {previousOrders.map((order, index) => {
             return (
               <tr
+                key={order._id}
                 className={`${index % 2 === 0 ? "bg-light-red-opacity" : ""}`}
               >
                 <td>
@@ -70,6 +108,12 @@ export const HistoryPage = (): JSX.Element => {
             );
           })}
         </table>
+        <PaginationControl
+          previousLabel={<SvgLeftArrow />}
+          nextLabel={<SvgLeftArrow className="rotate-180" />}
+          pageCount={paginationInfo?.totalPage}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

@@ -1,6 +1,5 @@
 import { MapWrapper } from "common/components/MapContainer";
 import { Modal } from "common/components/Modal";
-import SvgClock from "common/components/svg/Clock";
 import SvgLocation from "common/components/svg/Location";
 import SvgPhone from "common/components/svg/Phone";
 
@@ -28,12 +27,12 @@ export const StoreInfoPopup = ({
             <span>Oude Turfmarkt 153, Amsterdam, The Netherlands, 1012 GC</span>
           </div>
         </div>
-        <div className="flex items-center gap-2 px-2 py-4 border-b">
+        {/* <div className="flex items-center gap-2 px-2 py-4 border-b">
           <SvgClock />
           <div>
             <span>Closed • Opens Tue at 11 AM</span>
           </div>
-        </div>
+        </div> */}
         <div className="flex items-center gap-2 px-2 py-4 border-b">
           <SvgPhone />
           <div>
