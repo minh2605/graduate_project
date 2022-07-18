@@ -32,9 +32,9 @@ export const ProfileDropDown = ({
           <DropDownTab>Dashboard</DropDownTab>
         </Link>
       )}
-      {/* <Link to="/profile">
+      <Link to="/store/profile">
         <DropDownTab>Profile</DropDownTab>
-      </Link> */}
+      </Link>
       <Link to="/store/history">
         <DropDownTab>History</DropDownTab>
       </Link>

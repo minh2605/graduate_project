@@ -5,13 +5,14 @@ import { OrderPage } from "pages/OrderPage";
 import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
 import { AuthCheck } from "layout/AuthCheck";
 import { useMemo } from "react";
-import { ProfilePage } from "pages/ProfilePage";
 import { CheckoutRoute } from "./CheckoutRoute";
 import { HistoryPage } from "pages/HistoryPage";
 import { NotFoundPage } from "pages/NotFoundPage";
+import useAuth from "hooks/useAuth";
+import { UserProfilePage } from "pages/UserProfilePage";
 
 export const AppRoutes = (): JSX.Element => {
-  const productCart = localStorage.getItem("product_cart");
+  const { currentUserProfile } = useAuth();
 
   const APP_ROUTES = [
     {
@@ -35,12 +36,16 @@ export const AppRoutes = (): JSX.Element => {
       ),
     },
     {
-      path: "order",
-      element: <OrderPage />,
+      path: "profile",
+      element: (
+        <AuthCheck allow={!!currentUserProfile}>
+          <UserProfilePage />
+        </AuthCheck>
+      ),
     },
     {
-      path: "profile",
-      element: <ProfilePage />,
+      path: "order",
+      element: <OrderPage />,
     },
     {
       path: "*",

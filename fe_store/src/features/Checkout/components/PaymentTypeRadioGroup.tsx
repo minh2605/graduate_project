@@ -2,7 +2,6 @@ import { RadioGroup } from "@headlessui/react";
 import { SelectFieldOptionsProps } from "common/components/Form/SelectField";
 import SvgCheck from "common/components/svg/Check";
 import { PaymentType } from "features/Checkout/CheckoutForm";
-import { useFormikContext } from "formik";
 
 interface PaymentTypeRadioGroupProps {
   options: SelectFieldOptionsProps<PaymentType>[];

@@ -1,11 +1,7 @@
 import SvgAccount from "common/components/svg/Account";
-import SvgOrder from "common/components/svg/Order";
 import SvgRevenue from "common/components/svg/Revenue";
 import { Widget } from "features/Admin/components/Widget";
-import {
-  OrderPaginationProps,
-  OrderProps,
-} from "features/Admin/pages/ManageOrdersPage";
+// import { OrderPaginationProps } from "features/Admin/pages/ManageOrdersPage";
 import { useLoading } from "hooks/useLoading";
 import { useEffect, useMemo, useState } from "react";
 import queryString from "query-string";
@@ -13,7 +9,6 @@ import API from "api/axios";
 import {
   AreaChartAdmin,
   AreaChartAdminData,
-  AreaChartAdminProps,
 } from "features/Admin/components/AreaChartAdmin";
 
 export interface DateRangeFilterProps {
@@ -37,7 +32,7 @@ export interface UserProps {
 export const DashboardPage = (): JSX.Element => {
   const [showLoading, hideLoading] = useLoading();
   const [ordersByDate, setOrdersByDate] = useState<AreaChartAdminData[]>([]);
-  const [orderList, setOrderList] = useState<OrderPaginationProps>();
+  // const [orderList, setOrderList] = useState<OrderPaginationProps>();
   const [userList, setUserList] = useState<number>(0);
   const [dateRangeFilter, setDateRangeFilter] = useState<DateRangeFilterProps>({
     from: new Date().toISOString().slice(0, 10),

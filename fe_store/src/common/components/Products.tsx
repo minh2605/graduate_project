@@ -17,11 +17,15 @@ import { CategoriesFilter } from "./CategoriesFilter";
 import { PaginationInfoProps } from "features/Admin/pages/ManageProductsPage";
 import { PaginationControl } from "./PaginationControl";
 import SvgLeftArrow from "./svg/LeftArrow";
+import { HeaderSeachBar } from "features/Admin/components/HeaderAdmin";
+import SvgSearch from "./svg/Search";
+import debounce from "lodash/debounce";
 // import Skeleton from "react-loading-skeleton";
 // import "react-loading-skeleton/dist/skeleton.css";
 
 export const Products = (): JSX.Element => {
   const [products, setProducts] = useState<ProductProps[]>([]);
+  const [nameFilter, setNameFilter] = useState("");
   const [productTypes, setProductTypes] = useState<
     SelectFieldOptionsProps<string>[]
   >([]);
@@ -45,10 +49,16 @@ export const Products = (): JSX.Element => {
       page: paginationInfo.currentPage,
       productTypeId: productTypes[selectedTab]?.value ?? "",
       categoryId: selectedOption?.value ?? "",
-      name: "",
+      name: nameFilter,
     };
     return queryString.stringify(productFilter);
-  }, [selectedTab, productTypes, selectedOption, paginationInfo.currentPage]);
+  }, [
+    selectedTab,
+    productTypes,
+    selectedOption,
+    paginationInfo.currentPage,
+    nameFilter,
+  ]);
 
   const resetPage = useCallback(() => {
     setPaginationInfo((prev) => {
@@ -137,9 +147,27 @@ export const Products = (): JSX.Element => {
     });
   };
 
+  const debouncedSearch = debounce(async (searchText) => {
+    setNameFilter(searchText);
+  }, 400);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("e", e.target.value);
+    debouncedSearch(e.target.value);
+  };
+
   return (
     <>
       <div className="flex justify-between gap-20 mb-5">
+        <HeaderSeachBar>
+          <input
+            type="text"
+            placeholder="Search"
+            className="border-0 max-w-full focus:outline-none text-sm flex-1 lg:px-4"
+            onChange={handleSearchChange}
+          />
+          <SvgSearch className="shrink-0" />
+        </HeaderSeachBar>
         <ProductTypesFilter
           tabList={productTypes}
           selectedTab={selectedTab}

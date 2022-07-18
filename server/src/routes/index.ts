@@ -5,6 +5,7 @@ import authRoute from "./auth.route";
 import express from "express";
 import orderRoute from "./order.route";
 import orderTypeRoute from "./orderType.route";
+import userRoute from "./user.route";
 
 const router = express.Router();
 
@@ -32,6 +33,10 @@ const defaultRoutes = [
   {
     path: "/auth/",
     route: authRoute,
+  },
+  {
+    path: "/user/",
+    route: userRoute,
   },
 ];
 

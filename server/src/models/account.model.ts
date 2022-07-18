@@ -17,10 +17,7 @@ export interface AccountDocument extends mongoose.Document {
 }
 
 interface IAccountModel extends mongoose.Model<AccountDocument> {
-  isEmailTaken: (
-    email: string,
-    excludeUserId?: Types.ObjectId
-  ) => Promise<boolean>;
+  isEmailTaken: (email: string, excludeUserId?: string) => Promise<boolean>;
 }
 
 const accountSchema = new mongoose.Schema(

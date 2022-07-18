@@ -21,6 +21,11 @@ const createUser = async (userBody: UserCreateProps) => {
   return newUser;
 };
 
+const getUsers = async () => {
+  const userList = await UserProfileModel.find();
+  return userList;
+};
+
 const getUserByAccountId = async (accountId: string) => {
   const userByAccountId = await UserProfileModel.findOne({
     account_id: accountId,
@@ -28,11 +33,11 @@ const getUserByAccountId = async (accountId: string) => {
   return userByAccountId;
 };
 
-const getUserById = async (id: Types.ObjectId) => {
+const getUserById = async (id: string) => {
   return UserProfileModel.findById(id);
 };
 
-const updateUserById = async (userId: Types.ObjectId, updateBody: any) => {
+const updateUserById = async (userId: string, updateBody: any) => {
   const user = await getUserById(userId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
@@ -49,6 +54,7 @@ const updateUserById = async (userId: Types.ObjectId, updateBody: any) => {
 };
 
 const userService = {
+  getUsers,
   createUser,
   getUserByAccountId,
   getUserById,
