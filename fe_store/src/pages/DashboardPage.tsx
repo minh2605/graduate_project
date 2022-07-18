@@ -10,6 +10,7 @@ import {
   AreaChartAdmin,
   AreaChartAdminData,
 } from "features/Admin/components/AreaChartAdmin";
+import { UserInfoProps } from "./UserProfilePage";
 
 export interface DateRangeFilterProps {
   from: string;
@@ -49,15 +50,15 @@ export const DashboardPage = (): JSX.Element => {
     });
   };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     showLoading();
-  //     const data: number = await API.get(`/auth/amount`);
-  //     setUserList(data);
-  //     hideLoading();
-  //   };
-  //   fetchData();
-  // }, [showLoading, hideLoading]);
+  useEffect(() => {
+    const fetchData = async () => {
+      showLoading();
+      const data: UserInfoProps[] = await API.get(`/user/list`);
+      setUserList(data.length);
+      hideLoading();
+    };
+    fetchData();
+  }, [showLoading, hideLoading]);
 
   useEffect(() => {
     const fetchData = async () => {

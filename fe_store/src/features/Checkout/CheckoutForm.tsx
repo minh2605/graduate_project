@@ -133,7 +133,6 @@ export const CheckoutForm = (): JSX.Element => {
         checkoutPayload
       );
       hideLoading();
-      console.log("values.payment_type", values.payment_type);
       dispatch(clearCart());
       if (selected.value === PaymentType.CREDIT_CARD) {
         window.open(checkoutUrl, "_self");

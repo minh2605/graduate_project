@@ -46,7 +46,6 @@ export const SelectField = <T extends object>({
       });
     } else return options;
   }, [options, dependField, dependValue]);
-  // console.log("cleanOptions", cleanOptions);
 
   const handleSelectedOptionChange = (value: any) => {
     setFieldValue(name, value.value);

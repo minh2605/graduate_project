@@ -14,7 +14,6 @@ export const AuthCheck = ({
   isPublic,
   children,
 }: AuthCheckProps): JSX.Element => {
-  console.log("allow", allow);
   const { isLoggedIn, currentUserProfile } = useAuth();
   const location = useLocation();
 

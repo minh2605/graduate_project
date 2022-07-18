@@ -16,9 +16,7 @@ const calculateTotalPrice = (productCartInfo: ProductCartProps[]) => {
   }, 0);
   return totalPrice;
 };
-if (productCartInfo) {
-  console.log("productCartInfo", JSON.parse(productCartInfo));
-}
+
 const initialState: CartState = productCartInfo
   ? {
       productCart: JSON.parse(productCartInfo).productCart,

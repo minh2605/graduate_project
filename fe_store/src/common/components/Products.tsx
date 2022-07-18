@@ -152,7 +152,6 @@ export const Products = (): JSX.Element => {
   }, 400);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("e", e.target.value);
     debouncedSearch(e.target.value);
   };
 

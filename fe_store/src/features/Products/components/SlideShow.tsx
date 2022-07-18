@@ -5,7 +5,7 @@ interface SlideShowData {
   slideData: string[];
 }
 export const SlideShow = ({ slideData }: SlideShowData): JSX.Element => {
-  console.log("slideData", slideData);
+  // console.log("slideData", slideData);
   return (
     <>
       {slideData.length > 0 ? (

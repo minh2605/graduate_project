@@ -8,7 +8,7 @@ import useAuth from "hooks/useAuth";
 import { useEffect, useState } from "react";
 import { getInitialsFromName } from "common/utils/common";
 import { useLoading } from "hooks/useLoading";
-interface UserInfoProps {
+export interface UserInfoProps {
   account_id: string;
   name: string;
   address?: string;
@@ -49,7 +49,6 @@ export const UserProfilePage = (): JSX.Element => {
         gender: data?.gender?.toString() ?? "",
         avatar: data.avatar ?? "",
       };
-      console.log("profileData", profileData);
       setProfileInfo(profileData);
     };
     fetchData();
@@ -74,7 +73,7 @@ export const UserProfilePage = (): JSX.Element => {
       hideLoading();
     }
   };
-  console.log("profileInfo", profileInfo);
+
   return (
     <div>
       <Formik

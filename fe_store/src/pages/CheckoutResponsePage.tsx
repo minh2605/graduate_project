@@ -11,7 +11,6 @@ export const CheckoutResponsePage = (): JSX.Element => {
   const { orderId } = useParams();
   const search = useLocation().search;
   const success = new URLSearchParams(search).get("success");
-  const cancel = new URLSearchParams(search).get("cancel");
   const [showLoading, hideLoading] = useLoading();
   const [orderInfo, setOrderInfo] = useState<OrderProps>();
 
@@ -23,8 +22,7 @@ export const CheckoutResponsePage = (): JSX.Element => {
       hideLoading();
     };
     fetchData();
-  }, [showLoading, hideLoading]);
-  console.log("orderInfo", orderInfo);
+  }, [showLoading, hideLoading, orderId]);
   return (
     <div>
       {orderInfo ? (

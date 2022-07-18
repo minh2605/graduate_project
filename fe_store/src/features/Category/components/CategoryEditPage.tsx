@@ -1,14 +1,11 @@
 import { Button } from "common/components/Button";
 import { ProductProps } from "common/components/ProductCard";
-import { Formik, Form, FieldArray, FormikValues } from "formik";
+import { Formik, Form, FormikValues } from "formik";
 import { useLoading } from "hooks/useLoading";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import * as yup from "yup";
-import {
-  PriceErrorMessage,
-  RequiredErrorMessage,
-} from "features/Products/ProductCreatePopup";
+import { RequiredErrorMessage } from "features/Products/ProductCreatePopup";
 import API from "api/axios";
 import { useParams } from "react-router-dom";
 import { UploadField } from "common/components/Form/UploadField";
@@ -96,7 +93,6 @@ export const CategoryEditPage = (): JSX.Element => {
       };
 
   const handleEditProduct = async (values: FormikValues) => {
-    console.log("values submit", values);
     try {
       showLoading();
       const formData = new FormData();

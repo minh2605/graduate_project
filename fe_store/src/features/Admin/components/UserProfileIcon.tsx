@@ -20,7 +20,6 @@ export const UserProfileIcon = ({
   const handleProfileClicked = () => {
     setShowDropDown((prev) => !prev);
   };
-  console.log("url", url);
   return (
     <div
       className="relative flex items-center gap-2 "

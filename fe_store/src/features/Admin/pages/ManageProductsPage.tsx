@@ -178,12 +178,10 @@ export const ManageProductsPage = (): JSX.Element => {
 
   const handlePageChange = (selectedItem: { selected: number }) => {
     const pageSelected = selectedItem.selected + 1;
-    console.log("pageSelected", pageSelected);
     setPaginationFilter({
       ...paginationFilter,
       page: pageSelected,
     });
-    console.log("pageSelected", pageSelected);
   };
 
   return (

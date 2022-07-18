@@ -23,7 +23,6 @@ export const usePaginationFilter = (initData: PaginationFilterProps) => {
       if (data.page <= 0) {
         data.page = 1;
       }
-      console.log("data", data);
       setDataFilter(data);
     },
     [setDataFilter]
